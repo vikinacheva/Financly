@@ -1,0 +1,110 @@
+#:kivy 1.0
+<Welcome>:
+    name: "welcome"
+    MDFloatLayout: 
+        md_bg_color: 1, 1, 1, 1        
+        Carousel:
+            id: carousel
+            scroll_timeout: 0
+            on_current_slide: root.current_slide(self.index)   
+            MDFloatLayout:
+                Image:
+                    source: "assets/imgs/money-management.jpg"
+                    pos_hint: {"center_x": .5, "center_y": .7}
+                    size_hint: 1, 1
+                    canvas.before:
+                        Color:
+                            rgb: rgba(255, 255, 255, 255)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                MDLabel:
+                    text:"Следи лесно финансите си."
+                    size_hint_x: .6
+                    pos_hint: {"center_x": .40, "center_y": .52}
+                    font_name: "RobotoB"
+                MDLabel:
+                    text:"Научи се да управляваш парите си и бъди винаги наясно с разходите и приходите си."
+                    size_hint_x: .8
+                    pos_hint: {"center_x": .50, "center_y": .45}
+                    font_name: "RobotoCR"
+                    font_size: "15sp"
+                    color: rgba(135, 143, 158, 255)        
+            MDFloatLayout:
+                Image:
+                    source: "assets/imgs/save-money.jpg"
+                    pos_hint: {"center_x": .5, "center_y": .7}
+                    size_hint: .9, .6
+                    canvas.before:
+                        Color:
+                            rgb: rgba(255, 255, 255, 255)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                MDLabel:
+                    text:"Спестявай успешно."
+                    size_hint_x: .6  
+                    pos_hint: {"center_x": .40, "center_y": .52}
+                    font_name: "RobotoB"
+                MDLabel:
+                    text:"Изгради навици за отговорнo харчене и заделянето на пари ще стане напълно постижимо."
+                    size_hint_x: .8
+                    pos_hint: {"center_x": .50, "center_y": .45}
+                    font_name: "RobotoCR"
+                    font_size: "15sp"
+                    color: rgba(135, 143, 158, 255)            
+            MDFloatLayout:
+                Image:
+                    source: "assets/imgs/success.jpg"
+                    pos_hint: {"center_x": .5, "center_y": .7}
+                    size_hint: .9, .6
+                    canvas.before:
+                        Color:
+                            rgb: rgba(255, 255, 255, 255)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                MDLabel:
+                    text:"Успехът се крие в дисциплината."
+                    size_hint_x: .6 
+                    pos_hint: {"center_x": .40, "center_y": .52}
+                    font_name: "RobotoB"
+                MDLabel:
+                    text:"Очакват те нови висоти на кариера и стандарт на живот. Пренапиши напълно финансовите си навици с Financly."
+                    size_hint_x: .8
+                    pos_hint: {"center_x": .50, "center_y": .43}
+                    font_name: "RobotoCR"
+                    font_size: "15sp"
+                    color: rgba(135, 143, 158, 255)        
+        MDIconButton:
+            icon: "arrow-right"
+            md_bg_color: 0, 0, 0, 1
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            pos_hint: {"center_x": .85, "center_y": .1}
+            on_release:
+                root.next()
+                if root.current_slide == slide3: root.manager.current = "home"   
+
+
+        MDIconButton:
+            id: slide1
+            icon: "circle"
+            theme_text_color: "Custom"
+            text_color: rgba(35, 56, 99, 255)
+            pos_hint: {"center_x": .1, "center_y": .085}
+            icon_size: "8sp"
+        MDIconButton:
+            id: slide2
+            icon: "circle"
+            theme_text_color: "Custom"
+            text_color: rgba(221, 221, 221, 255)
+            pos_hint: {"center_x": .15, "center_y": .085}
+            icon_size: "8sp"
+        MDIconButton:
+            id: slide3
+            icon: "circle"
+            theme_text_color: "Custom"
+            text_color: rgba(221, 221, 221, 255)
+            pos_hint: {"center_x": .2, "center_y": .085}
+            icon_size: "8sp"

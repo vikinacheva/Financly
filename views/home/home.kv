@@ -1,0 +1,89 @@
+#:kivy 1.0
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+
+<Home>:
+    name: "home"
+    MDFloatLayout:
+        md_bg_color: 1, 1, 1, 1
+        ScreenManager:
+            id: screen_manager
+            transition: NoTransition()
+            MDScreen:
+                name: "begin"
+                MDLabel:
+                    text: "Начало"
+                    pos_hint:{"center_y": .5}
+                    halign: "center"
+            MDScreen:
+                name: "analytics"
+                MDLabel:
+                    text: "Анализи"
+                    pos_hint:{"center_y": .5}
+                    halign: "center"
+            MDScreen:
+                name: "currencies"
+                MDLabel:
+                    text: "Валути"
+                    pos_hint:{"center_y": .5}
+                    halign: "center"
+            MDScreen:
+                name: "settings"
+                MDLabel:
+                    text: "Настройки"
+                    pos_hint:{"center_y": .5}
+                    halign: "center"
+        NavBar:
+            size_hint: .8, .07
+            pos_hint: {"center_x": .5, "center_y": .07}
+            elevation: 6
+            shadow_softness: 5
+            md_bg_color: get_color_from_hex("#335098")
+            radius: [16]
+            MDGridLayout:
+                cols: 4
+                size_hint_x: .9
+                spacing: 45
+                text_color: get_color_from_hex("#e9f1fa")
+                pos_hint: {"center_x": .5, "center_y": .52}
+                MDIconButton:
+                    id: nav_icon1
+                    icon: "home" 
+                    ripple_scale: 0 
+                    user_font_size: "30sp" 
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#e9f1fa") 
+                    on_release:
+                        screen_manager.current = "begin"
+                        root.if_active(self)
+                MDIconButton:
+                    id: nav_icon2
+                    icon: "google-analytics" 
+                    ripple_scale: 0 
+                    user_font_size: "30sp" 
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#e9f1fa") 
+                    on_release:
+                        screen_manager.current = "analytics"
+                        root.if_active(self)
+                MDIconButton:
+                    id: nav_icon3
+                    icon: "swap-horizontal" 
+                    ripple_scale: 0 
+                    user_font_size: "30sp" 
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#e9f1fa") 
+                    on_release:
+                        screen_manager.current = "currencies"
+                        root.if_active(self)
+                MDIconButton:
+                    id: nav_icon4
+                    icon: "cogs" 
+                    ripple_scale: 0 
+                    user_font_size: "30sp" 
+                    theme_text_color: "Custom"
+                    text_color: get_color_from_hex("#e9f1fa") 
+                    on_release:
+                        screen_manager.current = "settings"
+                        root.if_active(self)
+

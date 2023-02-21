@@ -1,0 +1,136 @@
+#:kivy 1.0
+<Login>:
+    name: "login"
+    MDFloatLayout:
+        md_bg_color: 1, 1, 1, 1
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint: {"center_y": .95}
+            user_font_size: "30sp"
+            theme_text_color: "Custom"
+            text_color: rgba(34, 56, 97, 255)
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "main"
+        MDLabel:
+            text: "ДОБРЕ ДОШЪЛ!"
+            font_name: "RobotoM"
+            font_size: "26sp"
+            pos_hint: {"center_x": .6, "center_y": .85}
+            color: rgba(34, 56, 97, 255)
+        MDLabel:
+            text: "Влез, за да продължиш"
+            font_name: "RobotoCR"
+            font_size: "18sp"
+            pos_hint: {"center_x": .6, "center_y": .79}
+            color: rgba(135, 143, 158, 255) 
+        MDFloatLayout:
+            size_hint: .7, .07
+            pos_hint: {"center_x": .5, "center_y": .63}
+            TextInput:
+                id: email
+                hint_text: "Имейл"
+                font_name: "RobotoCR"
+                size_hint_y: .75
+                pos_hint: {"center_x": .45, "center_y": .3}
+                background_color: 1, 1, 1, 0
+                foreground_color: rgba(0, 0, 59, 255)
+                cursor_color: rgba(0, 0, 59, 255)
+                font_size: "14sp"        
+                cursor_width: "2sp"
+                multiline: False
+                required: True
+            MDFloatLayout:                
+                pos_hint: {"center_x": .45, "center_y": 0}
+                size_hint_y: .03
+                md_bg_color: rgba(178, 178, 178, 255)
+        MDFloatLayout:
+            size_hint: .7, .07
+            pos_hint: {"center_x": .5, "center_y": .5}
+            TextInput:
+                id: password
+                hint_text: "Парола"
+                font_name: "RobotoCR"
+                size_hint_y: .75
+                pos_hint: {"center_x": .45, "center_y": .3}
+                background_color: 1, 1, 1, 0
+                foreground_color: rgba(0, 0, 59, 255)
+                cursor_color: rgba(0, 0, 59, 255)
+                font_size: "14sp"        
+                cursor_width: "2sp"
+                multiline: False
+                password: True
+                required: True
+            MDFloatLayout:                
+                pos_hint: {"center_x": .45, "center_y": 0}
+                size_hint_y: .03
+                md_bg_color: rgba(178, 178, 178, 255)
+        MDCheckbox:
+            size_hint: None, None
+            size: "48dp", "48dp"
+            pos_hint: {"center_x": .76, "center_y": .43}
+            on_active:
+                root.show_password(*args)
+        MDLabel:
+            id: password_text
+            text: "Покажи паролата"
+            font_size: "13sp"
+            font_name: "RobotoCR"
+            pos_hint: {"center_x": .95, "center_y": .43}
+            color: rgba(108, 117, 125, 255)            
+        Button:
+            text: "Влез"
+            size_hint: .66, .065
+            pos_hint: {"center_x": .5, "center_y": .34}
+            background_color: 0, 0, 0, 0
+            font_name: "RobotoB"
+            on_release: 
+                root.manager.transition.director = "left"
+                root.manager.current = "home"
+                root.validate()
+            canvas.before:
+                Color:
+                    rgb: rgba(51, 80, 152, 255)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [5] 
+        MDTextButton:   
+            text: "Забравена парола?"
+            pos_hint: {"center_x": .5, "center_y": .28}
+            color: rgba(108, 117, 125, 255)
+            font_size: "12sp"
+            font_name: "RobotoCR"
+        MDLabel:
+            text: "или"
+            color: rgba(51, 80, 152, 255)
+            pos_hint: {"center_y": .22}
+            font_size: "13sp"
+            font_name: "RobotoB"
+            halign: "center"
+        MDFloatLayout:                
+            md_bg_color: rgba(178, 178, 178, 255)
+            size_hint: .3, .002
+            pos_hint: {"center_x": .3, "center_y": .218}
+        MDFloatLayout:                
+            md_bg_color: rgba(178, 178, 178, 255)
+            size_hint: .3, .002
+            pos_hint: {"center_x": .7, "center_y": .218}
+        MDLabel:
+            text: "Нямаш акаунт?"
+            font_name: "RobotoCR"
+            font_size: "13sp"
+            pos_hint: {"center_x": .38, "center_y": .16}
+            color: rgba(108, 117, 125, 255)
+            halign: "center"
+        MDTextButton:
+            text: "Регистрирай се"
+            font_name: "RobotoCR"
+            font_size: "13sp"
+            pos_hint: {"center_x": .63, "center_y": .16}
+            color: rgba(51, 80, 152, 255)
+            halign: "center"
+            underline: True
+            on_release:
+                root.manager.transition.direction = "left"
+                root.manager.current = "register"       

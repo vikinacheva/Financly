@@ -1,0 +1,60 @@
+# #:kivy 1.0
+<Start>:
+    name: "start"
+    MDFloatLayout:
+        md_bg_color: rgba(234,243,250,255)
+        # Insert a logo image to the upper left corner
+        # Image:
+        #     source: "assets/logo.png"
+        #     pos_hint: {"center_x": .18, "center_y": .95}
+        Image: 
+            source: "assets/imgs/bank_app.jpg"
+            size_hint: .8, .8
+            pos_hint: {"center_x": .5, "center_y": .8}
+        MDLabel:
+            text: "ЗДРАВЕЙ!"
+            font_name: "RobotoMono"
+            font_size: "25sp"
+            pos_hint: {"center_x": .5, "center_y": .6}
+            halign: "center"
+            color: rgba(34, 56, 97, 255)
+        MDLabel:
+            text: "Добре дошъл във Financly - твоят личен финансов помощник."
+            font_name: "RobotoCR"
+            font_size: "15sp"
+            size_hint_x: .85
+            pos_hint: {"center_x": .5, "center_y": .5}
+            halign: "center"
+            color: rgba(135, 143, 158, 255) 
+        Button:
+            text: "Влез"
+            size_hint: .66, .065
+            pos_hint: {"center_x": .5, "center_y": .18}
+            background_color: 0, 0, 0, 0
+            font_name: "RobotoB"
+            on_release: 
+                root.manager.transition.direction = "left"
+                root.manager.current = "login"
+            canvas.before:
+                Color:
+                    rgb: rgba(51, 80, 152, 1)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [5]       
+        Button:
+            text: "Регистрирай се"
+            size_hint: .66, .065
+            pos_hint: {"center_x": .5, "center_y": .09}
+            background_color: 0, 0, 0, 0
+            font_name: "RobotoB"
+            color: rgba(51, 80, 152, 255)
+            on_release: 
+                root.manager.transition.direction = "left"
+                root.manager.current = "register"
+            canvas.before:
+                Color:
+                    rgb: rgba(51, 80, 152, 1)
+                Line:
+                    width: 1.2
+                    rounded_rectangle: self.x, self.y, self.width, self.height, 5, 5, 5, 5, 100  
