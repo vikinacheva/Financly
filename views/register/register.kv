@@ -8,7 +8,7 @@
         pos_hint: {"center_y": .95}
         user_font_size: "30sp"
         theme_text_color: "Custom"
-        text_color: rgba(34, 56, 97, 255)
+        text_color: app.primary_font_color
         on_release:
             root.manager.transition.direction = "right"
             root.manager.current = "start"
@@ -17,13 +17,13 @@
         font_name: "RobotoMono"
         font_size: "26sp"
         pos_hint: {"center_x": .6, "center_y": .85}
-        color: rgba(34, 56, 97, 255)
+        color: app.primary_font_color
     MDLabel:
         text: "Създай нов акаунт"
         font_name: "RobotoCR"
         font_size: "18sp"
         pos_hint: {"center_x": .6, "center_y": .79}
-        color: rgba(135, 143, 158, 255) 
+        color: app.secondary_font_color 
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .70}
@@ -34,8 +34,8 @@
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: rgba(0, 0, 59, 255)
-            cursor_color: rgba(0, 0, 59, 255)
+            foreground_color: app.input_font_color
+            cursor_color: app.input_font_color
             font_size: "14sp"        
             cursor_width: "2sp"
             multiline: False
@@ -43,7 +43,7 @@
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: rgba(178, 178, 178, 255)
+            md_bg_color: app.dash_color
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .63}
@@ -54,8 +54,8 @@
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: rgba(0, 0, 59, 255)
-            cursor_color: rgba(0, 0, 59, 255)
+            foreground_color: app.input_font_color
+            cursor_color: app.input_font_color
             font_size: "14sp"        
             cursor_width: "2sp"
             multiline: False
@@ -63,7 +63,7 @@
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: rgba(178, 178, 178, 255)
+            md_bg_color: app.dash_color
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .56}
@@ -74,8 +74,8 @@
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: rgba(0, 0, 59, 255)
-            cursor_color: rgba(0, 0, 59, 255)
+            foreground_color: app.input_font_color
+            cursor_color: app.input_font_color
             font_size: "14sp"        
             cursor_width: "2sp"
             multiline: False
@@ -84,7 +84,7 @@
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: rgba(178, 178, 178, 255)
+            md_bg_color: app.dash_color
     MDCheckbox:
         size_hint: None, None
         size: "48dp", "48dp"
@@ -97,7 +97,7 @@
         font_size: "13sp"
         font_name: "RobotoCR"
         pos_hint: {"center_x": .95, "center_y": .5}
-        color: rgba(108, 117, 125, 255)
+        color: app.forth_font_color
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .45}
@@ -108,8 +108,8 @@
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: rgba(0, 0, 59, 255)
-            cursor_color: rgba(0, 0, 59, 255)
+            foreground_color: app.input_font_color
+            cursor_color: app.input_font_color
             font_size: "14sp"        
             cursor_width: "2sp"
             multiline: False
@@ -118,7 +118,7 @@
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: rgba(178, 178, 178, 255)
+            md_bg_color: app.dash_color
     Button:
         text: "Регистрирай се"
         size_hint: .66, .065
@@ -130,24 +130,24 @@
             root.register()
         canvas.before:
             Color:
-                rgb: rgba(51, 80, 152, 255)
+                rgb: app.tertiary_font_color
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
                 radius: [5]    
     MDLabel:
         text: "или"
-        color: rgba(51, 80, 152, 255)
+        color: app.tertiary_font_color
         pos_hint: {"center_y": .18}
         font_size: "13sp"
         font_name: "RobotoB"
         halign: "center"
     MDFloatLayout:                
-        md_bg_color: rgba(178, 178, 178, 255)
+        md_bg_color: app.dash_color
         size_hint: .3, .002
         pos_hint: {"center_x": .3, "center_y": .18}
     MDFloatLayout:                
-        md_bg_color: rgba(178, 178, 178, 255)
+        md_bg_color: app.dash_color
         size_hint: .3, .002
         pos_hint: {"center_x": .7, "center_y": .18}
     MDLabel:
@@ -155,14 +155,14 @@
         font_name: "RobotoCR"
         font_size: "13sp"
         pos_hint: {"center_x": .43, "center_y": .13}
-        color: rgba(108, 117, 125, 255)
+        color: app.forth_font_color
         halign: "center"
     MDTextButton:
         text: "Влез оттук"
         font_name: "RobotoCR"
         font_size: "13sp"
         pos_hint: {"center_x": .66, "center_y": .13}
-        color: rgba(51, 80, 152, 255)
+        color: app.tertiary_font_color
         halign: "center"
         underline: True
         on_release:

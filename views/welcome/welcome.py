@@ -1,8 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from kivy.utils import rgba
-from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
-from views.home import Home
 
 Builder.load_file('views/welcome/welcome.kv')
 

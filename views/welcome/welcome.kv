@@ -14,7 +14,7 @@
                     size_hint: 1, 1
                     canvas.before:
                         Color:
-                            rgb: rgba(255, 255, 255, 255)
+                            rgb: app.white_color
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -29,7 +29,7 @@
                     pos_hint: {"center_x": .50, "center_y": .45}
                     font_name: "RobotoCR"
                     font_size: "15sp"
-                    color: rgba(135, 143, 158, 255)        
+                    color: app.secondary_font_color        
             MDFloatLayout:
                 Image:
                     source: "assets/imgs/save-money.jpg"
@@ -37,7 +37,7 @@
                     size_hint: .9, .6
                     canvas.before:
                         Color:
-                            rgb: rgba(255, 255, 255, 255)
+                            rgb: app.white_color
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -52,7 +52,7 @@
                     pos_hint: {"center_x": .50, "center_y": .45}
                     font_name: "RobotoCR"
                     font_size: "15sp"
-                    color: rgba(135, 143, 158, 255)            
+                    color: app.secondary_font_color            
             MDFloatLayout:
                 Image:
                     source: "assets/imgs/success.jpg"
@@ -60,7 +60,7 @@
                     size_hint: .9, .6
                     canvas.before:
                         Color:
-                            rgb: rgba(255, 255, 255, 255)
+                            rgb: app.white_color
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -75,7 +75,7 @@
                     pos_hint: {"center_x": .50, "center_y": .43}
                     font_name: "RobotoCR"
                     font_size: "15sp"
-                    color: rgba(135, 143, 158, 255)        
+                    color: app.secondary_font_color        
         MDIconButton:
             icon: "arrow-right"
             md_bg_color: 0, 0, 0, 1
