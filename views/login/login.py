@@ -1,22 +1,21 @@
 from kivy.uix.screenmanager import Screen
 from kivymd.toast.kivytoast import toast
 from kivy.lang import Builder
-from data.database import User, Database
+from data.database import Database
 
 Builder.load_file('views/login/login.kv')
 
 class Login(Screen):
-    
+
     def show_password(self, checkbox, value):
         if value:
             self.ids.password.password = False
-            self.ids.password_text.text = "Скрий паролата"
+            self.ids.password_text.text = 'Скрий паролата'
         else:
             self.ids.password.password = True
-            self.ids.password_text.text = "Покажи паролата"
+            self.ids.password_text.text = 'Покажи паролата'
             
     def validate(self):
-        self.u_obj = User()
         self.data = Database()
         email = self.ids.email.text
         password = self.ids.password.text
@@ -27,9 +26,13 @@ class Login(Screen):
         elif not password:
             return toast('Не сте въвели парола!')
         val = self.data.select_by_email(email = email)
-        real_email, real_pass = [val, ('', '')]
-        if real_email != email:
-            toast(f'Добре дошли отново, {self.u_obj.username}!')
-        elif real_pass != password:
+        if not val:
+            toast('Акаунт с този имейл не съществува!')
+            self.ids.email.text = ''
+            self.ids.password.text = ''
+        elif val[2] != password:
             toast('Грешна парола!')
-        self.manager.current = 'home'
+            self.ids.password.text = ''
+        else:
+            self.manager.transition.director = 'left'
+            self.manager.current = 'home'

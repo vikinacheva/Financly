@@ -33,13 +33,15 @@ class Database():
         self.conn.commit()
     
     def select_by_email(self, user_obj = None, email = None):
-        conn = sqlite3.connect('data/financly.db')
-        c = conn.cursor()
         if user_obj is not None:
-            with conn:
-                c.execute('SELECT * from users where email = (:email)',({'email' : user_obj.email}))
-                return c.fetchone()
+            with self.conn:
+                self.c.execute('SELECT * FROM users WHERE email = (:email)',
+                               ({'email' : user_obj.email})
+                            )
+                return self.c.fetchone()
         else:
-            with conn:
-                c.execute('SELECT * from users where email = (:email)', ({'email' : email}))
-                return c.fetchone()
+            with self.conn:
+                self.c.execute('SELECT * FROM users WHERE email = (:email)',
+                               ({'email' : email})
+                            )
+                return self.c.fetchone()

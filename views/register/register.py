@@ -1,6 +1,7 @@
 from kivy.uix.screenmanager import Screen
 from kivymd.toast.kivytoast import toast
 from kivy.lang import Builder
+import re
 from data.database import User, Database
 
 Builder.load_file('views/register/register.kv')
@@ -21,14 +22,25 @@ class Register(Screen):
         username = self.ids.username_input.text
         email = self.ids.email_input.text
         password = self.ids.password_input.text
-        if username and not email and not password:
-            return toast('Не сте въвели потребителско име, парола и имейл!')
-        elif not username:
+        confirm_password = self.ids.confirm_password.text
+        if not username:
             return toast('Не сте въвели потребителско име!')
-        elif not email:
+        elif ' ' in username:
+            return toast('Потребителското име не може да съдържа интервали!')
+        elif len(username) < 2 or len(username) > 20:
+            return toast('Потребителското име трябва да бъде между 2 и 20 символа!')
+        if not email:
             return toast('Не сте въвели имейл!')
-        elif not password:
+        elif '@' not in email:
+            return toast('Невалиден имейл адрес!')
+        if not password:
             return toast('Не сте въвели парола!')
+        elif not re.search(r"\d", password):
+            return toast('Паролата трябва да съдържа поне 1 число!')
+        elif len(password) < 6 or len(password) > 20:
+            return toast('Паролата трябва да бъде между 6 и 20 символа!')
+        if password != confirm_password:
+            return toast('Паролите не съвпадат!')
         val = self.data.select_by_email(email = email)
         if val is None:
             self.u_obj.add_username(username)
@@ -36,22 +48,10 @@ class Register(Screen):
             self.u_obj.add_password(password)
             self.data.add_entry(self.u_obj)
         else:
-            return toast('Акаунт с този имейл вече съществува!')
+            toast('Акаунт с този имейл вече съществува!')
+            self.ids.username_input.text = ''
+            self.ids.username_input.text = ''
+            self.ids.username_input.text = ''
         self.manager.current = 'welcome'
-        
-    # Create a submit button with:
-    #    - required fields
-    #        * if even one field isn't filled in, a text "Задължително поле!" to appear as a function
-    #        * if all fields are filled in correctly, create an account
-    #    - checking if the email already exists:
-    #        * if the email already exists, a text "Акаунт с този имейл вече съществува!" to appear as a function
-    #        * if the same email doesn't already exists, create an account
-    #    - confirmation of a password:
-    #        * if the two passwords are not the same, a text "Несъвпадащи пароли!" to appear as a function
-    #        * if the input is correct, create an account
-    #    - password validation of length and symbols:
-    #        * if the input is not correct, a text "Неправилно въведена парола!" to appear as a function
-    #        * if the input is correct, create an account
-    #    - when all of the above is fulfilled:
-    #        * save the data from all fields (except confirm password) to the database
-    #        * redirect to 'welcome.kv' 
+
+

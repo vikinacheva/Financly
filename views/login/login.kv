@@ -13,7 +13,7 @@
                 root.manager.transition.direction = "right"
                 root.manager.current = "main"
         MDLabel:
-            text: "ДОБРЕ ДОШЪЛ!"
+            text: "ДОБРЕ ДОШЛИ!"
             font_name: "RobotoM"
             font_size: "26sp"
             pos_hint: {"center_x": .6, "center_y": .85}
@@ -85,8 +85,6 @@
             background_color: 0, 0, 0, 0
             font_name: "RobotoB"
             on_release: 
-                root.manager.transition.director = "left"
-                root.manager.current = "home"
                 root.validate()
             canvas.before:
                 Color:

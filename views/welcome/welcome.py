@@ -1,6 +1,8 @@
 from kivy.uix.screenmanager import Screen
 from kivy.utils import rgba
+from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
+from views.home import Home
 
 Builder.load_file('views/welcome/welcome.kv')
 
@@ -17,3 +19,4 @@ class Welcome(Screen):
         self.ids.carousel.load_next(mode='next')
         if self.ids.slide3.text_color == rgba(35, 56, 99, 255):
             self.manager.current = 'home'
+            

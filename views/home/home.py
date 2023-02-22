@@ -1,9 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
-from kivy.properties import StringProperty, BooleanProperty
-from kivymd_extensions.akivymd.uix.bottomnavigation2 import Button_Item
-from kivy.utils import rgba
 from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
 
