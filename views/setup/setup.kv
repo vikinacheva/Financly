@@ -1,0 +1,175 @@
+#:kivy 1.0
+<Setup>:
+    name: "setup"
+    MDFloatLayout: 
+        md_bg_color: app.white_color 
+        MDCard: 
+            size_hint: .9, .8
+            pos_hint: {"center_x": .5, "center_y": .5}
+            Carousel: 
+                id: slide
+                MDFloatLayout:
+                    MDLabel:
+                        text: "Каква е твоята начална сума?"
+                        color: app.primary_color
+                        size_hint_x: .8
+                        pos_hint: {"center_x": .53, "center_y": .7}
+                        font_name: "RobotoCR"
+                    MDFloatLayout:
+                        size_hint: .7, .07
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        TextInput:
+                            hint_text: "Сума в лв."
+                            font_name: "RobotoCR"
+                            size_hint_y: .75
+                            pos_hint: {"center_x": .45, "center_y": .3}
+                            background_color: 1, 1, 1, 0
+                            foreground_color: app.input_font_color
+                            cursor_color: app.input_font_color
+                            font_size: "14sp"        
+                            cursor_width: "2sp"
+                            multiline: False
+                            required: True
+                        MDFloatLayout:                
+                            pos_hint: {"center_x": .45, "center_y": 0}
+                            size_hint_y: .03
+                            md_bg_color: app.dash_color
+                    MDFlatButton:
+                        text: "Следващ"
+                        theme_text_color: "Custom"
+                        text_color: app.white_color
+                        font_name: "RobotoMono"
+                        md_bg_color: app.primary_color
+                        size_hint_x: .8
+                        pos_hint: {"center_x": .5, "center_y": .2}
+                        on_release:
+                            root.next()
+                MDFloatLayout:
+                    MDLabel:
+                        text: "Какъв е сегашният ти месечен доход?"
+                        color: app.primary_color
+                        size_hint_x: .8
+                        pos_hint: {"center_x": .53, "center_y": .7}
+                        font_name: "RobotoCR"
+                    MDFloatLayout:
+                        size_hint: .7, .07
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        TextInput:
+                            hint_text: "Сума в лв."
+                            font_name: "RobotoCR"
+                            size_hint_y: .75
+                            pos_hint: {"center_x": .45, "center_y": .3}
+                            background_color: 1, 1, 1, 0
+                            foreground_color: app.input_font_color
+                            cursor_color: app.input_font_color
+                            font_size: "14sp"        
+                            cursor_width: "2sp"
+                            multiline: False
+                            required: True
+                        MDFloatLayout:                
+                            pos_hint: {"center_x": .45, "center_y": 0}
+                            size_hint_y: .03
+                            md_bg_color: app.dash_color
+                    MDFlatButton:
+                        text: "Предишен"
+                        theme_text_color: "Custom"
+                        text_color: app.white_color
+                        font_name: "RobotoMono"
+                        md_bg_color: app.primary_color
+                        size_hint_x: .35
+                        pos_hint: {"center_x": .3, "center_y": .2}
+                        on_release:
+                            root.previous()
+                    MDFlatButton:
+                        text: "Следващ"
+                        theme_text_color: "Custom"
+                        text_color: app.white_color
+                        font_name: "RobotoMono"
+                        md_bg_color: app.primary_color
+                        size_hint_x: .35
+                        pos_hint: {"center_x": .7, "center_y": .2}
+                        on_release:
+                            root.next1()
+                MDFloatLayout:
+                    MDLabel:
+                        text: "Колко % от месечните си доходи желаеш да спестяваш?"
+                        color: app.primary_color
+                        size_hint_x: .8
+                        pos_hint: {"center_x": .53, "center_y": .7}
+                        font_name: "RobotoCR"
+                    MDFloatLayout:
+                        size_hint: .7, .07
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        TextInput:
+                            hint_text: "Сума в %"
+                            font_name: "RobotoCR"
+                            size_hint_y: .75
+                            pos_hint: {"center_x": .45, "center_y": .3}
+                            background_color: 1, 1, 1, 0
+                            foreground_color: app.input_font_color
+                            cursor_color: app.input_font_color
+                            font_size: "14sp"        
+                            cursor_width: "2sp"
+                            multiline: False
+                            required: True
+                        MDFloatLayout:                
+                            pos_hint: {"center_x": .45, "center_y": 0}
+                            size_hint_y: .03
+                            md_bg_color: app.dash_color
+                    MDFlatButton:
+                        text: "Предишен"
+                        theme_text_color: "Custom"
+                        text_color: app.white_color
+                        font_name: "RobotoMono"
+                        md_bg_color: app.primary_color
+                        size_hint_x: .35
+                        pos_hint: {"center_x": .3, "center_y": .2}
+                        on_release:
+                            root.previous1()
+                    MDFlatButton:
+                        text: "Готово"
+                        theme_text_color: "Custom"
+                        text_color: app.white_color
+                        font_name: "RobotoMono"
+                        md_bg_color: app.primary_color
+                        size_hint_x: .35
+                        pos_hint: {"center_x": .7, "center_y": .2}
+                        on_release:
+                            root.manager.transition.direction = "left"
+                            root.manager.current = "home"
+    MDFloatLayout:
+        Image:
+            source: "assets/imgs/setup.png"
+            pos_hint: {"center_x": .5, "center_y": .8}
+            size_hint: 1, 1
+    MDIconButton:
+        id: icon
+        icon: "numeric-1-circle"
+        pos_hint: {"center_x": .34, "center_y": .94}
+        user_font_size: "35sp"
+        theme_text_color: "Custom"
+        text_color: app.primary_color
+    MDProgressBar:
+        id: progress
+        size_hint_x: .1
+        pos_hint: {"center_x": .42, "center_y": .94}
+        color: app.secondary_color
+    MDIconButton:
+        id: icon1
+        icon: "numeric-2-circle"
+        pos_hint: {"center_x": .5, "center_y": .94}
+        user_font_size: "35sp"
+        theme_text_color: "Custom"
+        text_color: app.primary_color
+    MDProgressBar:
+        id: progress1
+        size_hint_x: .1
+        pos_hint: {"center_x": .58, "center_y": .94}
+        color: app.secondary_color
+    MDIconButton:
+        icon: "numeric-3-circle"
+        pos_hint: {"center_x": .66, "center_y": .94}
+        user_font_size: "35sp"
+        theme_text_color: "Custom"
+        text_color: app.primary_color
+    

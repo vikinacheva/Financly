@@ -8,7 +8,7 @@
             pos_hint: {"center_y": .95}
             user_font_size: "30sp"
             theme_text_color: "Custom"
-            text_color: app.primary_font_color
+            text_color: app.primary_color
             on_release:
                 root.manager.transition.direction = "right"
                 root.manager.current = "start"
@@ -17,13 +17,13 @@
             font_name: "RobotoMono"
             font_size: "26sp"
             pos_hint: {"center_x": .6, "center_y": .85}
-            color: app.primary_font_color
+            color: app.primary_color
         MDLabel:
             text: "Влез, за да продължиш"
             font_name: "RobotoCR"
             font_size: "18sp"
             pos_hint: {"center_x": .6, "center_y": .79}
-            color: app.secondary_font_color 
+            color: app.primary_font_color 
         MDFloatLayout:
             size_hint: .7, .07
             pos_hint: {"center_x": .5, "center_y": .63}
@@ -77,7 +77,7 @@
             font_size: "13sp"
             font_name: "RobotoCR"
             pos_hint: {"center_x": .95, "center_y": .43}
-            color: app.forth_font_color            
+            color: app.tertiary_font_color            
         Button:
             text: "Влез"
             size_hint: .66, .065
@@ -88,7 +88,7 @@
                 root.validate()
             canvas.before:
                 Color:
-                    rgb: app.tertiary_font_color
+                    rgb: app.secondary_font_color
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -96,12 +96,12 @@
         MDTextButton:   
             text: "Забравена парола?"
             pos_hint: {"center_x": .5, "center_y": .28}
-            color: app.forth_font_color
+            color: app.tertiary_font_color
             font_size: "12sp"
             font_name: "RobotoCR"
         MDLabel:
             text: "или"
-            color: app.tertiary_font_color
+            color: app.secondary_font_color
             pos_hint: {"center_y": .22}
             font_size: "13sp"
             font_name: "RobotoB"
@@ -119,14 +119,14 @@
             font_name: "RobotoCR"
             font_size: "13sp"
             pos_hint: {"center_x": .38, "center_y": .16}
-            color: app.forth_font_color
+            color: app.tertiary_font_color
             halign: "center"
         MDTextButton:
             text: "Регистрирай се"
             font_name: "RobotoCR"
             font_size: "13sp"
             pos_hint: {"center_x": .63, "center_y": .16}
-            color: app.tertiary_font_color
+            color: app.secondary_font_color
             halign: "center"
             underline: True
             on_release:

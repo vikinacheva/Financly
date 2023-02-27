@@ -13,7 +13,7 @@
             font_size: "25sp"
             pos_hint: {"center_x": .5, "center_y": .6}
             halign: "center"
-            color: rgba(34, 56, 97, 255)
+            color: app.primary_color
         MDLabel:
             text: "Добре дошъл във Financly - твоят личен финансов помощник."
             font_name: "RobotoCR"
@@ -21,7 +21,7 @@
             size_hint_x: .85
             pos_hint: {"center_x": .5, "center_y": .5}
             halign: "center"
-            color: rgba(135, 143, 158, 255) 
+            color: app.primary_font_color 
         Button:
             text: "Влез"
             size_hint: .66, .065
@@ -33,7 +33,7 @@
                 root.manager.current = "login"
             canvas.before:
                 Color:
-                    rgb: rgba(51, 80, 152, 1)
+                    rgb: app.secondary_font_color
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -44,13 +44,13 @@
             pos_hint: {"center_x": .5, "center_y": .09}
             background_color: 0, 0, 0, 0
             font_name: "RobotoB"
-            color: rgba(51, 80, 152, 255)
+            color: app.secondary_font_color
             on_release: 
                 root.manager.transition.direction = "left"
                 root.manager.current = "register"
             canvas.before:
                 Color:
-                    rgb: rgba(51, 80, 152, 1)
+                    rgb: app.secondary_font_color
                 Line:
                     width: 1.2
                     rounded_rectangle: self.x, self.y, self.width, self.height, 5, 5, 5, 5, 100  

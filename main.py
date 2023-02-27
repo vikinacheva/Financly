@@ -10,6 +10,7 @@ from views.login import login
 from views.register import register
 from views.welcome import welcome
 from views.home import home
+from views.setup import setup
 
 Window.size = (360, 640)   
 
@@ -19,21 +20,26 @@ class Financly(MDApp):
     black_color = get_color_from_hex("#010101")
     white_color = rgba(255, 255, 255, 255)
     
-    primary_font_color = rgba(34, 56, 97, 255)
-    secondary_font_color = rgba(135, 143, 158, 255)
-    tertiary_font_color = rgba(51, 80, 152, 255)
-    forth_font_color = rgba(108, 117, 125, 255)
+    primary_color = rgba(34, 56, 97, 255)
+    secondary_color = get_color_from_hex("#f7983c")
     
+    primary_font_color = rgba(135, 143, 158, 255)
+    secondary_font_color = rgba(51, 80, 152, 255)
+    tertiary_font_color = rgba(108, 117, 125, 255) 
     input_font_color = rgba(0, 0, 59, 255)
+    
     dash_color = rgba(178, 178, 178, 255)
+    dot_color = rgba(221, 221, 221, 255)
+    icon_color = get_color_from_hex("#e9f1fa")
     
     def build(self):
         screen_manager = ScreenManager()
-        screen_manager.add_widget(home.Home(name = "home"))
+        screen_manager.add_widget(setup.Setup(name = "setup"))
         screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(login.Login(name = "login"))
         screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(welcome.Welcome(name = "welcome"))
+        screen_manager.add_widget(home.Home(name = "home"))
         
         return screen_manager   
 

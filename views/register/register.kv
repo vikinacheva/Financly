@@ -8,7 +8,7 @@
         pos_hint: {"center_y": .95}
         user_font_size: "30sp"
         theme_text_color: "Custom"
-        text_color: app.primary_font_color
+        text_color: app.primary_color
         on_release:
             root.manager.transition.direction = "right"
             root.manager.current = "start"
@@ -17,13 +17,13 @@
         font_name: "RobotoMono"
         font_size: "26sp"
         pos_hint: {"center_x": .6, "center_y": .85}
-        color: app.primary_font_color
+        color: app.primary_color
     MDLabel:
         text: "Създай нов акаунт"
         font_name: "RobotoCR"
         font_size: "18sp"
         pos_hint: {"center_x": .6, "center_y": .79}
-        color: app.secondary_font_color 
+        color: app.primary_font_color 
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .70}
@@ -97,7 +97,7 @@
         font_size: "13sp"
         font_name: "RobotoCR"
         pos_hint: {"center_x": .95, "center_y": .5}
-        color: app.forth_font_color
+        color: app.tertiary_font_color
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .45}
@@ -130,14 +130,14 @@
             root.register()
         canvas.before:
             Color:
-                rgb: app.tertiary_font_color
+                rgb: app.secondary_font_color
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
                 radius: [5]    
     MDLabel:
         text: "или"
-        color: app.tertiary_font_color
+        color: app.secondary_font_color
         pos_hint: {"center_y": .18}
         font_size: "13sp"
         font_name: "RobotoB"
@@ -155,14 +155,14 @@
         font_name: "RobotoCR"
         font_size: "13sp"
         pos_hint: {"center_x": .43, "center_y": .13}
-        color: app.forth_font_color
+        color: app.tertiary_font_color
         halign: "center"
     MDTextButton:
         text: "Влез оттук"
         font_name: "RobotoCR"
         font_size: "13sp"
         pos_hint: {"center_x": .66, "center_y": .13}
-        color: app.tertiary_font_color
+        color: app.secondary_font_color
         halign: "center"
         underline: True
         on_release:
