@@ -1,7 +1,209 @@
 #:kivy 1.0
 <Home>:
     name: 'home'
+    RelativeLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            SoftBox:
+                orientation: 'vertical'
+                size_hint_y: .6
+                padding: dp(14)
+                vertical: True
+                bcolor: [app.colors.primary, app.colors.tertiary]
+                MDLabel:
+                    text: "Current Balance"
+                    halign: 'center'
+                    valign: 'bottom'
+                    font_name: app.fonts.subheading
+                    font_size: app.fonts.size.h5 
+                    color: app.colors.white
+                MDLabel:
+                    text: "0 лв."
+                    halign: 'center'
+                    font_name: app.fonts.heading
+                    font_size: app.fonts.size.h2 
+                    color: app.colors.white
+                BoxLayout:
+                    Widget:
+                    AnchorLayout:
+                        size_hint_x: None 
+                        width: self.height
+                        BackBox:
+                            padding: dp(8)
+                            bcolor: [1,1,1, .2] 
+                            radius: [self.height*.3]
+                            size_hint: [None, None]
+                            size: [dp(50), dp(50)]
+                            IconButton:
+                                source: 'assets/icons/income.png'
+                    AnchorLayout:
+                        size_hint_x: None 
+                        width: self.height
+                        BackBox:
+                            padding: dp(8)
+                            bcolor: [1,1,1, .2] 
+                            radius: [self.height*.3]
+                            size_hint: [None, None]
+                            size: [dp(50), dp(50)]
+                            IconButton:
+                                source: 'assets/icons/expense.png'
+                    Widget:
+                Widget:
+            Widget:
+                size_hint_y: .4
+        BoxLayout:
+            orientation: 'vertical'
+            Widget:
+            BackBox:
+                orientation: 'vertical'
+                bcolor: app.colors.white 
+                radius: [dp(42), dp(42), 0, 0]
+                padding: dp(12)
+                MDLabel: 
+                    text: "Транзакции"
+                    halign: 'center'
+                    valign: 'top'
+                    font_name: app.fonts.space
+                    font_size: app.fonts.size.h3
+                    color: app.colors.secondary
+                    size_hint_y: None
+                    height: dp(28)
+                BoxLayout:
+                    ScrollView:
+                        do_scroll: [False, True] 
+                        size_hint_y: None 
+                        height: self.parent.height*.85 
+                        GridLayout:
+                            id: gl_transactions 
+                            cols: 1 
+                            size_hint_y: None 
+                            height: self.minimum_height       
+                            spacing: dp(20)
+<TileAction>:
+	background: ''
+	background_color: [0,0,0, .2]
+	AnchorLayout:
+		anchor_y: 'bottom'
+		BackBox:
+			orientation: 'vertical'
+			padding: dp(12)
+			bcolor: app.colors.white
+			size_hint_y: None
+			height: dp(128)
+			GridLayout:
+				cols: 1
+				FlatButton:
+					text: 'Edit'
+					color: app.colors.primary
+					font_name: app.fonts.heading
+					halign: 'left'
+					size_hint_y: None
+					height: dp(42)
+				BackBox:
+					size_hint_y: None
+					height: dp(1)
+					bcolor: app.colors.primary_font
+				FlatButton:
+					text: 'Delete'
+					color: app.colors.red
+					font_name: app.fonts.heading
+					halign: 'left'
+					size_hint_y: None
+					height: dp(42)
+<AddNew>:
+	background: ''
+	background_color: [0,0,0, .2]
+	AnchorLayout:
+		anchor_y: 'bottom'
+		BackBox:
+			orientation: 'vertical'
+			padding: dp(12)
+			bcolor: app.colors.white
+			size_hint_y: .9
+			radius: [dp(42), dp(42), 0, 0]
+			BoxLayout:
+				spacing: dp(8)
+				size_hint_y: None
+				height: dp(42)
+				padding: [dp(0), 0, 0, dp(10)]
+				FlatButton:
+					text: 'cancel'
+					color: app.colors.secondary
+					font_name: app.fonts.subheading
+					font_size: app.fonts.size.h6
+					size_hint_x: .3
+					on_release: root.dismiss()
+				Text: 
+					text: "Add Expense" if root.expense else "Add Income"
+					color: app.colors.primary
+					font_name: app.fonts.heading
+					font_size: app.fonts.size.h4
+					halign: 'center'
+					size_hint_x: .4
+				FlatButton:
+					text: 'confirm'
+					color: app.colors.secondary
+					font_name: app.fonts.subheading
+					font_size: app.fonts.size.h6
+					size_hint_x: .3
+					on_release: root.confirm()
+			BoxLayout:
+				orientation: 'vertical'
+				spacing: dp(14)
+				padding: [0,dp(12),0,0]
+				BackBox:
+					size_hint_y: None
+					height: dp(42)
+					bcolor: app.colors.primary_font
+					radius: [self.height*.2]
+					padding: dp(4)
+					OutlineTextField:
+						id: title
+						hint_text: 'Title'
+						bcolor: [0,0,0,0]
+				BackBox:
+					size_hint_y: None
+					height: dp(42)
+					bcolor: app.colors.primary_font
+					radius: [self.height*.2]
+					padding: dp(4)
+					OutlineTextField:
+						hint_text: 'Execution Date'
+						bcolor: [0,0,0,0]
+				BoxLayout:
+					size_hint_y: None
+					height: dp(54)
+					orientation: 'vertical'
+					Text: 
+						id: new_amount
+						text: "0.00"
+						color: app.colors.secondary
+						font_name: app.fonts.heading
+						font_size: app.fonts.size.extra
+						halign: 'center'
+					Text: 
+						text: "Amount"
+						color: app.colors.secondary
+						font_name: app.fonts.subheading
+						font_size: app.fonts.size.h6
+						halign: 'center'
+						opacity: .7
+						size_hint_y: None
+						height: dp(18)
+				GridLayout:
+					id: gl_buttons
+					cols: 3
+					spacing: dp(32)
+					padding: [dp(32), dp(4), dp(32), dp(12)]
 
+<KeyPad>:
+	size_hint: [1, None]
+	height: self.width
+	canvas.before:
+		Color:
+			rgba: [0,0,0,0] if root.non_numeric else app.colors.primary_font
+		Ellipse:
+			pos: self.pos
+			size: self.size
 
-        
-  
+            

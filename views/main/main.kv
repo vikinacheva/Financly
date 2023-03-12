@@ -2,6 +2,12 @@
 #: import NoTransition kivy.uix.screenmanager.NoTransition
 #: import get_color_from_hex kivy.utils.get_color_from_hex
 
+#: import SoftBox widgets.gradient.SoftBox 
+#: import ShadowBox widgets.shadow.ShadowBox
+#: import BackBox widgets.box.BackBox 
+#: import Text widgets.labels.Text
+#: import IconButton widgets.buttons.IconButton
+
 #: import Home views.home.Home
 #: import Analytics views.analytics.Analytics
 #: import Currencies views.currencies.Currencies
@@ -38,6 +44,9 @@
                     name: 'screen_account'
                     Account:
                         id: account
+            Widget:
+                size_hint_y: None
+                height: dp(50)
     NavBar:
         size_hint: .8, .07
         pos_hint: {"center_x": .5, "center_y": .07}

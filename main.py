@@ -26,6 +26,7 @@ class Financly(MDApp):
     
     colors.primary = rgba(34, 56, 97, 255)
     colors.secondary = get_color_from_hex("#f7983c")
+    colors.tertiary = get_color_from_hex("#2c468e")
     
     colors.primary_font = rgba(135, 143, 158, 255)
     colors.secondary_font = rgba(51, 80, 152, 255)
