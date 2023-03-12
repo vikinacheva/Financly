@@ -1,0 +1,94 @@
+#:kivy 1.0
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+
+#: import Home views.home.Home
+#: import Analytics views.analytics.Analytics
+#: import Currencies views.currencies.Currencies
+#: import Account views.account.Account
+
+<Main>:
+    name: 'main'
+    orientation: 'vertical'
+    canvas.before:
+        Color: 
+            rgba: app.colors.white
+        Rectangle:
+            pos: self.pos
+            size: self.size 
+    RelativeLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            ScreenManager:
+                id: screen_manager
+                transition: NoTransition()
+                Screen:
+                    name: 'screen_home'
+                    Home:
+                        id: home
+                Screen:
+                    name: 'screen_analytics'
+                    Analytics:
+                        id: analytics
+                Screen:
+                    name: 'screen_currencies'
+                    Currencies:
+                        id: currencies
+                Screen:
+                    name: 'screen_account'
+                    Account:
+                        id: account
+    NavBar:
+        size_hint: .8, .07
+        pos_hint: {"center_x": .5, "center_y": .07}
+        elevation: 6
+        shadow_softness: 5
+        md_bg_color: app.colors.primary
+        radius: [16]
+        MDGridLayout:
+            cols: 4
+            size_hint_x: .9
+            spacing: 45
+            text_color: app.colors.icon
+            pos_hint: {"center_x": .5, "center_y": .52}
+            MDIconButton:
+                id: nav_icon1
+                icon: "home" 
+                ripple_scale: 0 
+                theme_text_color: "Custom"
+                user_font_size: app.fonts.size.h5 
+                text_color: get_color_from_hex("#f7983c") 
+                on_release:
+                    screen_manager.current = "screen_home"
+                    root.if_active(self)
+            MDIconButton:
+                id: nav_icon2
+                icon: "google-analytics" 
+                ripple_scale: 0 
+                theme_text_color: "Custom"
+                user_font_size: app.fonts.size.h5 
+                text_color: app.colors.icon 
+                on_release:
+                    screen_manager.current = "screen_analytics"
+                    root.if_active(self)
+            MDIconButton:
+                id: nav_icon3
+                icon: "swap-horizontal" 
+                ripple_scale: 0 
+                theme_text_color: "Custom"
+                user_font_size: app.fonts.size.h5 
+                text_color: app.colors.icon 
+                on_release:
+                    screen_manager.current = "screen_currencies"
+                    root.if_active(self)
+            MDIconButton:
+                id: nav_icon4
+                icon: "account" 
+                ripple_scale: 0 
+                theme_text_color: "Custom"
+                user_font_size: app.fonts.size.h5 
+                text_color: app.colors.icon 
+                on_release:
+                    screen_manager.current = "screen_account"
+                    root.if_active(self)
+

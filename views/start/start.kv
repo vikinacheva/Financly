@@ -9,31 +9,31 @@
             pos_hint: {"center_x": .5, "center_y": .8}
         MDLabel:
             text: "ЗДРАВЕЙ!"
-            font_name: "RobotoMono"
-            font_size: "25sp"
             pos_hint: {"center_x": .5, "center_y": .6}
             halign: "center"
-            color: app.primary_color
+            font_name: app.fonts.space
+            font_size: app.fonts.size.h3
+            color: app.colors.primary
         MDLabel:
             text: "Добре дошъл във Financly - твоят личен финансов помощник."
-            font_name: "RobotoCR"
-            font_size: "15sp"
             size_hint_x: .85
             pos_hint: {"center_x": .5, "center_y": .5}
             halign: "center"
-            color: app.primary_font_color 
+            font_name: app.fonts.body
+            font_size: app.fonts.size.h5
+            color: app.colors.primary_font 
         Button:
             text: "Влез"
             size_hint: .66, .065
             pos_hint: {"center_x": .5, "center_y": .18}
             background_color: 0, 0, 0, 0
-            font_name: "RobotoB"
+            font_name: app.fonts.heading
             on_release: 
                 root.manager.transition.direction = "left"
                 root.manager.current = "login"
             canvas.before:
                 Color:
-                    rgb: app.secondary_font_color
+                    rgb: app.colors.secondary_font
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -43,14 +43,14 @@
             size_hint: .66, .065
             pos_hint: {"center_x": .5, "center_y": .09}
             background_color: 0, 0, 0, 0
-            font_name: "RobotoB"
-            color: app.secondary_font_color
+            font_name: app.fonts.heading
+            color: app.colors.secondary_font
             on_release: 
                 root.manager.transition.direction = "left"
                 root.manager.current = "register"
             canvas.before:
                 Color:
-                    rgb: app.secondary_font_color
+                    rgb: app.colors.secondary_font
                 Line:
                     width: 1.2
                     rounded_rectangle: self.x, self.y, self.width, self.height, 5, 5, 5, 5, 100  

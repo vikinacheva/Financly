@@ -7,7 +7,6 @@ from data.database import User, Database
 Builder.load_file('views/register/register.kv')
 
 class Register(Screen):
-    
     def show_password(self, checkbox, value):
         if value:
             self.ids.password_input.password = False
@@ -39,7 +38,10 @@ class Register(Screen):
             return toast('Паролата трябва да съдържа поне 1 число!')
         elif len(password) < 6 or len(password) > 20:
             return toast('Паролата трябва да бъде между 6 и 20 символа!')
+        if not confirm_password:
+            return toast('Потвърдете паролата си!')
         if password != confirm_password:
+            self.ids.confirm_password.text = ''
             return toast('Паролите не съвпадат!')
         val = self.data.select_by_email(email = email)
         if val is None:

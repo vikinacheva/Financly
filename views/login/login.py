@@ -6,7 +6,6 @@ from data.database import Database
 Builder.load_file('views/login/login.kv')
 
 class Login(Screen):
-
     def show_password(self, checkbox, value):
         if value:
             self.ids.password.password = False

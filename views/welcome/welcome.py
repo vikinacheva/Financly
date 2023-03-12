@@ -5,7 +5,6 @@ from kivy.lang import Builder
 Builder.load_file('views/welcome/welcome.kv')
 
 class Welcome(Screen):
-    
     def current_slide(self, index):
         for i in range(3):
             if index == i:

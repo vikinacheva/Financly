@@ -14,7 +14,7 @@
                     size_hint: 1, 1
                     canvas.before:
                         Color:
-                            rgb: app.white_color
+                            rgb: app.colors.white
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -22,14 +22,14 @@
                     text:"Следи лесно финансите си."
                     size_hint_x: .6
                     pos_hint: {"center_x": .4, "center_y": .52}
-                    font_name: "RobotoB"
+                    font_name: app.fonts.heading
                 MDLabel:
                     text:"Научи се да управляваш парите си и бъди винаги наясно с разходите и приходите си."
                     size_hint_x: .8
                     pos_hint: {"center_x": .5, "center_y": .45}
-                    font_name: "RobotoCR"
-                    font_size: "15sp"
-                    color: app.primary_font_color        
+                    font_name: app.fonts.body
+                    font_size: app.fonts.size.h5
+                    color: app.colors.primary_font        
             MDFloatLayout:
                 Image:
                     source: "assets/imgs/save-money.jpg"
@@ -37,7 +37,7 @@
                     size_hint: .9, .6
                     canvas.before:
                         Color:
-                            rgb: app.white_color
+                            rgb: app.colors.white
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -45,14 +45,14 @@
                     text:"Спестявай успешно."
                     size_hint_x: .6  
                     pos_hint: {"center_x": .4, "center_y": .52}
-                    font_name: "RobotoB"
+                    font_name: app.fonts.heading
                 MDLabel:
                     text:"Изгради навици за отговорнo харчене и заделянето на пари ще стане напълно постижимо."
                     size_hint_x: .8
                     pos_hint: {"center_x": .5, "center_y": .45}
-                    font_name: "RobotoCR"
-                    font_size: "15sp"
-                    color: app.primary_font_color            
+                    font_name: app.fonts.body
+                    font_size: app.fonts.size.h5
+                    color: app.colors.primary_font            
             MDFloatLayout:
                 Image:
                     source: "assets/imgs/success.jpg"
@@ -60,7 +60,7 @@
                     size_hint: .9, .6
                     canvas.before:
                         Color:
-                            rgb: app.white_color
+                            rgb: app.colors.white
                         Rectangle:
                             size: self.size
                             pos: self.pos
@@ -68,14 +68,14 @@
                     text:"Успехът се крие в дисциплината."
                     size_hint_x: .6 
                     pos_hint: {"center_x": .4, "center_y": .52}
-                    font_name: "RobotoB"
+                    font_name: app.fonts.heading
                 MDLabel:
                     text:"Очакват те нови висоти на кариера и стандарт на живот. Пренапиши напълно финансовите си навици с Financly."
                     size_hint_x: .8
                     pos_hint: {"center_x": .5, "center_y": .43}
-                    font_name: "RobotoCR"
-                    font_size: "15sp"
-                    color: app.primary_font_color    
+                    font_name: app.fonts.body
+                    font_size: app.fonts.size.h5
+                    color: app.colors.primary_font    
         MDIconButton:
             id: arrow
             icon: "arrow-right"
@@ -90,20 +90,20 @@
             id: slide1
             icon: "circle"
             theme_text_color: "Custom"
-            text_color: app.primary_color
+            text_color: app.colors.primary
             pos_hint: {"center_x": .1, "center_y": .085}
             icon_size: "8sp"
         MDIconButton:
             id: slide2
             icon: "circle"
             theme_text_color: "Custom"
-            text_color: app.dot_color
+            text_color: app.colors.dot
             pos_hint: {"center_x": .15, "center_y": .085}
             icon_size: "8sp"
         MDIconButton:
             id: slide3
             icon: "circle"
             theme_text_color: "Custom"
-            text_color: app.dot_color
+            text_color: app.colors.dot
             pos_hint: {"center_x": .2, "center_y": .085}
             icon_size: "8sp"

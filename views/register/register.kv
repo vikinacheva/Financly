@@ -6,77 +6,79 @@
     MDIconButton:
         icon: "arrow-left"
         pos_hint: {"center_y": .95}
-        user_font_size: "30sp"
         theme_text_color: "Custom"
-        text_color: app.primary_color
+        user_font_size: app.fonts.size.h1
+        text_color: app.colors.primary
         on_release:
             root.manager.transition.direction = "right"
             root.manager.current = "start"
     MDLabel:
         text: "ЗДРАВЕЙ!"
-        font_name: "RobotoMono"
-        font_size: "26sp"
         pos_hint: {"center_x": .6, "center_y": .85}
-        color: app.primary_color
+        font_name: app.fonts.space
+        font_size: app.fonts.size.h2
+        color: app.colors.primary
     MDLabel:
         text: "Създай нов акаунт"
-        font_name: "RobotoCR"
-        font_size: "18sp"
         pos_hint: {"center_x": .6, "center_y": .79}
-        color: app.primary_font_color 
+        font_name: app.fonts.body
+        font_size: app.fonts.size.h5
+        color: app.colors.primary_font 
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .70}
         TextInput:
             id: username_input
             hint_text: "Потребителско име"
-            font_name: "RobotoCR"
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: app.input_font_color
-            cursor_color: app.input_font_color
-            font_size: "14sp"        
+            foreground_color: app.colors.input_font
+            font_size: app.fonts.size.h6        
+            cursor_color: app.colors.input_font
             cursor_width: "2sp"
+            font_name: app.fonts.body
             multiline: False
             required: True
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: app.dash_color
+            md_bg_color: app.colors.dash
     MDFloatLayout:
         size_hint: .7, .07
+            md_bg_color: app.colors.dash
         pos_hint: {"center_x": .5, "center_y": .63}
         TextInput:
             id: email_input
             hint_text: "Имейл"
-            font_name: "RobotoCR"
+            font_name: app.fonts.body
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: app.input_font_color
-            cursor_color: app.input_font_color
-            font_size: "14sp"        
+            foreground_color: app.colors.input_font
+            font_size: app.fonts.size.h6        
+            cursor_color: app.colors.input_font
             cursor_width: "2sp"
             multiline: False
             required: True
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: app.dash_color
+            md_bg_color: app.colors.dash
     MDFloatLayout:
         size_hint: .7, .07
+            md_bg_color: app.colors.dash
         pos_hint: {"center_x": .5, "center_y": .56}
         TextInput:
             id: password_input
             hint_text: "Парола"
-            font_name: "RobotoCR"
+            font_name: app.fonts.body
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: app.input_font_color
-            cursor_color: app.input_font_color
-            font_size: "14sp"        
+            foreground_color: app.colors.input_font
+            font_size: app.fonts.size.h6        
+            cursor_color: app.colors.input_font
             cursor_width: "2sp"
             multiline: False
             password: True
@@ -84,9 +86,10 @@
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: app.dash_color
+            md_bg_color: app.colors.dash
     MDCheckbox:
         size_hint: None, None
+            md_bg_color: app.colors.dash
         size: "48dp", "48dp"
         pos_hint: {"center_x": .76, "center_y": .5}
         on_active:
@@ -94,23 +97,23 @@
     MDLabel:
         id: password_text
         text: "Покажи паролата"
-        font_size: "13sp"
-        font_name: "RobotoCR"
+        font_size: app.fonts.size.h6
+        font_name: app.fonts.body
         pos_hint: {"center_x": .95, "center_y": .5}
-        color: app.tertiary_font_color
+        color: app.colors.tertiary_font
     MDFloatLayout:
         size_hint: .7, .07
         pos_hint: {"center_x": .5, "center_y": .45}
         TextInput:
             id: confirm_password
             hint_text: "Потвърди паролата"
-            font_name: "RobotoCR"
+            font_name: app.fonts.body
             size_hint_y: .75
             pos_hint: {"center_x": .45, "center_y": .3}
             background_color: 1, 1, 1, 0
-            foreground_color: app.input_font_color
-            cursor_color: app.input_font_color
-            font_size: "14sp"        
+            foreground_color: app.colors.input_font
+            font_size: app.fonts.size.h6        
+            cursor_color: app.colors.input_font
             cursor_width: "2sp"
             multiline: False
             password: True
@@ -118,53 +121,53 @@
         MDFloatLayout:                
             pos_hint: {"center_x": .45, "center_y": 0}
             size_hint_y: .03
-            md_bg_color: app.dash_color
+            md_bg_color: app.colors.dash
     Button:
         text: "Регистрирай се"
+        md_bg_color: app.colors.dash
         size_hint: .66, .065
         pos_hint: {"center_x": .5, "center_y": .27}
         background_color: 0, 0, 0, 0
-        font_name: "RobotoB"
+        font_name: app.fonts.heading
         on_release: 
             root.manager.transition.director = "left"
             root.register()
         canvas.before:
             Color:
-                rgb: app.secondary_font_color
+                rgb: app.colors.secondary_font
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
                 radius: [5]    
     MDLabel:
         text: "или"
-        color: app.secondary_font_color
-        pos_hint: {"center_y": .18}
-        font_size: "13sp"
-        font_name: "RobotoB"
         halign: "center"
+        pos_hint: {"center_y": .18}
+        font_name: app.fonts.heading
+        font_size: app.fonts.size.h6
+        color: app.colors.secondary_font
     MDFloatLayout:                
-        md_bg_color: app.dash_color
         size_hint: .3, .002
         pos_hint: {"center_x": .3, "center_y": .18}
+        md_bg_color: app.colors.dash
     MDFloatLayout:                
-        md_bg_color: app.dash_color
         size_hint: .3, .002
         pos_hint: {"center_x": .7, "center_y": .18}
+        md_bg_color: app.colors.dash
     MDLabel:
         text: "Вече имаш акаунт?"
-        font_name: "RobotoCR"
-        font_size: "13sp"
         pos_hint: {"center_x": .43, "center_y": .13}
-        color: app.tertiary_font_color
         halign: "center"
+        font_name: app.fonts.body
+        font_size: app.fonts.size.h6
+        color: app.colors.tertiary_font
     MDTextButton:
         text: "Влез оттук"
-        font_name: "RobotoCR"
-        font_size: "13sp"
-        pos_hint: {"center_x": .66, "center_y": .13}
-        color: app.secondary_font_color
+        pos_hint: {"center_x": .645, "center_y": .13}
         halign: "center"
-        underline: True
+        font_name: app.fonts.body
+        font_size: app.fonts.size.h6
+        color: app.colors.secondary_font
         on_release:
             root.manager.transition.direction = "left"
             root.manager.current = "login" 
