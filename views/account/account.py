@@ -1,7 +1,7 @@
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen
 
 Builder.load_file('views/account/account.kv')
 
-class Account(BoxLayout):
+class Account(Screen):
     pass

@@ -1,3 +1,167 @@
 #:kivy 1.0
 <Analytics>:
     name: 'analytics'
+    orientation: 'vertical'
+    spacing: dp(8)
+    BoxLayout:
+        size_hint_y: None
+        height: dp(42)
+        Text:   
+            text: 'Анализи'
+            font_name: app.fonts.heading
+            font_size: app.fonts.size.h2
+            color: app.colors.tertiary
+            halign: 'center'
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: .3
+            id: wrapper_overview
+            orientation: 'vertical'
+            padding: [dp(12), dp(4)]
+            BoxLayout:
+                size_hint_y: None
+                height: dp(24)
+                Text:   
+                    text: 'Месечен преглед'
+                    font_name: app.fonts.subheading
+                    font_size: app.fonts.size.h5
+                    color: app.colors.primary
+                    halign: 'center'
+            BoxLayout:
+                spacing: dp(20)
+                padding: [dp(1), dp(12), dp(1), dp(8)]
+                AnchorLayout:
+                    size_hint_y: .7
+                    pos_hint: {"center_y": .55}
+                    SoftBox:
+                        vertical: True
+                        radius: [self.height*.2]
+                        bcolor: [app.colors.tertiary, app.colors.primary]
+                        padding: dp(8)
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint_y: None
+                            height: dp(42)
+                            AnchorLayout:
+                                size_hint_x: None
+                                width: self.height
+                                anchor_x: 'left'
+                                BackBox:
+                                    padding: dp(1)
+                                    bcolor: [1,1,1, .6]
+                                    radius: [self.height*.3]
+                                    size_hint: [None, None]
+                                    size: [dp(24), dp(24)]
+                                    IconButton:
+                                        source: 'assets/icons/income.png'
+                            BoxLayout:
+                                id: wrapper_trend
+                        GridLayout:
+                            cols: 1
+                            Text: 
+                                text: "12, 450.02 лв."
+                                color: app.colors.white
+                                font_name: app.fonts.heading
+                                font_size: app.fonts.size.h3
+                                size_hint_y: None
+                                height: dp(24)
+                            Text: 
+                                text: "Приходи"
+                                color: app.colors.white
+                                font_name: app.fonts.subheading
+                                font_size: app.fonts.size.h5
+                                size_hint_y: None
+                                height: dp(16)
+                                opacity: .7
+                AnchorLayout:
+                    size_hint_y: .7
+                    pos_hint: {"center_y": .55}
+                    SoftBox:
+                        vertical: True
+                        radius: [self.height*.2]
+                        bcolor: [app.colors.primary, app.colors.tertiary]
+                        padding: dp(8)
+                        orientation: 'vertical'
+                        BoxLayout:
+                            size_hint_y: None
+                            height: dp(42)
+                            AnchorLayout:
+                                size_hint_x: None
+                                width: self.height
+                                anchor_x: 'left'
+                                BackBox:
+                                    padding: dp(1)
+                                    bcolor: [1,1,1, .6]
+                                    radius: [self.height*.3]
+                                    size_hint: [None, None]
+                                    size: [dp(24), dp(24)]
+                                    IconButton:
+                                        source: 'assets/icons/expense.png'
+                            BoxLayout:
+                                id: wrapper_trend
+                        GridLayout:
+                            cols: 1
+                            Text: 
+                                text: "4,827.64 лв."
+                                color: app.colors.white
+                                font_name: app.fonts.heading
+                                font_size: app.fonts.size.h3
+                                size_hint_y: None
+                                height: dp(24)
+                            Text: 
+                                text: "Разходи"
+                                color: app.colors.white
+                                font_name: app.fonts.subheading
+                                font_size: app.fonts.size.h5
+                                size_hint_y: None
+                                height: dp(16)
+                                opacity: .7
+
+        BoxLayout:
+            size_hint_y: .4
+            id: wrapper_graph
+            orientation: 'vertical'
+            padding: dp(12)
+            BoxLayout:
+                size_hint_y: None
+                height: dp(36)
+                BoxLayout:
+                    size_hint_x: .4
+                    spacing: dp(4)
+                    orientation: 'vertical'
+                    BoxLayout:
+                        spacing: dp(4)
+                        Text:   
+                            text: 'Приходи'
+                            font_name: app.fonts.body
+                            font_size: app.fonts.size.h6
+                            color: app.colors.black
+                            halign: 'right'
+                        AnchorLayout:
+                            size_hint_x: None
+                            width: dp(10)
+                            BackBox:
+                                size_hint: [1, None]
+                                height: dp(10)
+                                bcolor: app.colors.secondary
+                                radius: [self.height/2]
+                    BoxLayout:
+                        spacing: dp(4)
+                        Text:   
+                            text: 'Разходи'
+                            font_name: app.fonts.body
+                            font_size: app.fonts.size.h6
+                            color: app.colors.black
+                            halign: 'right'
+                        AnchorLayout:
+                            size_hint_x: None
+                            width: dp(10)
+                            BackBox:
+                                size_hint: [1, None]
+                                height: dp(10)
+                                bcolor: app.colors.secondary_font
+                                radius: [self.height/2]
+            BoxLayout:
+                BarChart:
+                    id: chart

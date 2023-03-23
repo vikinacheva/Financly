@@ -23,6 +23,7 @@ class Financly(MDApp):
     colors.white = rgba(255, 255, 255, 255)
     colors.red = get_color_from_hex("d00000")
     colors.green = get_color_from_hex("55a630")
+    colors.light = get_color_from_hex("f8f9fa")
     
     colors.primary = rgba(34, 56, 97, 255)
     colors.secondary = get_color_from_hex("#f7983c")

@@ -10,7 +10,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.metrics import dp, sp
-from kivy.utils import rgba, QueryDict, get_color_from_hex
+from kivy.utils import rgba, QueryDict, get_random_color, get_color_from_hex
 
 from kivy.clock import Clock
 
@@ -29,58 +29,67 @@ class Home(BoxLayout):
     def render(self, _):
         trans = [
             {
-                'id': 'groceries',
-                'title': 'Храна',
-                'date': 'Today',
+                'id': 'shopping',
+                'title': 'Дрехи',
+                'date': 'Днес',
                 'amount': '22.00',
                 'initial-amount': '12,472',
-                'icon': 'assets/icons/groceries.png',
+                'icon': 'assets/icons/shopping.png',
                 'expense': True,
             },
             {
-                'id': 'shopping',
-                'title': 'Дрехи',
-                'date': 'Today',
+                'id': 'groceries',
+                'title': 'Храна',
+                'date': 'Днес',
                 'amount': '54.50',
                 'initial-amount': '12,869',
-                'icon': 'assets/icons/shopping.png',
+                'icon': 'assets/icons/groceries.png',
                 'expense': True,
             },
             {
                 'id': 'scholarship',
                 'title': 'Стипендия',
-                'date': 'Today',
-                'amount': '30.00',
-                'initial-amount': '12,103',
+                'date': 'Вчера',
+                'amount': '40.00',
+                'initial-amount': '12,472',
                 'icon': 'assets/icons/scholarship.png',
                 'expense': False,
             },
             {
                 'id': 'cosmetics',
                 'title': 'Козметика',
-                'date': 'Today',
-                'amount': '8.99',
-                'initial-amount': '13,757',
+                'date': 'Днес',
+                'amount': '720.00',
+                'initial-amount': '12,103',
                 'icon': 'assets/icons/cosmetics.png',
                 'expense': True,
             },
             {
                 'id': 'transport',
                 'title': 'Транспорт',
-                'date': 'Today',
+                'date': 'Днес',
                 'amount': '8.99',
                 'initial-amount': '13,757',
                 'icon': 'assets/icons/transport.png',
                 'expense': True,
             },
             {
-                'id': 'wage',
+                'id': 'salary',
                 'title': 'Заплата',
-                'date': 'Yesterday',
+                'date': 'Вчера',
                 'amount': '540.00',
                 'initial-amount': '12,472',
-                'icon': 'assets/icons/wage.png',
+                'icon': 'assets/icons/salary.png',
                 'expense': False,
+            },
+            {
+                'id': 'accommodation',
+                'title': 'За дома',
+                'date': 'Днес',
+                'amount': '540.00',
+                'initial-amount': '12,472',
+                'icon': 'assets/icons/accommodation.png',
+                'expense': True,
             },
         ]
         self.refresh_transactions(trans)
@@ -89,7 +98,7 @@ class Home(BoxLayout):
         grid = self.ids.gl_transactions
         grid.clear_widgets()
         for t in trans:
-            ic = get_color_from_hex("#f7983c")
+            ic = get_color_from_hex("f8f9fa")
 
             tile = ListTile()
             tile.tile_id = t['id']
@@ -116,7 +125,7 @@ class Home(BoxLayout):
         an.open()
 
     def add_transaction(self, t):
-        ic = get_color_from_hex("#f7983c")
+        ic = get_color_from_hex("f8f9fa")
 
         now = datetime.now()
         dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
@@ -126,9 +135,9 @@ class Home(BoxLayout):
 
         if yr == dt.year and mnth == dt.month:
             if day == dt.day:
-                sub = "Today"
+                sub = "Днес"
             elif dt.day == day -1:
-                sub = "Yesterday"
+                sub = "Вчера"
         else:
             sub = t['date']
 
@@ -137,8 +146,8 @@ class Home(BoxLayout):
         tile.title = t['title']
         tile.subtitle = sub
         tile.amount = t['amount']
-        tile.extra = "12,657.09" 
-        tile.extra = t['initial-amount']
+        tile.extra = "12,657.09" # Track current balance before add
+        # tile.extra = t['initial-amount']
         tile.icon = t['icon']
         tile.expense = t['expense']
         tile.icon_color = ic
@@ -218,14 +227,14 @@ class KeyPad(ButtonBehavior, AnchorLayout):
             self.padding = dp(10)
             icon = IconButton()
             icon.source = value
-            icon.bind(on_release=self.callback)
+            # icon.bind(on_release=self.callback)
         else:
             icon = FlatButton()
             icon.text = value
             icon.font_name = fonts.heading
             icon.font_size = fonts.size.h2
             icon.color = colors.secondary
-            icon.bind(on_release=self.callback)
+            # icon.bind(on_release=self.callback)
         
         self.clear_widgets()
         self.add_widget(icon)

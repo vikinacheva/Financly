@@ -1,7 +1,38 @@
 #:kivy 1.0
 <Account>:
     name: 'account'
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "10dp"
+        padding: "20dp"
+        Image:
+    		source: "assets/icons/logo2.png"
+    		size_hint: None, None
+    		size: 75, 75
+			pos_hint: {"center_y": .85}
+        Image:
+            source: "assets/icons/user.png"
+            size_hint: None, None
+            size: 200, 200
+            pos_hint: {"center_x": .5}
+        Label:
+            text: "Име"
+            size_hint: None, None
+            size: self.texture_size
+            pos_hint: {"center_x": .5}
+            color: app.colors.black
+        MDFloatLayout:
+            MDRaisedButton:
+                text: "Излез"
+                pos_hint: {"center_x": .5, "center_y": .7}
+                text_color: app.colors.white
+                line_color: app.colors.primary
+                md_bg_color: app.colors.primary
+                on_release:
+                    app.root.transition.direction = "right"
+                    app.root.current = "login"
 
 
         
+    
   
