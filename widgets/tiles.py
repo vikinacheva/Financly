@@ -48,6 +48,22 @@ Builder.load_string('''
             font_size: app.fonts.size.h6
             color: app.colors.primary_font
 ''')
+
+category_icons = {
+        "Храна": "assets/icons/groceries.png",
+        "Дрехи и др.": "assets/icons/shopping.png",
+        "Козметика": "assets/icons/cosmetics.png",
+        "Транспорт": "assets/icons/transport.png",
+        "За дома": "assets/icons/accommodation.png",
+        "Здраве": "assets/icons/healthcare.png",
+        "Данък": "assets/icons/tax.png",
+        "Други": "assets/icons/more-information.png",
+        "Заплата": "assets/icons/salary.png",
+        "Подарък": "assets/icons/gift-card.png",
+        "Инвестиции": "assets/icons/invest.png",
+        "Стипендия": "assets/icons/scholarship.png"
+    }
+
 class ListTile(ButtonBehavior, BoxLayout):
     tile_id = StringProperty("")
     icon = StringProperty("")
@@ -58,8 +74,10 @@ class ListTile(ButtonBehavior, BoxLayout):
     expense = BooleanProperty(True)
     data = ObjectProperty(allownone=True)
     icon_color = ColorProperty([1,1,1, .2])
-    def __init__(self, **kw) -> None:
-        super().__init__(**kw)
+
+    def __init__(self, category_name, **kwargs):
+        super().__init__(**kwargs)
+        self.icon = category_icons.get(category_name, 'icons/default.png')
 
     def on_amount(self, inst, amount):
         amountx = self.ids.amount

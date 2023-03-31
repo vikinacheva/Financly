@@ -9,152 +9,144 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.behaviors import ButtonBehavior
-from kivy.metrics import dp, sp
-from kivy.utils import rgba, QueryDict, get_random_color, get_color_from_hex
+from kivy.uix.button import Button
+from kivy.uix.dropdown import DropDown
+from kivy.metrics import dp
+from kivy.utils import get_color_from_hex
 
 from kivy.clock import Clock
 
-from kivy.properties import StringProperty, ObjectProperty, BooleanProperty, ListProperty, ColorProperty, NumericProperty
+from kivy.properties import StringProperty, ObjectProperty, BooleanProperty, NumericProperty
 
 from widgets.tiles import ListTile
 from widgets.buttons import FlatButton, IconButton
 
 Builder.load_file('views/home/home.kv')
 
-class Home(BoxLayout):
-    def __init__(self, **kw) -> None:
-        super().__init__(**kw)
-        Clock.schedule_once(self.render, .1)
+category_icons = {
+        "Храна": "assets/icons/groceries.png",
+        "Дрехи и др.": "assets/icons/shopping.png",
+        "Козметика": "assets/icons/cosmetics.png",
+        "Транспорт": "assets/icons/transport.png",
+        "За дома": "assets/icons/accommodation.png",
+        "Здраве": "assets/icons/healthcare.png",
+        "Данък": "assets/icons/tax.png",
+        "Други": "assets/icons/more-information.png",
+        "Заплата": "assets/icons/salary.png",
+        "Подарък": "assets/icons/gift-card.png",
+        "Инвестиции": "assets/icons/invest.png",
+        "Стипендия": "assets/icons/scholarship.png"
+    }
 
-    def render(self, _):
-        trans = [
-            {
-                'id': 'shopping',
-                'title': 'Дрехи',
-                'date': 'Днес',
-                'amount': '22.00',
-                'initial-amount': '12,472',
-                'icon': 'assets/icons/shopping.png',
-                'expense': True,
-            },
-            {
-                'id': 'groceries',
-                'title': 'Храна',
-                'date': 'Днес',
-                'amount': '54.50',
-                'initial-amount': '12,869',
-                'icon': 'assets/icons/groceries.png',
-                'expense': True,
-            },
-            {
-                'id': 'scholarship',
-                'title': 'Стипендия',
-                'date': 'Вчера',
-                'amount': '40.00',
-                'initial-amount': '12,472',
-                'icon': 'assets/icons/scholarship.png',
-                'expense': False,
-            },
-            {
-                'id': 'cosmetics',
-                'title': 'Козметика',
-                'date': 'Днес',
-                'amount': '720.00',
-                'initial-amount': '12,103',
-                'icon': 'assets/icons/cosmetics.png',
-                'expense': True,
-            },
-            {
-                'id': 'transport',
-                'title': 'Транспорт',
-                'date': 'Днес',
-                'amount': '8.99',
-                'initial-amount': '13,757',
-                'icon': 'assets/icons/transport.png',
-                'expense': True,
-            },
-            {
-                'id': 'salary',
-                'title': 'Заплата',
-                'date': 'Вчера',
-                'amount': '540.00',
-                'initial-amount': '12,472',
-                'icon': 'assets/icons/salary.png',
-                'expense': False,
-            },
-            {
-                'id': 'accommodation',
-                'title': 'За дома',
-                'date': 'Днес',
-                'amount': '540.00',
-                'initial-amount': '12,472',
-                'icon': 'assets/icons/accommodation.png',
-                'expense': True,
-            },
-        ]
-        self.refresh_transactions(trans)
+class Home(BoxLayout):          
+    # current_amount = NumericProperty(0)
+    
+    # def __init__(self, **kw) -> None:
+    #     super().__init__(**kw)
+    #     Clock.schedule_once(self.render, .1)
 
-    def refresh_transactions(self, trans):
-        grid = self.ids.gl_transactions
-        grid.clear_widgets()
-        for t in trans:
-            ic = get_color_from_hex("f8f9fa")
+    # def render(self, _):
+    #     expenses = []
+    #     incomes = []
+    #     self.refresh_transactions(expenses, incomes)
+          
+    # def refresh_transactions(self, expenses, incomes):
+    #     grid = self.ids.gl_transactions
+    #     grid.clear_widgets()
+    #     current_amount = self.current_amount
 
-            tile = ListTile()
-            tile.tile_id = t['id']
-            tile.title = t['title']
-            tile.subtitle = t['date']
-            tile.amount = t['amount']
-            tile.extra = t['initial-amount']
-            tile.icon = t['icon']
-            tile.expense = t['expense']
-            tile.icon_color = ic
-            tile.data = t
-            tile.bind(on_release=self.tile_action)
+    #     for t in expenses:
+    #         ic = get_color_from_hex("f8f9fa")
+    #         tile = ListTile()
+    #         tile.tile_id = t['id']
+    #         tile.title = t['title']
+    #         tile.subtitle = t['date']
+    #         tile.amount = t['amount']
+    #         tile.extra = t['initial-amount']
+    #         tile.icon = t['icon']
+    #         tile.expense = t['expense']
+    #         tile.icon_color = ic
+    #         tile.data = t
+    #         tile.bind(on_release=self.tile_action)
+    #         grid.add_widget(tile)
 
-            grid.add_widget(tile)
+    #         if t['expense']:
+    #             current_amount -= float(t['amount'])
 
-    def tile_action(self, inst):
-        ta = TileAction()
-        ta.open()
+    #     for t in incomes:
+    #         ic = get_color_from_hex("f8f9fa")
+    #         tile = ListTile()
+    #         tile.tile_id = t['id']
+    #         tile.title = t['title']
+    #         tile.subtitle = t['date']
+    #         tile.amount = t['amount']
+    #         tile.extra = t['initial-amount']
+    #         tile.icon = t['icon']
+    #         tile.expense = t['expense']
+    #         tile.icon_color = ic
+    #         tile.data = t
+    #         tile.bind(on_release=self.tile_action)
+    #         grid.add_widget(tile)
 
-    def add_new(self, expense=True):
-        an = AddNew()
-        an.expense = expense
-        an.callback = self.add_transaction
-        an.open()
+    #         if not t['expense']:
+    #             current_amount += float(t['amount'])
 
-    def add_transaction(self, t):
-        ic = get_color_from_hex("f8f9fa")
+    #     self.current_amount = current_amount
+    #     self.ids.current_amount.text = f"{current_amount:.2f} лв."
 
-        now = datetime.now()
-        dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
-        yr = now.year
-        mnth = now.month
-        day = now.day
+    # def tile_action(self, inst):
+    #     ta = TileAction()
+    #     ta.open()
 
-        if yr == dt.year and mnth == dt.month:
-            if day == dt.day:
-                sub = "Днес"
-            elif dt.day == day -1:
-                sub = "Вчера"
-        else:
-            sub = t['date']
+    # def add_new(self, expense=True):
+    #     an = AddNew()
+    #     an.expense = expense
+    #     an.callback = self.add_transaction
+    #     an.open()
 
-        tile = ListTile()
-        tile.tile_id = t['id']
-        tile.title = t['title']
-        tile.subtitle = sub
-        tile.amount = t['amount']
-        tile.extra = "12,657.09" # Track current balance before add
-        # tile.extra = t['initial-amount']
-        tile.icon = t['icon']
-        tile.expense = t['expense']
-        tile.icon_color = ic
-        tile.data = t
-        tile.bind(on_release=self.tile_action)
+    # def add_transaction(self, t):
+    #     ic = get_color_from_hex("f8f9fa")
+    #     category_name = t['category']
+    #     icon = category_icons[category_name]
 
-        self.ids.gl_transactions.add_widget(tile)
+    #     now = datetime.now()
+    #     dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
+    #     yr = now.year
+    #     mnth = now.month
+    #     day = now.day
+
+    #     if yr == dt.year and mnth == dt.month:
+    #         if day == dt.day:
+    #             sub = "Днес"
+    #         elif dt.day == day -1:
+    #             sub = "Вчера"
+    #     else:
+    #         sub = t['date']
+
+    #     icon = category_icons.get(category_name, "icons/default.png")
+
+    #     tile = ListTile(category_name=category_name)
+    #     tile.tile_id = t['id']
+    #     tile.title = t['title']
+    #     tile.subtitle = sub
+    #     tile.amount = t['amount']
+    #     if t['expense']:
+    #         self.current_amount -= float(t['amount'])
+    #         tile.extra = f"{float(t['amount']):.2f}"
+    #     else:
+    #         self.current_amount += float(t['amount'])
+    #         tile.extra = f"{float(t['amount']):.2f}"
+    #     tile.extra += " лв."
+    #     tile.icon = icon
+    #     tile.expense = t['expense']
+    #     tile.icon_color = ic
+    #     tile.data = t
+    #     tile.bind(on_release=self.tile_action)
+
+    #     self.ids.gl_transactions.add_widget(tile)
+    #     self.ids.current_amount.text = f"{self.current_amount:.2f} лв."
+    pass
+    
 
 class TileAction(ModalView):
     def __init__(self, **kw) -> None:
@@ -163,8 +155,13 @@ class TileAction(ModalView):
 class AddNew(ModalView):
     expense = BooleanProperty(False)
     callback = ObjectProperty(print)
-    def __init__(self, **kw) -> None:
+    category_button = ObjectProperty(None)
+    expense_categories = ["Храна", "Дрехи и др.", "Козметика", "Транспорт", "За дома", "Здраве", "Данък", "Други"]
+    income_categories = ["Заплата", "Подарък", "Инвестиции", "Стипендия", "Други"]
+
+    def __init__(self, **kw):
         super().__init__(**kw)
+        self.category_button = self.ids.category_button
         Clock.schedule_once(self.render, .1)
 
     def render(self, _):
@@ -183,7 +180,67 @@ class AddNew(ModalView):
                 kp.non_numeric = True
 
             self.ids.gl_buttons.add_widget(kp)
-    
+
+        self.expense_category_dropdown = DropDown()
+        for category in self.expense_categories:
+            btn = Button(
+                text=category,
+                size_hint_y=None,
+                height=dp(40)
+            )
+            btn.bind(on_release=self.expense_category_dropdown.select)
+            btn.bind(on_release=lambda btn: self.set_category_text(btn.text))
+            btn.bind(on_release=lambda btn: self.select_category(btn.text))
+            self.expense_category_dropdown.add_widget(btn)
+
+        self.income_category_dropdown = DropDown()
+        for category in self.income_categories:
+            btn = Button(
+                text=category,
+                size_hint_y=None,
+                height=dp(40)
+            )
+            btn.bind(on_release=self.income_category_dropdown.select)
+            btn.bind(on_release=lambda btn: self.set_category_text(btn.text))
+            btn.bind(on_release=lambda btn: self.select_category(btn.text))
+            self.income_category_dropdown.add_widget(btn)
+
+    def set_category_text(self, category):
+        self.category_button.text = category
+
+    def show_category_dropdown(self, instance):
+        if self.expense:
+            self.expense_category_dropdown.open(instance)
+        else:
+            self.income_category_dropdown.open(instance)
+
+    def select_category(self, category):
+        if self.expense:
+            categories = self.expense_categories
+        else:
+            categories = self.income_categories
+        self.set_category_text(category)
+        self.category = category
+        self.update_category_dropdown(categories)
+
+    def update_category_dropdown(self, categories):
+        if self.expense:
+            dropdown = self.expense_category_dropdown
+        else:
+            dropdown = self.income_category_dropdown
+
+        dropdown.clear_widgets()
+        for category in categories:
+            btn = Button(
+                text=category,
+                size_hint_y=None,
+                height=dp(40)
+            )
+            btn.bind(on_release=dropdown.select)
+            btn.bind(on_release=lambda btn: self.set_category_text(btn.text))
+            btn.bind(on_release=lambda btn: self.select_category(btn.text))
+            dropdown.add_widget(btn)
+
     def confirm(self):
         self.dismiss()
         icons = os.listdir("assets/icons")
@@ -198,6 +255,7 @@ class AddNew(ModalView):
             'initial-amount': '0.00',
             'icon': icon,
             'expense': self.expense,
+            'category': self.category_button.text,
         }
         self.callback(data)
     
@@ -211,7 +269,7 @@ class AddNew(ModalView):
             amount.text = amount.text[: -1]
             if amount.text == "":
                 amount.text = "0.00"
-
+                
 class KeyPad(ButtonBehavior, AnchorLayout):
     source = StringProperty("")
     non_numeric = BooleanProperty(False)
@@ -227,14 +285,12 @@ class KeyPad(ButtonBehavior, AnchorLayout):
             self.padding = dp(10)
             icon = IconButton()
             icon.source = value
-            # icon.bind(on_release=self.callback)
         else:
             icon = FlatButton()
             icon.text = value
             icon.font_name = fonts.heading
             icon.font_size = fonts.size.h2
             icon.color = colors.secondary
-            # icon.bind(on_release=self.callback)
         
         self.clear_widgets()
         self.add_widget(icon)

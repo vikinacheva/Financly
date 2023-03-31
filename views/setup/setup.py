@@ -1,25 +1,29 @@
+from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.toast.kivytoast import toast
 from kivy.lang import Builder
 from kivy.utils import rgba
 from kivy.utils import get_color_from_hex
-
+from data.database import User, Database
 
 Builder.load_file('views/setup/setup.kv')
 
 class Setup(Screen): 
+    def submit_starting_budget(self, budget):
+        app = App.get_running_app()
+        app.starting_budget = float(budget)
+    
     def next(self):
-        if not self.ids.initial_amount.text:
+        if not self.ids.starting_budget.text:
             return toast("Моля въведете начална сума!")
-        if not self.ids.initial_amount.text.isdigit():
+        if not self.ids.starting_budget.text.isdigit():
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')
             self.ids.progress.value = 100
             self.ids.icon.text_color = get_color_from_hex("#f7983c")
             self.ids.icon.icon = "check-circle"
-        
-    
+
     def next1(self):
         if not self.ids.perma_income.text:
             return toast("Моля въведете месечен доход (заплата)!")
@@ -27,9 +31,9 @@ class Setup(Screen):
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')
-            self.ids.progress.value = 100
-            self.ids.icon.text_color = get_color_from_hex("#f7983c")
-            self.ids.icon.icon = "check-circle"
+            self.ids.progress1.value = 100
+            self.ids.icon1.text_color = get_color_from_hex("#f7983c")
+            self.ids.icon1.icon = "check-circle"
         
     def previous(self):
         self.ids.slide.load_previous()
@@ -55,10 +59,13 @@ class Setup(Screen):
             toast("Процентът не може да бъде по-голям от 100!")
             return
         else:
-            self.manager.current = 'main'
-        
-    
-
-    
-    
+            db = Database()
+            user_obj = User()
+            user_obj.add_username(App.get_running_app().root.get_screen('register').username.text)
+            user_obj.add_email(App.get_running_app().root.get_screen('register').email.text)
+            user_obj.add_password(App.get_running_app().root.get_screen('register').password.text)
+            user_obj.add_savings(float(self.ids.savings.text))
+            user_obj.add_starting_budget(float(self.ids.starting_budget.text))
+            db.add_user(user_obj)
+            self.manager.current = 'welcome'
     

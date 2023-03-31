@@ -19,7 +19,7 @@
                         size_hint: .7, .07
                         pos_hint: {"center_x": .5, "center_y": .5}
                         TextInput:
-                            id: initial_amount
+                            id: starting_budget
                             hint_text: "Сума в лв."
                             size_hint_y: .75
                             pos_hint: {"center_x": .45, "center_y": .3}
@@ -34,7 +34,7 @@
                         MDFloatLayout:                
                             pos_hint: {"center_x": .45, "center_y": 0}
                             size_hint_y: .03
-                            md_bg_color: app.colors.dash
+                            md_bg_color: app.colors.dash    
                     MDFlatButton:
                         text: "Следващ"
                         theme_text_color: "Custom"
@@ -44,6 +44,7 @@
                         size_hint_x: .8
                         pos_hint: {"center_x": .5, "center_y": .2}
                         on_release:
+                            root.submit_starting_budget(starting_budget.text)
                             root.next()
                 MDFloatLayout:
                     MDLabel:
@@ -94,7 +95,7 @@
                             root.next1()
                 MDFloatLayout:
                     MDLabel:
-                        text: "Колко лв. от месечните си доходи желаеш да спестяваш?"
+                        text: "Колко % от месечните си доходи желаеш да спестяваш?"
                         color: app.colors.primary
                         size_hint_x: .8
                         pos_hint: {"center_x": .53, "center_y": .7}

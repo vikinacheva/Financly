@@ -3,6 +3,10 @@ from kivy.uix.screenmanager import ScreenManager
 from kivymd.theming import ThemeManager
 from kivy.core.window import Window
 from kivy.utils import QueryDict, rgba, get_color_from_hex
+from data.database import User, Database
+
+from kivy.properties import NumericProperty
+
 from views.start import start
 from views.login import login
 from views.register import register
@@ -13,6 +17,24 @@ from views.main import main
 Window.size = (360, 640)   
 
 class Financly(MDApp):
+    starting_budget = NumericProperty()
+    
+    def set_budget(self, value):
+        self.starting_budget = float(value)
+        user = User()
+        user.set_starting_budget(self.starting_budget)
+        db = Database()
+        db.add_entry(user)
+        
+    def get_budget(self):
+        return self.starting_budget
+    
+    def save_budget(self, main_screen):
+        user = User()
+        user.add_email(main_screen.email)
+        db = Database()
+        db.add_entry(user, main_screen.ids.starting_budget.text)
+    
     theme_cls = ThemeManager()
     
     colors = QueryDict()
@@ -50,18 +72,18 @@ class Financly(MDApp):
     fonts.body = 'assets/fonts/RobotoCondensed-Regular.ttf'
     fonts.space = 'assets/fonts/RobotoMono-VariableFont_wght.ttf'
     fonts.light = 'assets/fonts/RobotoCondensed-Light.ttf'
-    
+
     def build(self):
         screen_manager = ScreenManager()
-        screen_manager.add_widget(main.Main(name = "main"))
-        screen_manager.add_widget(setup.Setup(name = "setup"))
+        screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(login.Login(name = "login"))
-        screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(welcome.Welcome(name = "welcome"))
+        screen_manager.add_widget(setup.Setup(name = "setup"))
+        screen_manager.add_widget(main.Main(name = "main"))
         
         return screen_manager   
-
+        
 if __name__ == '__main__':
     financly = Financly()
     financly.run()

@@ -1,12 +1,18 @@
+from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.toast.kivytoast import toast
 from kivy.lang import Builder
 import re
 from data.database import User, Database
+from kivy.properties import ObjectProperty
 
 Builder.load_file('views/register/register.kv')
 
 class Register(Screen):
+    username = ObjectProperty(None)
+    email = ObjectProperty(None)
+    password = ObjectProperty(None)
+    
     def show_password(self, checkbox, value):
         if value:
             self.ids.password_input.password = False
@@ -44,16 +50,9 @@ class Register(Screen):
             self.ids.confirm_password.text = ''
             return toast('Паролите не съвпадат!')
         val = self.data.select_by_email(email = email)
-        if val is None:
-            self.u_obj.add_username(username)
-            self.u_obj.add_email(email)
-            self.u_obj.add_password(password)
-            self.data.add_entry(self.u_obj)
-        else:
-            toast('Акаунт с този имейл вече съществува!')
-            self.ids.username_input.text = ''
-            self.ids.username_input.text = ''
-            self.ids.username_input.text = ''
-        self.manager.current = 'welcome'
+        App.get_running_app().username = username
+        App.get_running_app().email = email
+        App.get_running_app().password = password
+        self.manager.current = 'setup'
 
 

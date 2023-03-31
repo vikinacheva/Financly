@@ -15,55 +15,7 @@ class History(BoxLayout):
         Clock.schedule_once(self.render, .1)
 
     def render(self, _):
-        trans = [
-            {
-                'id': 'shopping',
-                'title': 'Дрехи',
-                'date': 'Днес',
-                'amount': '22.00',
-                'initial-amount': '12,472',
-                'icon': 'assets/icons/shopping.png',
-                'expense': True,
-            },
-            {
-                'id': 'groceries',
-                'title': 'Храна',
-                'date': 'Днес',
-                'amount': '54.50',
-                'initial-amount': '12,869',
-                'icon': 'assets/icons/groceries.png',
-                'expense': True,
-            },
-            {
-                'id': 'cosmetics',
-                'title': 'Козметика',
-                'date': 'Днес',
-                'amount': '720.00',
-                'initial-amount': '12,103',
-                'icon': 'assets/icons/cosmetics.png',
-                'expense': True,
-            },
-            {
-                'id': 'transport',
-                'title': 'Транспорт',
-                'date': 'Днес',
-                'amount': '8.99',
-                'initial-amount': '13,757',
-                'icon': 'assets/icons/transport.png',
-                'expense': True,
-            },
-            {
-                'id': 'accommodation',
-                'title': 'За дома',
-                'date': 'Днес',
-                'amount': '540.00',
-                'initial-amount': '12,472',
-                'icon': 'assets/icons/accommodation.png',
-                'expense': True,
-            },
-        ]
-
-        self.refresh_transactions(trans)
+        pass
 
     def refresh_transactions(self, data):
         grid = self.ids.gl_history

@@ -32,8 +32,8 @@
 					halign: 'center'
 					valign: 'bottom'
 					opacity: .8
-				Text: 
-					text: "12, 450.02 лв."
+				Label: 
+					text: str(app.starting_budget) + ' лв.'
 					color: app.colors.white
 					font_name: app.fonts.heading
 					font_size: app.fonts.size.h3
@@ -129,6 +129,8 @@
 					size_hint_y: None
 					height: dp(42)
 <AddNew>:
+	expense: False
+    category_button: category_button
 	background: ''
 	background_color: [0,0,0, .2]
 	AnchorLayout:
@@ -170,6 +172,7 @@
 				spacing: dp(14)
 				padding: [0,dp(12),0,0]
 				BackBox:
+					id: name_box
 					size_hint_y: None
 					height: dp(42)
 					bcolor: app.colors.light
@@ -179,15 +182,32 @@
 						id: title
 						hint_text: 'Заглавие'
 						bcolor: [0,0,0,0]
-				BackBox:
-					size_hint_y: None
-					height: dp(42)
-					bcolor: app.colors.light
-					radius: [self.height*.2]
-					padding: dp(4)
-					OutlineTextField:
-						hint_text: 'Таг'
-						bcolor: [0,0,0,0]
+				BoxLayout:
+    				size_hint_y: None
+    				height: dp(42)
+    				padding: dp(4)
+    				ToggleButton:
+                		id: category_button
+                		text: 'Избери категория'
+                		background_normal: ''
+                		background_color: app.colors.light
+                		color: app.colors.primary_font
+                		group: 'category_toggle'
+						text_size: self.size
+    					halign: 'left'
+						valign: 'center'
+                		on_release: 
+							root.show_category_dropdown(self)
+                		DropDown:
+                		    id: expense_category_dropdown
+                		    on_select:
+                		        category_button.text = args[1]
+                		        root.select_category(args[1])
+                		DropDown:
+                		    id: income_category_dropdown
+                		    on_select:
+                		        category_button.text = args[1]
+                		        root.select_category(args[1])
 				BoxLayout:
 					size_hint_y: None
 					height: dp(54)
@@ -195,6 +215,7 @@
 					Text: 
 						id: new_amount
 						text: "0.00"
+					
 						color: app.colors.primary
 						font_name: app.fonts.heading
 						font_size: app.fonts.size.h3

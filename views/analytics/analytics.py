@@ -15,7 +15,6 @@ class Analytics(BoxLayout):
         Clock.schedule_once(self.render, .1)
 
     def render(self, _):
-        # Plot Chart points
         points = [(20, 10), (15, 32), (45, 24), (87, 38), (34, 27), (98, 54), (56, 90)]
         colors = App.get_running_app().colors
 

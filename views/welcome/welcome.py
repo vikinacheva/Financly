@@ -15,5 +15,5 @@ class Welcome(Screen):
     def next(self):
         self.ids.carousel.load_next(mode='next')
         if self.ids.slide3.text_color == rgba(35, 56, 99, 255):
-            self.manager.current = 'setup'
+            self.manager.current = 'main'
             
