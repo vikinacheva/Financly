@@ -1,6 +1,7 @@
 #:kivy 1.0
 <Home>:
 	name: 'home'
+	id: home
     RelativeLayout:
 		BoxLayout:
 			orientation: 'vertical'
@@ -32,12 +33,12 @@
 					halign: 'center'
 					valign: 'bottom'
 					opacity: .8
-				Label: 
-					text: str(app.starting_budget) + ' лв.'
-					color: app.colors.white
-					font_name: app.fonts.heading
-					font_size: app.fonts.size.h3
-					halign: 'center'
+				Label:
+        			text: f"{app.starting_budget} лв."
+            		color: app.colors.white
+            		font_name: app.fonts.heading
+            		font_size: app.fonts.size.h3
+            		halign: 'center'
 				BoxLayout:
 					Widget:
 					AnchorLayout:

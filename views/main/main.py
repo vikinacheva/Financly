@@ -1,8 +1,10 @@
+from kivy.app import App
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
+from data.database import Database
 
 Builder.load_file('views/main/main.kv')
 

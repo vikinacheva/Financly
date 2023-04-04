@@ -1,4 +1,5 @@
 from kivymd.app import MDApp
+import sqlite3
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.theming import ThemeManager
 from kivy.core.window import Window
@@ -17,24 +18,13 @@ from views.main import main
 Window.size = (360, 640)   
 
 class Financly(MDApp):
-    starting_budget = NumericProperty()
+    starting_budget = NumericProperty(0)
     
-    def set_budget(self, value):
-        self.starting_budget = float(value)
-        user = User()
-        user.set_starting_budget(self.starting_budget)
-        db = Database()
-        db.add_entry(user)
+    def __init__(self, **kwargs):
+        self.db_path = 'data/financly.db'
+        self.current_user_email = None
+        super().__init__(**kwargs)
         
-    def get_budget(self):
-        return self.starting_budget
-    
-    def save_budget(self, main_screen):
-        user = User()
-        user.add_email(main_screen.email)
-        db = Database()
-        db.add_entry(user, main_screen.ids.starting_budget.text)
-    
     theme_cls = ThemeManager()
     
     colors = QueryDict()
@@ -72,18 +62,29 @@ class Financly(MDApp):
     fonts.body = 'assets/fonts/RobotoCondensed-Regular.ttf'
     fonts.space = 'assets/fonts/RobotoMono-VariableFont_wght.ttf'
     fonts.light = 'assets/fonts/RobotoCondensed-Light.ttf'
-
+        
     def build(self):
+        self.db = Database()
         screen_manager = ScreenManager()
-        screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(login.Login(name = "login"))
-        screen_manager.add_widget(welcome.Welcome(name = "welcome"))
+        screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(setup.Setup(name = "setup"))
+        screen_manager.add_widget(welcome.Welcome(name = "welcome"))
         screen_manager.add_widget(main.Main(name = "main"))
         
         return screen_manager   
-        
+    
+    def get_starting_budget(self):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT starting_budget FROM budgets WHERE user_email = ?", (self.current_user_email,))
+        result = cursor.fetchone()
+        if result:
+            self.starting_budget = result[0]
+        else:
+            self.starting_budget = 0
+            
 if __name__ == '__main__':
     financly = Financly()
     financly.run()
