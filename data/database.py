@@ -3,11 +3,12 @@ import datetime
 import threading
 
 class User():
-    def __init__(self, username=None, email=None, password=None, starting_budget=None, savings=None, incomes=None, expenses=None):
+    def __init__(self, username=None, email=None, password=None, starting_budget=None, salary=None, savings=None, incomes=None, expenses=None):
         self.username = username
         self.email = email
         self.password = password
         self.starting_budget = starting_budget
+        self.salary = salary
         self.savings = savings
         self.incomes = incomes if incomes is not None else []
         self.expenses = expenses if expenses is not None else []
@@ -29,18 +30,21 @@ class User():
         
     def add_starting_budget(self, starting_budget):
         self.starting_budget = starting_budget
+    
+    def add_salary(self, salary):
+        self.salary = salary
         
     def add_savings(self, savings):
         self.savings = savings
         
     def add_income(self, db, budget_id, title, amount, category):
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-        db.add_income(budget_id, title, amount, date, category)
+        self.add_income(budget_id, title, amount, date, category)
         self.incomes.append((title, amount, date, category))
 
     def add_expense(self, db, budget_id, title, amount, category):
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-        db.add_expense(budget_id, title, amount, date, category)
+        self.add_expense(budget_id, title, amount, date, category)
         self.expenses.append((title, amount, date, category))
     
     @classmethod
@@ -50,10 +54,11 @@ class User():
         if user_data:
             username, email, password = user_data[:3]
             starting_budget = db.get_starting_budget(email)
+            salary = db.get_salary(email)
             savings = db.get_savings(email)
             incomes = db.get_incomes(email)
             expenses = db.get_expenses(email)
-            user = cls(username, email, password, starting_budget, savings, incomes, expenses)
+            user = cls(username, email, password, starting_budget, salary, savings, incomes, expenses)
             return user
         else:
             return None
@@ -68,7 +73,8 @@ class Database:
                 id INTEGER PRIMARY KEY,
                 username TEXT,
                 email TEXT UNIQUE,
-                password TEXT
+                password TEXT,
+                profile_picture BLOB
             )
         ''')
         self.c.execute('''
@@ -76,8 +82,9 @@ class Database:
                 id INTEGER PRIMARY KEY,
                 user_email TEXT,
                 starting_budget REAL,
+                salary REAL,
                 savings REAL,
-                FOREIGN KEY(user_email) REFERENCES users(email) ON DELETE CASCADE
+                FOREIGN KEY(user_email) REFERENCES users(id) ON DELETE CASCADE
             )
         ''')
         self.c.execute('''
@@ -109,8 +116,8 @@ class Database:
             self.c.execute('INSERT INTO users(username, email, password) VALUES(:username, :email, :password)',
                            {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password})
             user_id = self.c.lastrowid
-            self.c.execute('INSERT INTO budgets(user_email, starting_budget, savings) VALUES(:user_email, :starting_budget, :savings)',
-                           {'user_email': user_obj.email, 'starting_budget': user_obj.starting_budget, 'savings': user_obj.savings})
+            self.c.execute('INSERT INTO budgets(user_email, starting_budget, salary, savings) VALUES(:user_email, :starting_budget, :salary, :savings)',
+                           {'user_email': user_obj.email, 'starting_budget': user_obj.starting_budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
         self.conn.commit()
 
     def add_income(self, budget_id, title, amount, date, category, recurring=False):
@@ -125,9 +132,19 @@ class Database:
                             (budget_id, title, amount, date, category, recurring))
         self.conn.commit()
     
+    
     def get_starting_budget(self, email):
         with self.conn:
             self.c.execute('SELECT starting_budget FROM budgets JOIN users ON users.email = budgets.user_email WHERE users.email = :email', {'email': email})
+            result = self.c.fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return None
+            
+    def get_salary(self, email):
+        with self.conn:
+            self.c.execute('SELECT salary FROM budgets JOIN users ON users.email = budgets.user_email WHERE users.email = :email', {'email': email})
             result = self.c.fetchone()
             if result is not None:
                 return result[0]
@@ -155,6 +172,7 @@ class Database:
                            {'email': email})
             return self.c.fetchall()
 
+
     def update_entry(self, user):
         conn = sqlite3.connect("data/financly.db")
         c = conn.cursor()
@@ -163,6 +181,7 @@ class Database:
 
         conn.commit()
         conn.close()
+
 
     def select_by_email(self, email):
         with self.conn:

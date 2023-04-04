@@ -25,9 +25,9 @@ class Setup(Screen):
             self.ids.icon.icon = "check-circle"
 
     def next1(self):
-        if not self.ids.perma_income.text:
+        if not self.ids.salary.text:
             return toast("Моля въведете месечен доход (заплата)!")
-        if not self.ids.perma_income.text.isdigit():
+        if not self.ids.salary.text.isdigit():
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')
@@ -64,8 +64,9 @@ class Setup(Screen):
             user_obj.add_username(App.get_running_app().root.get_screen('register').username.text)
             user_obj.add_email(App.get_running_app().root.get_screen('register').email.text)
             user_obj.add_password(App.get_running_app().root.get_screen('register').password.text)
-            user_obj.add_savings(float(self.ids.savings.text))
             user_obj.add_starting_budget(float(self.ids.starting_budget.text))
+            user_obj.add_salary(float(self.ids.salary.text))
+            user_obj.add_savings(float(self.ids.savings.text))
             db.add_user(user_obj)
             self.manager.current = 'welcome'
     

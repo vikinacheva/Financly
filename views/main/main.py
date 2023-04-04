@@ -4,14 +4,13 @@ from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
-from data.database import Database
 
 Builder.load_file('views/main/main.kv')
 
 class NavBar(CommonElevationBehavior, MDFloatLayout):
     pass
     
-class Main(Screen):  
+class Main(Screen):          
     def if_active (self, instance):
         if instance in self.ids.values():
             current_id = list(self.ids.keys())[list(self.ids.values()).index(instance)]

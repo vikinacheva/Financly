@@ -3,7 +3,7 @@ import time
 import os
 from datetime import datetime
 from random import randint
-
+from data.database import User, Database
 import sqlite3
 
 from kivy.lang import Builder
@@ -40,143 +40,166 @@ category_icons = {
         "Стипендия": "assets/icons/scholarship.png"
     }
 
-class Home(BoxLayout):                   
-    # def __init__(self, **kw) -> None:
-    #     super().__init__(**kw)
-    #     Clock.schedule_once(self.render, .1)
+class Home(BoxLayout):  
+    budget_id = NumericProperty()
+    current_budget = NumericProperty()
+                     
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        Clock.schedule_once(self.render, .1)
 
-    # def render(self, _):
-    #     expenses = []
-    #     incomes = []
-    #     self.refresh_transactions(expenses, incomes)
-    
-    # def get_expenses(self):
-    #     expenses = []
-    #     for child in self.ids.gl_transactions.children:
-    #         if child.expense:
-    #             expenses.append(child.data)
-    #     return expenses
-
-    # def get_incomes(self):
-    #     incomes = []
-    #     for child in self.ids.gl_transactions.children:
-    #         if not child.expense:
-    #             incomes.append(child.data)
-    #     return incomes
-    
-          
-    # def refresh_transactions(self, expenses, incomes):
-    #     grid = self.ids.gl_transactions
-    #     grid.clear_widgets()
-    #     current_budget = self.current_budget
-
-    #     for t in expenses:
-    #         ic = get_color_from_hex("f8f9fa")
-    #         tile = ListTile()
-    #         tile.tile_id = t['id']
-    #         tile.title = t['title']
-    #         tile.subtitle = t['date']
-    #         tile.amount = t['amount']
-    #         tile.extra = t['initial-amount']
-    #         tile.icon = t['icon']
-    #         tile.expense = t['expense']
-    #         tile.icon_color = ic
-    #         tile.data = t
-    #         tile.bind(on_release=self.tile_action)
-    #         grid.add_widget(tile)
-
-    #         if t['expense']:
-    #             current_budget -= float(t['amount'])
-
-    #     for t in incomes:
-    #         ic = get_color_from_hex("f8f9fa")
-    #         tile = ListTile()
-    #         tile.tile_id = t['id']
-    #         tile.title = t['title']
-    #         tile.subtitle = t['date']
-    #         tile.amount = t['amount']
-    #         tile.extra = t['initial-amount']
-    #         tile.icon = t['icon']
-    #         tile.expense = t['expense']
-    #         tile.icon_color = ic
-    #         tile.data = t
-    #         tile.bind(on_release=self.tile_action)
-    #         grid.add_widget(tile)
-
-    #         if not t['expense']:
-    #             current_budget += float(t['amount'])
-
-    #     self.current_budget = current_budget
-    #     self.ids.current_budget.text = f"{current_budget:.2f} лв."
-
-    # def tile_action(self, inst):
-    #     ta = TileAction()
-    #     ta.open()
-
-    # def add_new(self, expense=True):
-    #     an = AddNew()
-    #     an.expense = expense
-    #     an.callback = self.add_transaction
-    #     an.open()
-
-    # def add_transaction(self, t):
-    #     category_name = t['category']
-    #     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #     icon = category_icons.get(category_name, "icons/default.png")
-    #     expense = t['expense']
-    #     amount = t['amount']
-    #     title = t['title']
-    #     budget_id = self.budget_id  
-
-    #     if expense:
-    #         sql = "INSERT INTO expenses (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
-    #     else:
-    #         sql = "INSERT INTO incomes (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
-    #     conn = sqlite3.connect('data/financly.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute(sql, (budget_id, title, category_name, now, amount))
-    #     conn.commit()
-    #     conn.close()
-
-    #     ic = get_color_from_hex("f8f9fa")
+    def render(self, _):
+        expenses = []
+        incomes = []
+        self.refresh_transactions(expenses, incomes)
         
-    #     now = datetime.now()
-    #     dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
-    #     yr = now.year
-    #     mnth = now.month
-    #     day = now.day
+        app = App.get_running_app()
+        if app.current_user_email:
+            db = Database()
+            user = db.get_user_by_email(app.current_user_email)
+            if user:
+                app.user = user
+                budget_id = db.get_user_budget_id(user.id)
+                self.budget_id = budget_id
+                self.current_budget = db.get_budget_amount(budget_id)
+    
+    def get_expenses(self):
+        expenses = []
+        for child in self.ids.gl_transactions.children:
+            if child.expense:
+                expenses.append(child.data)
+        return expenses
 
-    #     if yr == dt.year and mnth == dt.month:
-    #         if day == dt.day:
-    #             sub = "Днес"
-    #         elif dt.day == day -1:
-    #             sub = "Вчера"
-    #     else:
-    #         sub = t['date']
+    def get_incomes(self):
+        incomes = []
+        for child in self.ids.gl_transactions.children:
+            if not child.expense:
+                incomes.append(child.data)
+        return incomes
+          
+    def refresh_transactions(self, expenses, incomes):
+        grid = self.ids.gl_transactions
+        grid.clear_widgets()
+        current_budget = float(self.current_budget)
+
+        for t in expenses:
+            ic = get_color_from_hex("f8f9fa")
+            tile = ListTile()
+            tile.tile_id = t['id']
+            tile.title = t['title']
+            tile.subtitle = t['date']
+            tile.amount = t['amount']
+            tile.extra = t['initial-amount']
+            tile.icon = t['icon']
+            tile.expense = t['expense']
+            tile.icon_color = ic
+            tile.data = t
+            tile.bind(on_release=self.tile_action)
+            grid.add_widget(tile)
+
+            if t['expense']:
+                current_budget -= float(t['amount'])
+
+        for t in incomes:
+            ic = get_color_from_hex("f8f9fa")
+            tile = ListTile()
+            tile.tile_id = t['id']
+            tile.title = t['title']
+            tile.subtitle = t['date']
+            tile.amount = t['amount']
+            tile.extra = t['initial-amount']
+            tile.icon = t['icon']
+            tile.expense = t['expense']
+            tile.icon_color = ic
+            tile.data = t
+            tile.bind(on_release=self.tile_action)
+            grid.add_widget(tile)
+
+            if not t['expense']:
+                current_budget += float(t['amount'])
+
+        self.current_budget = current_budget
+        self.ids.current_budget.text = f"{current_budget} лв."
+
+    def tile_action(self, inst):
+        ta = TileAction()
+        ta.open()
+
+    def add_new(self, expense=True):
+        an = AddNew()
+        an.expense = expense
+        an.callback = self.add_transaction
+        an.open()
+
+    def add_transaction(self, t):
+        category_name = t['category']
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        icon = category_icons.get(category_name, "icons/default.png")
+        expense = t['expense']
+        amount = t['amount']
+        title = t['title']
+        budget_id = self.budget_id  
+
+        current_budget = self.current_budget
+        if expense:
+            current_budget -= float(amount)
+        else:
+            current_budget += float(amount)
+        self.current_budget = current_budget
+        self.ids.current_budget.text = f"{current_budget} лв."
+
+        if expense:
+            sql = "INSERT INTO expenses (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
+        else:
+            sql = "INSERT INTO incomes (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
+
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        cursor.execute(sql, (budget_id, title, category_name, now, amount))
+        conn.commit()
+        conn.close()    
+
+        ic = get_color_from_hex("f8f9fa")
+        
+        now = datetime.now()
+        dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
+        yr = now.year
+        mnth = now.month
+        day = now.day
+
+        if yr == dt.year and mnth == dt.month:
+            if day == dt.day:
+                sub = "Днес"
+            elif dt.day == day -1:
+                sub = "Вчера"
+        else:
+            sub = t['date']
             
-    #     icon = category_icons.get(category_name, "icons/default.png")
+        icon = category_icons.get(category_name, "icons/default.png")
 
-    #     tile = ListTile(category_name=category_name)
-    #     tile.tile_id = t["cursor.lastrowid"]
-    #     tile.title = t["title"]
-    #     tile.subtitle = sub
-    #     tile.amount = t["amount"]
-    #     if expense:
-    #         self.current_budget -= float(amount)
-    #         tile.extra = f"{float(amount):.2f}"
-    #     else:
-    #         self.current_budget += float(amount)
-    #         tile.extra = f"{float(amount):.2f}"
-    #     tile.extra += " лв."
-    #     tile.icon = t["icon"]
-    #     tile.expense = t["expense"]
-    #     tile.icon_color = ic
-    #     tile.data = t
-    #     tile.bind(on_release=self.tile_action)
+        tile = ListTile(category_name=category_name)
+        tile.tile_id = t["id"]
+        tile.title = t["title"]
+        tile.subtitle = sub
+        tile.amount = t["amount"]
+        if expense:
+            self.current_budget -= float(amount)
+            tile.extra = f"{float(current_budget):.2f}"
+        else:
+            self.current_budget += float(amount)
+            tile.extra = f"{float(current_budget):.2f}"
+        tile.extra += " лв."
+        tile.icon = t["icon"]
+        tile.expense = t["expense"]
+        tile.icon_color = ic
+        tile.data = t
+        tile.bind(on_release=self.tile_action)
 
-    #     self.ids.gl_transactions.add_widget(tile)
-    #     self.ids.current_budget.text = f"{self.current_budget:.2f} лв."
-    pass
+        db = Database()
+        db.update_budget(self.budget_id, current_budget)
+
+        self.ids.gl_transactions.add_widget(tile)
+        self.ids.current_budget.text = f"{self.current_budget:.2f} лв."
 
 class TileAction(ModalView):
     def __init__(self, **kw) -> None:

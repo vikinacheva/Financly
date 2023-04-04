@@ -36,8 +36,9 @@ class Login(Screen):
             toast('Акаунт с този имейл не съществува!')
             self.ids.email.text = ''
             self.ids.password.text = ''
-        elif val[2] != password:
+        elif val[3] != password:
             toast('Грешна парола!')
+            print(val)
             self.ids.password.text = ''
         else:
             app = App.get_running_app()
