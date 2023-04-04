@@ -64,7 +64,7 @@ class Setup(Screen):
             user_obj.add_username(App.get_running_app().root.get_screen('register').username.text)
             user_obj.add_email(App.get_running_app().root.get_screen('register').email.text)
             user_obj.add_password(App.get_running_app().root.get_screen('register').password.text)
-            user_obj.add_starting_budget(float(self.ids.starting_budget.text))
+            user_obj.add_budget(float(self.ids.budget.text))
             user_obj.add_salary(float(self.ids.salary.text))
             user_obj.add_savings(float(self.ids.savings.text))
             db.add_user(user_obj)

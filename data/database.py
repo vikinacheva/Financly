@@ -29,7 +29,7 @@ class User():
     def add_password(self, password):
         self.password = password
         
-    def add_starting_budget(self, budget):
+    def add_budget(self, budget):
         self.budget = budget
     
     def add_salary(self, salary):
