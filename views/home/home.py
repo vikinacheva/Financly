@@ -42,7 +42,7 @@ category_icons = {
 
 class Home(BoxLayout):  
     budget_id = NumericProperty()
-    current_budget = NumericProperty()
+    budget = NumericProperty()
                      
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -54,14 +54,14 @@ class Home(BoxLayout):
         self.refresh_transactions(expenses, incomes)
         
         app = App.get_running_app()
-        if app.current_user_email:
+        if app.current_user_id:
             db = Database()
-            user = db.get_user_by_email(app.current_user_email)
+            user = db.get_user_by_id(app.current_user_id)
             if user:
                 app.user = user
-                budget_id = db.get_user_budget_id(user.id)
+                budget_id = db.get_user_by_id(user.id)
                 self.budget_id = budget_id
-                self.current_budget = db.get_budget_amount(budget_id)
+                self.budget = db.get_budget(budget_id)
     
     def get_expenses(self):
         expenses = []
@@ -80,7 +80,7 @@ class Home(BoxLayout):
     def refresh_transactions(self, expenses, incomes):
         grid = self.ids.gl_transactions
         grid.clear_widgets()
-        current_budget = float(self.current_budget)
+        budget = float(self.budget)
 
         for t in expenses:
             ic = get_color_from_hex("f8f9fa")
@@ -98,7 +98,7 @@ class Home(BoxLayout):
             grid.add_widget(tile)
 
             if t['expense']:
-                current_budget -= float(t['amount'])
+                budget -= float(t['amount'])
 
         for t in incomes:
             ic = get_color_from_hex("f8f9fa")
@@ -116,10 +116,10 @@ class Home(BoxLayout):
             grid.add_widget(tile)
 
             if not t['expense']:
-                current_budget += float(t['amount'])
+                budget += float(t['amount'])
 
-        self.current_budget = current_budget
-        self.ids.current_budget.text = f"{current_budget} лв."
+        self.budget = budget
+        self.ids.budget.text = f"{budget} лв."
 
     def tile_action(self, inst):
         ta = TileAction()
@@ -140,13 +140,13 @@ class Home(BoxLayout):
         title = t['title']
         budget_id = self.budget_id  
 
-        current_budget = self.current_budget
+        budget = self.budget
         if expense:
-            current_budget -= float(amount)
+            budget -= float(amount)
         else:
-            current_budget += float(amount)
-        self.current_budget = current_budget
-        self.ids.current_budget.text = f"{current_budget} лв."
+            budget += float(amount)
+        self.budget = budget
+        self.ids.budget.text = f"{budget} лв."
 
         if expense:
             sql = "INSERT INTO expenses (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
@@ -183,23 +183,24 @@ class Home(BoxLayout):
         tile.subtitle = sub
         tile.amount = t["amount"]
         if expense:
-            self.current_budget -= float(amount)
-            tile.extra = f"{float(current_budget):.2f}"
+            self.budget -= float(amount)
+            tile.extra = f"{float(budget):.2f}"
         else:
-            self.current_budget += float(amount)
-            tile.extra = f"{float(current_budget):.2f}"
+            self.budget += float(amount)
+            tile.extra = f"{float(budget):.2f}"
         tile.extra += " лв."
-        tile.icon = t["icon"]
+        tile.icon = icon
         tile.expense = t["expense"]
         tile.icon_color = ic
         tile.data = t
         tile.bind(on_release=self.tile_action)
 
         db = Database()
-        db.update_budget(self.budget_id, current_budget)
+        db.update_budget(self.budget_id, budget)
+
 
         self.ids.gl_transactions.add_widget(tile)
-        self.ids.current_budget.text = f"{self.current_budget:.2f} лв."
+        self.ids.budget.text = f"{self.budget:.2f} лв."
 
 class TileAction(ModalView):
     def __init__(self, **kw) -> None:

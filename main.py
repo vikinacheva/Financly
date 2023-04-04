@@ -18,11 +18,11 @@ from views.main import main
 Window.size = (360, 640)   
 
 class Financly(MDApp):
-    starting_budget = NumericProperty(0)
+    budget = NumericProperty(0)
     
     def __init__(self, **kwargs):
         self.db_path = 'data/financly.db'
-        self.current_user_email = None
+        self.current_user_id = None
         super().__init__(**kwargs)
         
     theme_cls = ThemeManager()
@@ -66,24 +66,24 @@ class Financly(MDApp):
     def build(self):
         self.db = Database()
         screen_manager = ScreenManager()
-        screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(login.Login(name = "login"))
         screen_manager.add_widget(register.Register(name = "register"))
+        screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(setup.Setup(name = "setup"))
         screen_manager.add_widget(welcome.Welcome(name = "welcome"))
         screen_manager.add_widget(main.Main(name = "main"))
         
         return screen_manager   
     
-    def get_starting_budget(self):
+    def get_budget(self):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        cursor.execute("SELECT starting_budget FROM budgets WHERE user_email = ?", (self.current_user_email,))
+        cursor.execute("SELECT budget FROM budgets WHERE user_id = ?", (self.current_user_id,))
         result = cursor.fetchone()
         if result:
-            self.starting_budget = result[0]
+            self.budget = result[0]
         else:
-            self.starting_budget = 0
+            self.budget = 0
             
 if __name__ == '__main__':
     financly = Financly()

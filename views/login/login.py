@@ -24,14 +24,15 @@ class Login(Screen):
         self.data = Database()
         email = self.ids.email.text
         password = self.ids.password.text
-        user = User.from_database(email)
+        val = self.data.select_by_email(email = email)
+        user_id = val[0]
+        user = User.from_database(user_id)
         if not email and not password:
             return toast('Не сте въвели имейл и парола!')
         elif not email:
             return toast('Не сте въвели имейл!')
         elif not password:
             return toast('Не сте въвели парола!')
-        val = self.data.select_by_email(email = email)
         if not val:
             toast('Акаунт с този имейл не съществува!')
             self.ids.email.text = ''
@@ -42,10 +43,10 @@ class Login(Screen):
             self.ids.password.text = ''
         else:
             app = App.get_running_app()
-            app.current_user_email = email
-            starting_budget = app.get_starting_budget()
+            app.current_user_id = user_id
+            budget = app.get_budget()
             self.manager.get_screen('main').user = user
-            self.manager.get_screen('main').starting_budget = starting_budget
+            self.manager.get_screen('main').budget = budget
             self.manager.transition.director = 'left'
             self.manager.current = 'main'
         
