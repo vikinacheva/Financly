@@ -11,12 +11,12 @@ Builder.load_file('views/setup/setup.kv')
 class Setup(Screen): 
     def submit_starting_budget(self, budget):
         app = App.get_running_app()
-        app.starting_budget = float(budget)
+        app.budget = float(budget)
     
     def next(self):
-        if not self.ids.starting_budget.text:
+        if not self.ids.budget.text:
             return toast("Моля въведете начална сума!")
-        if not self.ids.starting_budget.text.isdigit():
+        if not self.ids.budget.text.isdigit():
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')

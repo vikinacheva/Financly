@@ -12,13 +12,6 @@ class User():
         self.savings = savings
         self.incomes = incomes if incomes is not None else []
         self.expenses = expenses if expenses is not None else []
-
-        if budget is None and email is not None:
-            self.set_starting_budget()
-        
-    def set_starting_budget(self):
-        db = Database()
-        self.budget = db.get_starting_budget(self.email)
         
     def add_username(self, username):
         self.username = username
@@ -56,7 +49,7 @@ class User():
         user_data = db.select_by_email(id)
         if user_data:
             username, email, password = user_data[:3]
-            budget = db.get_starting_budget(id)
+            budget = db.get_budget(id)
             salary = db.get_salary(id)
             savings = db.get_savings(id)
             incomes = db.get_incomes(id)
@@ -78,66 +71,57 @@ class Database:
                 username TEXT,
                 email TEXT UNIQUE,
                 password TEXT,
-                profile_picture BLOB
-            )
-        ''')
-        self.c.execute('''
-            CREATE TABLE IF NOT EXISTS budgets(
-                id INTEGER PRIMARY KEY,
-                user_id INTEGER,
+                profile_picture BLOB,
                 budget REAL,
                 salary REAL,
-                savings REAL,
-                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+                savings REAL
             )
         ''')
         self.c.execute('''
             CREATE TABLE IF NOT EXISTS incomes(
                 id INTEGER PRIMARY KEY,
-                budget_id INTEGER,
+                user_id INTEGER,
                 title TEXT,
                 amount REAL,
                 date TEXT,
                 category TEXT,
-                FOREIGN KEY(budget_id) REFERENCES budgets(id) ON DELETE CASCADE
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         ''')
         self.c.execute('''
             CREATE TABLE IF NOT EXISTS expenses(
                 id INTEGER PRIMARY KEY,
-                budget_id INTEGER,
+                user_id INTEGER,
                 title TEXT,
                 amount REAL,
                 date TEXT,
                 category TEXT,
-                FOREIGN KEY(budget_id) REFERENCES budgets(id) ON DELETE CASCADE
+                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         ''')
         self.conn.commit()
 
     def add_user(self, user_obj):
         with self.conn:
-            self.c.execute('INSERT INTO users(username, email, password) VALUES(:username, :email, :password)',
-                           {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password})
-            user_id = self.c.lastrowid
-            self.c.execute('INSERT INTO budgets(user_id, budget, salary, savings) VALUES(:user_id, :budget, :salary, :savings)',
-                           {'user_id': user_id, 'budget': user_obj.budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
+            self.c.execute('INSERT INTO users(username, email, password, budget, salary, savings) VALUES(:username, :email, :password, :budget, :salary, :savings)',
+                        {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password, 'budget': user_obj.budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
         self.conn.commit()
 
-
-    def add_income(self, budget_id, title, amount, date, category):
-        self.c.execute("INSERT INTO incomes (budget_id, title, amount, date, category) VALUES (?, ?, ?, ?, ?)", (budget_id, title, amount, date, category))
-        print(f"New income id: {self.c.lastrowid}")
+    def add_income(self, user_id, title, amount, date, category):
+        user_id = self.c.lastrowid
+        self.c.execute("INSERT INTO incomes (user_id, title, amount, date, category) VALUES (:user_id, :title, :amount, :date, :category)", 
+                       {'user_id': user_id, 'title': title, 'amount': amount, 'date': date, 'category': category})
         self.conn.commit()
 
-    def add_expense(self, budget_id, title, amount, date, category):
-        self.c.execute("INSERT INTO expenses (budget_id, title, amount, date, category) VALUES (?, ?, ?, ?, ?)", (budget_id, title, amount, date, category))
+    def add_expense(self, user_id, title, amount, date, category):
+        user_id = self.c.lastrowid
+        self.c.execute("INSERT INTO expenses (user_id, title, amount, date, category) VALUES (:user_id, :title, :amount, :date, :category)", 
+                       {'user_id': user_id, 'title': title, 'amount': amount, 'date': date, 'category': category})
         self.conn.commit()
-    
     
     def get_budget(self, id):
         with self.conn:
-            self.c.execute('SELECT budget FROM budgets JOIN users ON users.id = budgets.user_id WHERE users.id = :id', {'id': id})
+            self.c.execute('SELECT budget FROM users WHERE users.id = :id', {'id': id})
             result = self.c.fetchone()
             if result is not None:
                 return result[0]
@@ -146,7 +130,7 @@ class Database:
             
     def get_salary(self, id):
         with self.conn:
-            self.c.execute('SELECT salary FROM budgets JOIN users ON users.id = budgets.user_id WHERE users.id = :id', {'id': id})
+            self.c.execute('SELECT salary FROM users WHERE users.id = :id', {'id': id})
             result = self.c.fetchone()
             if result is not None:
                 return result[0]
@@ -155,7 +139,7 @@ class Database:
             
     def get_savings(self, id):
         with self.conn:
-            self.c.execute('SELECT savings FROM budgets JOIN users ON users.id = budgets.user_id WHERE users.id = :id', {'id': id})
+            self.c.execute('SELECT savings FROM users WHERE users.id = :id', {'id': id})
             result = self.c.fetchone()
             if result is not None:
                 return result[0]
@@ -164,13 +148,13 @@ class Database:
             
     def get_incomes(self, id):
         with self.conn:
-            self.c.execute('SELECT title, amount, date, category FROM incomes JOIN budgets ON budgets.id = incomes.budget_id JOIN users ON users.id = budgets.user_id WHERE users.id = :id',
+            self.c.execute('SELECT title, amount, date, category FROM incomes JOIN users ON users.id = incomes.user_id WHERE users.id = :id',
                            {'id': id})
             return self.c.fetchall()
         
     def get_expenses(self, id):
         with self.conn:
-            self.c.execute('SELECT title, amount, date, category FROM expenses JOIN budgets ON budgets.id = expenses.budget_id JOIN users ON users.id = budgets.user_id WHERE users.id = :id',
+            self.c.execute('SELECT title, amount, date, category FROM expenses JOIN users ON users.id = incomes.user_id WHERE users.id = :id',
                            {'id': id})
             return self.c.fetchall()
 
@@ -187,11 +171,6 @@ class Database:
 
         conn.commit()
         conn.close()
-        
-    def update_budget(self, budget_id, current_budget):
-        sql = "UPDATE budgets SET budget = ? WHERE id = ?"
-        self.c.execute(sql, (current_budget, budget_id))
-        self.conn.commit()
 
 
     def select_by_email(self, email):

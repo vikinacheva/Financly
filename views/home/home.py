@@ -138,14 +138,14 @@ class Home(BoxLayout):
         expense = t['expense']
         amount = t['amount']
         title = t['title']
-        budget_id = self.budget_id  
-
+        budget_id = self.budget_id 
         budget = self.budget
         if expense:
             budget -= float(amount)
         else:
             budget += float(amount)
         self.budget = budget
+
         self.ids.budget.text = f"{budget} лв."
 
         if expense:

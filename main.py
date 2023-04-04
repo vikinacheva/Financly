@@ -75,15 +75,15 @@ class Financly(MDApp):
         
         return screen_manager   
     
-    def get_budget(self):
+    def get_starting_budget(self):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        cursor.execute("SELECT budget FROM budgets WHERE user_id = ?", (self.current_user_id,))
+        cursor.execute("SELECT budget FROM users WHERE id = ?", (self.current_user_id,))
         result = cursor.fetchone()
         if result:
-            self.budget = result[0]
+            self.starting_budget = result[0]
         else:
-            self.budget = 0
+            self.starting_budget = 0
             
 if __name__ == '__main__':
     financly = Financly()
