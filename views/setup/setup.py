@@ -9,7 +9,7 @@ from data.database import User, Database
 Builder.load_file('views/setup/setup.kv')
 
 class Setup(Screen): 
-    def submit_starting_budget(self, budget):
+    def submit_budget(self, budget):
         app = App.get_running_app()
         app.budget = float(budget)
     
