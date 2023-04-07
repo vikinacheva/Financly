@@ -4,9 +4,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivymd.theming import ThemeManager
 from kivy.core.window import Window
 from kivy.utils import QueryDict, rgba, get_color_from_hex
-from data.database import User, Database
-
-from kivy.properties import NumericProperty
+from data.database import Database
 
 from views.start import start
 from views.login import login
@@ -17,13 +15,13 @@ from views.main import main
 
 Window.size = (360, 640)   
 
-class Financly(MDApp):
-    budget = NumericProperty(0)
-    
+class Financly(MDApp):    
     def __init__(self, **kwargs):
-        self.db_path = 'data/financly.db'
-        self.current_user_id = None
         super().__init__(**kwargs)
+        self.current_user_id = None
+
+    def on_user_login(self, user_id):
+        self.current_user_id = user_id
         
     theme_cls = ThemeManager()
     
@@ -74,16 +72,6 @@ class Financly(MDApp):
         screen_manager.add_widget(main.Main(name = "main"))
         
         return screen_manager   
-    
-    def get_budget(self):
-        conn = sqlite3.connect('data/financly.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT budget FROM users WHERE id = ?", (self.current_user_id,))
-        result = cursor.fetchone()
-        if result:
-            self.budget = result[0]
-        else:
-            self.budget = 0
             
 if __name__ == '__main__':
     financly = Financly()

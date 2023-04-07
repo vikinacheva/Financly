@@ -8,15 +8,11 @@ from data.database import User, Database
 
 Builder.load_file('views/setup/setup.kv')
 
-class Setup(Screen): 
-    def submit_budget(self, budget):
-        app = App.get_running_app()
-        app.budget = float(budget)
-    
+class Setup(Screen):     
     def next(self):
-        if not self.ids.budget.text:
+        if not self.ids.budget_input.text:
             return toast("Моля въведете начална сума!")
-        if not self.ids.budget.text.isdigit():
+        if not self.ids.budget_input.text.isdigit():
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')
@@ -64,7 +60,7 @@ class Setup(Screen):
             user_obj.add_username(App.get_running_app().root.get_screen('register').username.text)
             user_obj.add_email(App.get_running_app().root.get_screen('register').email.text)
             user_obj.add_password(App.get_running_app().root.get_screen('register').password.text)
-            user_obj.add_budget(float(self.ids.budget.text))
+            user_obj.add_budget(float(self.ids.budget_input.text))
             user_obj.add_salary(float(self.ids.salary.text))
             user_obj.add_savings(float(self.ids.savings.text))
             db.add_user(user_obj)

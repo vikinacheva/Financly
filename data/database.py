@@ -46,7 +46,7 @@ class User():
     @classmethod
     def from_database(cls, id):
         db = Database()
-        user_data = db.select_by_email(id)
+        user_data = db.select_by_id(id)
         if user_data:
             username, email, password = user_data[:3]
             budget = db.get_budget(id)
@@ -58,7 +58,6 @@ class User():
             return user
         else:
             return None
-
 
 class Database:
     def __init__(self):
@@ -107,16 +106,14 @@ class Database:
                         {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password, 'budget': user_obj.budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
         self.conn.commit()
 
-    def add_income(self, user_id, title, amount, date, category):
-        user_id = self.c.lastrowid
-        self.c.execute("INSERT INTO incomes (user_id, title, amount, date, category) VALUES (:user_id, :title, :amount, :date, :category)", 
-                       {'user_id': user_id, 'title': title, 'amount': amount, 'date': date, 'category': category})
+    def add_income(self, title, amount, date, category):
+        self.c.execute("INSERT INTO incomes (title, amount, date, category) VALUES (::title, :amount, :date, :category)", 
+                       {'title': title, 'amount': amount, 'date': date, 'category': category})
         self.conn.commit()
 
-    def add_expense(self, user_id, title, amount, date, category):
-        user_id = self.c.lastrowid
-        self.c.execute("INSERT INTO expenses (user_id, title, amount, date, category) VALUES (:user_id, :title, :amount, :date, :category)", 
-                       {'user_id': user_id, 'title': title, 'amount': amount, 'date': date, 'category': category})
+    def add_expense(self, title, amount, date, category):
+        self.c.execute("INSERT INTO expenses (title, amount, date, category) VALUES (::title, :amount, :date, :category)", 
+                       {'title': title, 'amount': amount, 'date': date, 'category': category})
         self.conn.commit()
     
     def get_budget(self, id):
@@ -154,7 +151,7 @@ class Database:
         
     def get_expenses(self, id):
         with self.conn:
-            self.c.execute('SELECT title, amount, date, category FROM expenses JOIN users ON users.id = incomes.user_id WHERE users.id = :id',
+            self.c.execute('SELECT title, amount, date, category FROM expenses JOIN users ON users.id = expenses.user_id WHERE users.id = :id',
                            {'id': id})
             return self.c.fetchall()
 
@@ -163,16 +160,20 @@ class Database:
             self.c.execute('SELECT * FROM users WHERE id = :user_id', {'user_id': user_id})
             return self.c.fetchone()
 
-    def update_entry(self, user):
+    def update_user(self, user):
         conn = sqlite3.connect("data/financly.db")
         c = conn.cursor()
-
-        c.execute("UPDATE users SET budget = ? WHERE id = ?", (user.budget, user.id))
-
+        c.execute("UPDATE users SET username = ?, email = ?, password = ?, budget = ?, salary = ?, savings = ? WHERE id = ?",
+                  (user.username, user.email, user.password, user.budget, user.salary, user.savings, user.id))
         conn.commit()
         conn.close()
-
-
+    
+    def select_by_id(self, id):
+        with self.conn:
+            self.c.execute('SELECT * FROM users WHERE id = (:id)',
+                           {'id' : id})
+            return self.c.fetchone()
+    
     def select_by_email(self, email):
         with self.conn:
             self.c.execute('SELECT * FROM users WHERE email = (:email)',

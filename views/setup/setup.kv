@@ -19,7 +19,7 @@
                         size_hint: .7, .07
                         pos_hint: {"center_x": .5, "center_y": .5}
                         TextInput:
-                            id: budget
+                            id: budget_input
                             hint_text: "Сума в лв."
                             size_hint_y: .75
                             pos_hint: {"center_x": .45, "center_y": .3}
@@ -44,7 +44,6 @@
                         size_hint_x: .8
                         pos_hint: {"center_x": .5, "center_y": .2}
                         on_release:
-                            root.submit_budget(budget.text)
                             root.next()
                 MDFloatLayout:
                     MDLabel:

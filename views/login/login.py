@@ -36,17 +36,15 @@ class Login(Screen):
             self.ids.email.text = ''
             self.ids.password.text = ''  
         else:
-            id = val[0]
-            user = User.from_database(id)
+            current_user_id = val[0]
+            user = User.from_database(current_user_id)
             if val[3] != password:
                 toast('Грешна парола!')
                 self.ids.password.text = ''
             else:
                 app = App.get_running_app()
-                app.current_user_id = id
-                budget = app.get_budget()
+                app.current_user_id = current_user_id  
                 self.manager.get_screen('main').user = user
-                self.manager.get_screen('main').budget = budget
                 self.manager.transition.director = 'left'
                 self.manager.current = 'main'
         

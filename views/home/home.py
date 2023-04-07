@@ -40,47 +40,40 @@ category_icons = {
         "Стипендия": "assets/icons/scholarship.png"
     }
 
-class Home(BoxLayout):  
-    budget_id = NumericProperty()
-    budget = NumericProperty()
-                     
-    def __init__(self, **kwargs) -> None:
+class Home(BoxLayout):                       
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(self.render, .1)
 
-    def render(self, _):
-        expenses = []
-        incomes = []
-        self.refresh_transactions(expenses, incomes)
-        
+    def render(self, *args):
         app = App.get_running_app()
-        if app.current_user_id:
-            db = Database()
-            user = db.get_user_by_id(app.current_user_id)
-            if user:
-                app.user = user
-                budget_id = db.get_user_by_id(user.id)
-                self.budget_id = budget_id
-                self.budget = db.get_budget(budget_id)
-    
+        current_user_id = app.current_user_id
+
+        user_data = self.get_user_data(current_user_id)
+        budget = user_data['budget']
+        self.update_budget(self.get_expenses(), self.get_incomes(), budget)
+
+    def get_user_data(self, current_user_id):
+        return App.get_running_app().root.get_screen('main').get_user_data(current_user_id)
+
     def get_expenses(self):
         expenses = []
         for child in self.ids.gl_transactions.children:
             if child.expense:
                 expenses.append(child.data)
         return expenses
-
+        
     def get_incomes(self):
         incomes = []
         for child in self.ids.gl_transactions.children:
             if not child.expense:
                 incomes.append(child.data)
         return incomes
-          
-    def refresh_transactions(self, expenses, incomes):
+        
+    def update_budget(self, expenses, incomes):
         grid = self.ids.gl_transactions
         grid.clear_widgets()
-        budget = float(self.budget)
+        budget = float(budget)
 
         for t in expenses:
             ic = get_color_from_hex("f8f9fa")
@@ -132,35 +125,40 @@ class Home(BoxLayout):
         an.open()
 
     def add_transaction(self, t):
+        app = App.get_running_app()
+        current_user_id = app.current_user_id
         category_name = t['category']
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         icon = category_icons.get(category_name, "icons/default.png")
         expense = t['expense']
         amount = t['amount']
         title = t['title']
-        budget_id = self.budget_id 
-        budget = self.budget
+        user_data = self.get_user_data()
+        user_id = user_data['id']
+        budget = user_data['budget']
         if expense:
             budget -= float(amount)
         else:
             budget += float(amount)
-        self.budget = budget
 
-        self.ids.budget.text = f"{budget} лв."
+        expenses = self.get_expenses()
+        incomes = self.get_incomes()
+
+        self.update_budget(expenses, incomes, budget)
 
         if expense:
-            sql = "INSERT INTO expenses (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
+            sql = "INSERT INTO expenses (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
         else:
-            sql = "INSERT INTO incomes (budget_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
+            sql = "INSERT INTO incomes (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
 
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        cursor.execute(sql, (budget_id, title, category_name, now, amount))
+        cursor.execute(sql, (current_user_id, title, category_name, now, amount))
         conn.commit()
-        conn.close()    
+        conn.close()
 
         ic = get_color_from_hex("f8f9fa")
-        
+
         now = datetime.now()
         dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
         yr = now.year
@@ -174,7 +172,7 @@ class Home(BoxLayout):
                 sub = "Вчера"
         else:
             sub = t['date']
-            
+
         icon = category_icons.get(category_name, "icons/default.png")
 
         tile = ListTile(category_name=category_name)
@@ -183,10 +181,8 @@ class Home(BoxLayout):
         tile.subtitle = sub
         tile.amount = t["amount"]
         if expense:
-            self.budget -= float(amount)
             tile.extra = f"{float(budget):.2f}"
         else:
-            self.budget += float(amount)
             tile.extra = f"{float(budget):.2f}"
         tile.extra += " лв."
         tile.icon = icon
@@ -196,11 +192,10 @@ class Home(BoxLayout):
         tile.bind(on_release=self.tile_action)
 
         db = Database()
-        db.update_budget(self.budget_id, budget)
-
+        db.update_user(user_id, budget)
 
         self.ids.gl_transactions.add_widget(tile)
-        self.ids.budget.text = f"{self.budget:.2f} лв."
+        self.ids.budget.text = f"{budget:.2f} лв."
 
 class TileAction(ModalView):
     def __init__(self, **kw) -> None:
