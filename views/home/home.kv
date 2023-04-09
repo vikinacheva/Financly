@@ -1,6 +1,5 @@
 #:kivy 1.0
 <Home>:
-	name: 'home'
     RelativeLayout:
 		BoxLayout:
 			orientation: 'vertical'
@@ -34,6 +33,7 @@
 					opacity: .8
 				Label:
 					id: budget
+					text: f"{root.budget} лв."
             		color: app.colors.white
             		font_name: app.fonts.heading
             		font_size: app.fonts.size.h3

@@ -1,6 +1,6 @@
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen
 from kivy.metrics import dp, sp
 from kivy.utils import rgba, QueryDict, get_random_color, get_color_from_hex
 from kivy.clock import Clock
@@ -9,14 +9,7 @@ from widgets.tiles import ListTile
 
 Builder.load_file('views/history/history.kv')
 
-class History(BoxLayout):
-    def __init__(self, **kw) -> None:
-        super().__init__(**kw)
-        Clock.schedule_once(self.render, .1)
-
-    def render(self, _):
-        pass
-
+class History(Screen):
     def refresh_transactions(self, data):
         grid = self.ids.gl_history
         grid.clear_widgets()
@@ -35,3 +28,4 @@ class History(BoxLayout):
             tile.icon_color = ic
 
             grid.add_widget(tile)
+    

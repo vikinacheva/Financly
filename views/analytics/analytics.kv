@@ -1,19 +1,18 @@
 #:kivy 1.0
 <Analytics>:
-    name: 'analytics'
     orientation: 'vertical'
     spacing: dp(8)
     BoxLayout:
-        size_hint_y: None
-        height: dp(42)
-        Text:   
-            text: 'Анализи'
-            font_name: app.fonts.heading
-            font_size: app.fonts.size.h2
-            color: app.colors.tertiary
-            halign: 'center'
-    BoxLayout:
         orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: None
+            height: dp(42)
+            Text:   
+                text: 'Анализи'
+                font_name: app.fonts.heading
+                font_size: app.fonts.size.h2
+                color: app.colors.tertiary
+                halign: 'center'
         BoxLayout:
             size_hint_y: .3
             id: wrapper_overview

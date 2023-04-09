@@ -116,14 +116,13 @@ class Database:
                        {'title': title, 'amount': amount, 'date': date, 'category': category})
         self.conn.commit()
     
-    def get_budget(self, id):
-        with self.conn:
-            self.c.execute('SELECT budget FROM users WHERE users.id = :id', {'id': id})
-            result = self.c.fetchone()
-            if result is not None:
-                return result[0]
-            else:
-                return None
+    def get_budget(self, user_id):
+        self.c.execute("SELECT budget FROM users WHERE id = ?", (user_id,))
+        result = self.c.fetchone()
+        if result is not None:
+            return result[0]
+        else:
+            return None
             
     def get_salary(self, id):
         with self.conn:

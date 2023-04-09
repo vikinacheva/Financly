@@ -5,6 +5,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
 from kivy.clock import Clock
+from kivy.properties import NumericProperty
 import sqlite3
 
 
@@ -13,22 +14,23 @@ Builder.load_file('views/main/main.kv')
 class NavBar(CommonElevationBehavior, MDFloatLayout):
     pass
     
-class Main(Screen):      
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-    
-    def get_user_data(self, current_user_id):
+class Main(Screen):
+    def on_pre_enter(self):
         app = App.get_running_app()
         current_user_id = app.current_user_id
-
-        conn = sqlite3.connect('data/financly.db')
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE id = ?", (current_user_id,))
-        user_data = c.fetchone()
-        conn.close()
-
-        return user_data
+        self.budget = self.get_budget(current_user_id)
     
+    def get_budget(self, id):
+        self.conn = sqlite3.connect('data/financly.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute('SELECT budget FROM users WHERE users.id = :id', {'id': id})
+            result = self.c.fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return None
+                        
     def if_active (self, instance):
         if instance in self.ids.values():
             current_id = list(self.ids.keys())[list(self.ids.values()).index(instance)]

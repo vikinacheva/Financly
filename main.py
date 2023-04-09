@@ -3,6 +3,7 @@ import sqlite3
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.theming import ThemeManager
 from kivy.core.window import Window
+from kivy.lang import Builder
 from kivy.utils import QueryDict, rgba, get_color_from_hex
 from data.database import Database
 
@@ -14,14 +15,11 @@ from views.setup import setup
 from views.main import main
 
 Window.size = (360, 640)   
-
+    
 class Financly(MDApp):    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.current_user_id = None
-
-    def on_user_login(self, user_id):
-        self.current_user_id = user_id
         
     theme_cls = ThemeManager()
     
@@ -60,7 +58,7 @@ class Financly(MDApp):
     fonts.body = 'assets/fonts/RobotoCondensed-Regular.ttf'
     fonts.space = 'assets/fonts/RobotoMono-VariableFont_wght.ttf'
     fonts.light = 'assets/fonts/RobotoCondensed-Light.ttf'
-        
+    
     def build(self):
         self.db = Database()
         screen_manager = ScreenManager()

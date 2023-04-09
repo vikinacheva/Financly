@@ -3,11 +3,11 @@ import time
 import os
 from datetime import datetime
 from random import randint
-from data.database import User, Database
+from data.database import Database
 import sqlite3
 
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.behaviors import ButtonBehavior
@@ -40,21 +40,25 @@ category_icons = {
         "Стипендия": "assets/icons/scholarship.png"
     }
 
-class Home(BoxLayout):                       
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_once(self.render, .1)
+class Home(Screen):    
+    budget = NumericProperty
+    
+    # def on_pre_enter(self):
+    #     app = App.get_running_app()
+    #     current_user_id = app.current_user_id
+    #     self.budget = self.get_budget(current_user_id)
+    #     self.update_budget(self.get_expenses(), self.get_incomes())
 
-    def render(self, *args):
-        app = App.get_running_app()
-        current_user_id = app.current_user_id
-
-        user_data = self.get_user_data(current_user_id)
-        budget = user_data['budget']
-        self.update_budget(self.get_expenses(), self.get_incomes(), budget)
-
-    def get_user_data(self, current_user_id):
-        return App.get_running_app().root.get_screen('main').get_user_data(current_user_id)
+    # def get_budget(self, id):
+    #     self.conn = sqlite3.connect('data/financly.db')
+    #     self.c = self.conn.cursor()
+    #     with self.conn:
+    #         self.c.execute('SELECT budget FROM users WHERE users.id = :id', {'id': id})
+    #         result = self.c.fetchone()
+    #         if result is not None:
+    #             return result[0]
+    #         else:
+    #             return None
 
     def get_expenses(self):
         expenses = []
@@ -73,7 +77,6 @@ class Home(BoxLayout):
     def update_budget(self, expenses, incomes):
         grid = self.ids.gl_transactions
         grid.clear_widgets()
-        budget = float(budget)
 
         for t in expenses:
             ic = get_color_from_hex("f8f9fa")
@@ -91,7 +94,7 @@ class Home(BoxLayout):
             grid.add_widget(tile)
 
             if t['expense']:
-                budget -= float(t['amount'])
+                self.budget -= float(t['amount'])
 
         for t in incomes:
             ic = get_color_from_hex("f8f9fa")
@@ -109,10 +112,9 @@ class Home(BoxLayout):
             grid.add_widget(tile)
 
             if not t['expense']:
-                budget += float(t['amount'])
+                self.budget += float(t['amount'])
 
-        self.budget = budget
-        self.ids.budget.text = f"{budget} лв."
+        self.ids.budget.text = f"{self.budget} лв."
 
     def tile_action(self, inst):
         ta = TileAction()
@@ -133,18 +135,16 @@ class Home(BoxLayout):
         expense = t['expense']
         amount = t['amount']
         title = t['title']
-        user_data = self.get_user_data()
-        user_id = user_data['id']
-        budget = user_data['budget']
+  
         if expense:
-            budget -= float(amount)
+            self.budget -= float(amount)
         else:
-            budget += float(amount)
+            self.budget += float(amount)
 
         expenses = self.get_expenses()
         incomes = self.get_incomes()
 
-        self.update_budget(expenses, incomes, budget)
+        self.update_budget(expenses, incomes)
 
         if expense:
             sql = "INSERT INTO expenses (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
@@ -181,9 +181,9 @@ class Home(BoxLayout):
         tile.subtitle = sub
         tile.amount = t["amount"]
         if expense:
-            tile.extra = f"{float(budget):.2f}"
+            tile.extra = f"{float(self.budget):.2f}"
         else:
-            tile.extra = f"{float(budget):.2f}"
+            tile.extra = f"{float(self.budget):.2f}"
         tile.extra += " лв."
         tile.icon = icon
         tile.expense = t["expense"]
@@ -191,11 +191,8 @@ class Home(BoxLayout):
         tile.data = t
         tile.bind(on_release=self.tile_action)
 
-        db = Database()
-        db.update_user(user_id, budget)
-
         self.ids.gl_transactions.add_widget(tile)
-        self.ids.budget.text = f"{budget:.2f} лв."
+        self.ids.budget.text = f"{self.budget:.2f} лв."
 
 class TileAction(ModalView):
     def __init__(self, **kw) -> None:
