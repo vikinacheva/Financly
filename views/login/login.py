@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import Screen
 from kivymd.toast.kivytoast import toast
 from kivy.lang import Builder
 from data.database import User, Database
+from kivy.clock import Clock
 
 from kivy.properties import ObjectProperty
 
@@ -43,6 +44,9 @@ class Login(Screen):
             else:
                 app = App.get_running_app()
                 app.current_user_id = current_user_id  
+                main_screen = self.manager.get_screen('main')
+                main_screen.on_pre_enter()
                 self.manager.transition.director = 'left'
                 self.manager.current = 'main'
+                
         

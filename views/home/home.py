@@ -41,24 +41,7 @@ category_icons = {
     }
 
 class Home(Screen):    
-    budget = NumericProperty
-    
-    # def on_pre_enter(self):
-    #     app = App.get_running_app()
-    #     current_user_id = app.current_user_id
-    #     self.budget = self.get_budget(current_user_id)
-    #     self.update_budget(self.get_expenses(), self.get_incomes())
-
-    # def get_budget(self, id):
-    #     self.conn = sqlite3.connect('data/financly.db')
-    #     self.c = self.conn.cursor()
-    #     with self.conn:
-    #         self.c.execute('SELECT budget FROM users WHERE users.id = :id', {'id': id})
-    #         result = self.c.fetchone()
-    #         if result is not None:
-    #             return result[0]
-    #         else:
-    #             return None
+    budget = NumericProperty()
 
     def get_expenses(self):
         expenses = []

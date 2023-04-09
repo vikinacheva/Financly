@@ -20,6 +20,7 @@ class Financly(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.current_user_id = None
+        self.budget = None
         
     theme_cls = ThemeManager()
     
