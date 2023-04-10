@@ -21,6 +21,7 @@ class Financly(MDApp):
         super().__init__(**kwargs)
         self.current_user_id = None
         self.budget = None
+        self.latest_transactions = None
         
     theme_cls = ThemeManager()
     

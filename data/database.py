@@ -158,14 +158,6 @@ class Database:
         with self.conn:
             self.c.execute('SELECT * FROM users WHERE id = :user_id', {'user_id': user_id})
             return self.c.fetchone()
-
-    def update_user(self, user):
-        conn = sqlite3.connect("data/financly.db")
-        c = conn.cursor()
-        c.execute("UPDATE users SET username = ?, email = ?, password = ?, budget = ?, salary = ?, savings = ? WHERE id = ?",
-                  (user.username, user.email, user.password, user.budget, user.salary, user.savings, user.id))
-        conn.commit()
-        conn.close()
     
     def select_by_id(self, id):
         with self.conn:

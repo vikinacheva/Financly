@@ -97,37 +97,6 @@
 							height: self.minimum_height
 							spacing: dp(20)
 
-<TileAction>:
-	background: ''
-	background_color: [0,0,0, .2]
-	AnchorLayout:
-		anchor_y: 'bottom'
-		BackBox:
-			orientation: 'vertical'
-			padding: dp(12)
-			bcolor: app.colors.white
-			size_hint_y: None
-			height: dp(128)
-			GridLayout:
-				cols: 1
-				FlatButton:
-					text: 'Редактирай'
-					color: app.colors.primary
-					font_name: app.fonts.heading
-					halign: 'left'
-					size_hint_y: None
-					height: dp(42)
-				BackBox:
-					size_hint_y: None
-					height: dp(1)
-					bcolor: app.colors.light
-				FlatButton:
-					text: 'Изтрий'
-					color: app.colors.red
-					font_name: app.fonts.heading
-					halign: 'left'
-					size_hint_y: None
-					height: dp(42)
 <AddNew>:
 	expense: False
     category_button: category_button

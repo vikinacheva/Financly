@@ -18,7 +18,7 @@ from kivy.utils import get_color_from_hex
 
 from kivy.clock import Clock
 
-from kivy.properties import StringProperty, ObjectProperty, BooleanProperty, NumericProperty
+from kivy.properties import StringProperty, ObjectProperty, BooleanProperty, NumericProperty, ListProperty
 
 from widgets.tiles import ListTile
 from widgets.buttons import FlatButton, IconButton
@@ -42,67 +42,7 @@ category_icons = {
 
 class Home(Screen):    
     budget = NumericProperty()
-
-    def get_expenses(self):
-        expenses = []
-        for child in self.ids.gl_transactions.children:
-            if child.expense:
-                expenses.append(child.data)
-        return expenses
         
-    def get_incomes(self):
-        incomes = []
-        for child in self.ids.gl_transactions.children:
-            if not child.expense:
-                incomes.append(child.data)
-        return incomes
-        
-    def update_budget(self, expenses, incomes):
-        grid = self.ids.gl_transactions
-        grid.clear_widgets()
-
-        for t in expenses:
-            ic = get_color_from_hex("f8f9fa")
-            tile = ListTile()
-            tile.tile_id = t['id']
-            tile.title = t['title']
-            tile.subtitle = t['date']
-            tile.amount = t['amount']
-            tile.extra = t['initial-amount']
-            tile.icon = t['icon']
-            tile.expense = t['expense']
-            tile.icon_color = ic
-            tile.data = t
-            tile.bind(on_release=self.tile_action)
-            grid.add_widget(tile)
-
-            if t['expense']:
-                self.budget -= float(t['amount'])
-
-        for t in incomes:
-            ic = get_color_from_hex("f8f9fa")
-            tile = ListTile()
-            tile.tile_id = t['id']
-            tile.title = t['title']
-            tile.subtitle = t['date']
-            tile.amount = t['amount']
-            tile.extra = t['initial-amount']
-            tile.icon = t['icon']
-            tile.expense = t['expense']
-            tile.icon_color = ic
-            tile.data = t
-            tile.bind(on_release=self.tile_action)
-            grid.add_widget(tile)
-
-            if not t['expense']:
-                self.budget += float(t['amount'])
-
-        self.ids.budget.text = f"{self.budget} лв."
-
-    def tile_action(self, inst):
-        ta = TileAction()
-        ta.open()
-
     def add_new(self, expense=True):
         an = AddNew()
         an.expense = expense
@@ -113,55 +53,30 @@ class Home(Screen):
         app = App.get_running_app()
         current_user_id = app.current_user_id
         category_name = t['category']
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
         icon = category_icons.get(category_name, "icons/default.png")
+        ic = get_color_from_hex("f8f9fa")
         expense = t['expense']
         amount = t['amount']
         title = t['title']
   
         if expense:
             self.budget -= float(amount)
-        else:
-            self.budget += float(amount)
-
-        expenses = self.get_expenses()
-        incomes = self.get_incomes()
-
-        self.update_budget(expenses, incomes)
-
-        if expense:
             sql = "INSERT INTO expenses (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
         else:
+            self.budget += float(amount)
             sql = "INSERT INTO incomes (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
-
+        
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        cursor.execute(sql, (current_user_id, title, category_name, now, amount))
+        cursor.execute(sql, (current_user_id, title, category_name, dt, amount))
         conn.commit()
         conn.close()
-
-        ic = get_color_from_hex("f8f9fa")
-
-        now = datetime.now()
-        dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
-        yr = now.year
-        mnth = now.month
-        day = now.day
-
-        if yr == dt.year and mnth == dt.month:
-            if day == dt.day:
-                sub = "Днес"
-            elif dt.day == day -1:
-                sub = "Вчера"
-        else:
-            sub = t['date']
-
-        icon = category_icons.get(category_name, "icons/default.png")
-
+        
         tile = ListTile(category_name=category_name)
         tile.tile_id = t["id"]
         tile.title = t["title"]
-        tile.subtitle = sub
+        tile.subtitle = t['date']
         tile.amount = t["amount"]
         if expense:
             tile.extra = f"{float(self.budget):.2f}"
@@ -172,15 +87,18 @@ class Home(Screen):
         tile.expense = t["expense"]
         tile.icon_color = ic
         tile.data = t
-        tile.bind(on_release=self.tile_action)
-
+        
+        app = App.get_running_app()
+        current_user_id = app.current_user_id
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        cursor.execute('UPDATE users SET budget = ? WHERE id = ?', (self.budget, current_user_id))
+        conn.commit()
+        conn.close()
+        
         self.ids.gl_transactions.add_widget(tile)
         self.ids.budget.text = f"{self.budget:.2f} лв."
-
-class TileAction(ModalView):
-    def __init__(self, **kw) -> None:
-        super().__init__(**kw)
-
+            
 class AddNew(ModalView):
     expense = BooleanProperty(False)
     callback = ObjectProperty(print)
@@ -196,6 +114,7 @@ class AddNew(ModalView):
     def render(self, _):
         btns = [x for x in range(9, -1, -1)]
         btns.insert(9, ".")
+        btns.append("assets/icons/delete.png")
         
         for b in btns:
             kp = KeyPad()

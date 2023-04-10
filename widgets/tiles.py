@@ -106,4 +106,4 @@ class ListTile(ButtonBehavior, BoxLayout):
             amount.text = "-"+amount.text[2:]
     
     def on_extra(self, inst, extra):
-        self.ids.extra.text = f"${extra}"
+        self.ids.extra.text = f"{extra}"

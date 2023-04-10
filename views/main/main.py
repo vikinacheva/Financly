@@ -14,12 +14,15 @@ class NavBar(CommonElevationBehavior, MDFloatLayout):
     pass
     
 class Main(Screen): 
-    def on_pre_enter(self):
+    def on_login(self):
         app = App.get_running_app()
         current_user_id = app.current_user_id
         budget = self.get_budget(current_user_id)
+        latest_transactions = self.get_latest_transactions(current_user_id)
         app.budget = budget
+        app.latest_transactions = latest_transactions
         self.ids.home.budget = budget
+        self.ids.home.show_transactions(latest_transactions)
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -31,7 +34,27 @@ class Main(Screen):
                 return result[0]
             else:
                 return None
-                    
+    
+    def get_latest_transactions(self, id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            '''
+            SELECT * FROM (
+                SELECT * FROM expenses WHERE user_id=? ORDER BY date DESC LIMIT 10
+            )
+            UNION ALL
+            SELECT * FROM (
+                SELECT * FROM incomes WHERE user_id=? ORDER BY date DESC LIMIT 10
+            )
+            ORDER BY date DESC
+            ''',
+            (id, id)
+        )
+        transactions = cursor.fetchall()
+        conn.close()
+        return transactions
+    
     def if_active (self, instance):
         if instance in self.ids.values():
             current_id = list(self.ids.keys())[list(self.ids.values()).index(instance)]
