@@ -36,6 +36,8 @@ class Register(Screen):
             return toast('Потребителското име трябва да бъде между 2 и 20 символа!')
         if not email:
             return toast('Не сте въвели имейл!')
+        if val:
+            return toast('Вече има регистриран потребител с този имейл адрес!')
         elif '@' not in email:
             return toast('Невалиден имейл адрес!')
         if not password:
