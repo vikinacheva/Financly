@@ -15,6 +15,8 @@ from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.metrics import dp
 from kivy.utils import get_color_from_hex
+from kivymd.toast.kivytoast import toast
+
 
 from kivy.clock import Clock
 
@@ -62,8 +64,14 @@ class Home(Screen):
         title = t['title']
         
         if expense:
-            self.budget -= float(amount)
-            sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
+            if float(amount) < self.budget:
+                self.budget -= float(amount)
+                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
+            else:
+                self.budget -= float(amount)
+                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
+                toast("Надхвърлихте лимита си!")
+                self.ids.budget.color = get_color_from_hex("d00000")
         else:
             self.budget += float(amount)
             sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
@@ -86,10 +94,9 @@ class Home(Screen):
         cursor.execute('UPDATE users SET budget = ? WHERE id = ?', (self.budget, current_user_id))
         conn.commit()
         conn.close()
-    
+
         self.ids.budget.text = f"{self.budget:.2f} лв."
 
-    
     def show_transactions(self, transactions):
         self.latest_transactions = transactions
         self.ids.gl_transactions.clear_widgets()
@@ -200,22 +207,29 @@ class AddNew(ModalView):
             dropdown.add_widget(btn)
 
     def confirm(self):
-        self.dismiss()
-        icons = os.listdir("assets/icons")
-        icon = icons[randint(0, len(icons)-1)]
+        if self.ids.title.text == '':
+            return toast("Моля въведи заглавие на транзакцията!")
+        elif self.ids.category_button.text == 'Избери категория':
+            return toast("Моля избери категория!")
+        elif self.ids.new_amount.text == "0.00":
+            return toast("Моля въведи сума на транзакцията!")
+        else:
+            self.dismiss()
+            icons = os.listdir("assets/icons")
+            icon = icons[randint(0, len(icons)-1)]
 
-        icon = os.path.join("assets/icons", icon)
-        data = {
-            'id': str(time.time()),
-            'title': self.ids.title.text.strip(),
-            'date': datetime.strftime(datetime.now(), "%Y-%m-%d, %H:%M:%S"),
-            'amount': self.ids.new_amount.text.strip(),
-            'initial-amount': '0.00',
-            'icon': icon,
-            'expense': self.expense,
-            'category': self.category_button.text,
-        }
-        self.callback(data)
+            icon = os.path.join("assets/icons", icon)
+            data = {
+                'id': str(time.time()),
+                'title': self.ids.title.text.strip(),
+                'date': datetime.strftime(datetime.now(), "%Y-%m-%d, %H:%M:%S"),
+                'amount': self.ids.new_amount.text.strip(),
+                'initial-amount': '0.00',
+                'icon': icon,
+                'expense': self.expense,
+                'category': self.category_button.text,
+            }
+            self.callback(data)
     
     def key_press(self, inst):
         amount = self.ids.new_amount
