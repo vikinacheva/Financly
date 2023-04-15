@@ -3,15 +3,14 @@ import datetime
 import threading
 
 class User():
-    def __init__(self, username=None, email=None, password=None, budget=None, salary=None, savings=None, incomes=None, expenses=None):
+    def __init__(self, username=None, email=None, password=None, budget=None, salary=None, savings=None, transactions=None):
         self.username = username
         self.email = email
         self.password = password
         self.budget = budget
         self.salary = salary
         self.savings = savings
-        self.incomes = incomes if incomes is not None else []
-        self.expenses = expenses if expenses is not None else []
+        self.transactions = transactions if transactions is not None else []
         
     def add_username(self, username):
         self.username = username
@@ -31,17 +30,11 @@ class User():
     def add_savings(self, savings):
         self.savings = savings
         
-    def add_income(self, budget_id, title, amount, category):
+    def add_transaction(self, user_id, is_expense, title, amount, category, budget_snapshot):
         date = datetime.datetime.now().strftime("%Y-%m-%d")
         db = Database()
-        db.add_income(budget_id, title, amount, date, category)
-        self.incomes.append((title, amount, date, category))
-
-    def add_expense(self, budget_id, title, amount, category):
-        date = datetime.datetime.now().strftime("%Y-%m-%d")
-        db = Database()
-        db.add_expense(budget_id, title, amount, date, category)
-        self.expenses.append((title, amount, date, category))
+        db.add_transaction(user_id, is_expense, title, amount, date, category, budget_snapshot)
+        self.transactions.append((is_expense, title, amount, date, category, budget_snapshot))
     
     @classmethod
     def from_database(cls, id):
@@ -52,9 +45,8 @@ class User():
             budget = db.get_budget(id)
             salary = db.get_salary(id)
             savings = db.get_savings(id)
-            incomes = db.get_incomes(id)
-            expenses = db.get_expenses(id)
-            user = cls(username, email, password, budget, salary, savings, incomes, expenses)
+            transactions = db.get_transactions(id)
+            user = cls(username, email, password, budget, salary, savings, transactions)
             return user
         else:
             return None
@@ -77,24 +69,15 @@ class Database:
             )
         ''')
         self.c.execute('''
-            CREATE TABLE IF NOT EXISTS incomes(
+            CREATE TABLE IF NOT EXISTS transactions(
                 id INTEGER PRIMARY KEY,
                 user_id INTEGER,
+                is_expense BOOL,
                 title TEXT,
                 amount REAL,
                 date TEXT,
                 category TEXT,
-                FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-            )
-        ''')
-        self.c.execute('''
-            CREATE TABLE IF NOT EXISTS expenses(
-                id INTEGER PRIMARY KEY,
-                user_id INTEGER,
-                title TEXT,
-                amount REAL,
-                date TEXT,
-                category TEXT,
+                budget_snapshot TEXT,
                 FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
             )
         ''')
@@ -106,14 +89,9 @@ class Database:
                         {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password, 'budget': user_obj.budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
         self.conn.commit()
 
-    def add_income(self, title, amount, date, category):
-        self.c.execute("INSERT INTO incomes (title, amount, date, category) VALUES (::title, :amount, :date, :category)", 
-                       {'title': title, 'amount': amount, 'date': date, 'category': category})
-        self.conn.commit()
-
-    def add_expense(self, title, amount, date, category):
-        self.c.execute("INSERT INTO expenses (title, amount, date, category) VALUES (::title, :amount, :date, :category)", 
-                       {'title': title, 'amount': amount, 'date': date, 'category': category})
+    def add_transaction(self, is_expense, title, amount, date, category, budget_snapshot):
+        self.c.execute("INSERT INTO transactions (is_expense, title, amount, date, category, budget_snapshot) VALUES (:is_expense, :title, :amount, :date, :category, :budget_snapshot)", 
+                       {'is_expense' : is_expense, 'title': title, 'amount': amount, 'date': date, 'category': category, 'budget_snapshot' : budget_snapshot})
         self.conn.commit()
     
     def get_budget(self, user_id):
@@ -142,15 +120,9 @@ class Database:
             else:
                 return None
             
-    def get_incomes(self, id):
+    def get_transactions(self, id):
         with self.conn:
-            self.c.execute('SELECT title, amount, date, category FROM incomes JOIN users ON users.id = incomes.user_id WHERE users.id = :id',
-                           {'id': id})
-            return self.c.fetchall()
-        
-    def get_expenses(self, id):
-        with self.conn:
-            self.c.execute('SELECT title, amount, date, category FROM expenses JOIN users ON users.id = expenses.user_id WHERE users.id = :id',
+            self.c.execute('SELECT is_expense, title, amount, date, category, budget_snapshot FROM transactions JOIN users ON users.id = transactions.user_id WHERE users.id = :id',
                            {'id': id})
             return self.c.fetchall()
 

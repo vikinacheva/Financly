@@ -22,7 +22,7 @@ class Main(Screen):
         app.budget = budget
         app.latest_transactions = latest_transactions
         self.ids.home.budget = budget
-        self.ids.home.show_transactions(latest_transactions)
+        self.ids.home.show_transactions(latest_transactions) 
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -39,17 +39,10 @@ class Main(Screen):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
         cursor.execute(
-            '''
-            SELECT * FROM (
-                SELECT * FROM expenses WHERE user_id=? ORDER BY date DESC LIMIT 10
-            )
-            UNION ALL
-            SELECT * FROM (
-                SELECT * FROM incomes WHERE user_id=? ORDER BY date DESC LIMIT 10
-            )
-            ORDER BY date DESC
-            ''',
-            (id, id)
+            ('''
+            SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC LIMIT 10
+            '''),
+            (id,)
         )
         transactions = cursor.fetchall()
         conn.close()

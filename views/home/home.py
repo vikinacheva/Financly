@@ -42,6 +42,7 @@ category_icons = {
 
 class Home(Screen):    
     budget = NumericProperty()
+    latest_transactions = ListProperty([])
         
     def add_new(self, expense=True):
         an = AddNew()
@@ -53,23 +54,25 @@ class Home(Screen):
         app = App.get_running_app()
         current_user_id = app.current_user_id
         category_name = t['category']
-        dt = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
+        date = datetime.strptime(t['date'], "%Y-%m-%d, %H:%M:%S")
         icon = category_icons.get(category_name, "icons/default.png")
         ic = get_color_from_hex("f8f9fa")
         expense = t['expense']
         amount = t['amount']
         title = t['title']
-  
+        
         if expense:
             self.budget -= float(amount)
-            sql = "INSERT INTO expenses (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
+            sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
         else:
             self.budget += float(amount)
-            sql = "INSERT INTO incomes (user_id, title, category, date, amount) VALUES (?, ?, ?, ?, ?)"
+            sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
+        
+        budget_snapshot = f"{float(self.budget):.2f}"
         
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        cursor.execute(sql, (current_user_id, title, category_name, dt, amount))
+        cursor.execute(sql, (current_user_id, title, amount, date, category_name, budget_snapshot))
         conn.commit()
         conn.close()
         
@@ -78,11 +81,8 @@ class Home(Screen):
         tile.title = t["title"]
         tile.subtitle = t['date']
         tile.amount = t["amount"]
-        if expense:
-            tile.extra = f"{float(self.budget):.2f}"
-        else:
-            tile.extra = f"{float(self.budget):.2f}"
-        tile.extra += " лв."
+        tile.budget_snapshot = budget_snapshot
+        tile.budget_snapshot += " лв."
         tile.icon = icon
         tile.expense = t["expense"]
         tile.icon_color = ic
@@ -98,6 +98,26 @@ class Home(Screen):
         
         self.ids.gl_transactions.add_widget(tile)
         self.ids.budget.text = f"{self.budget:.2f} лв."
+    
+    def show_transactions(self, transactions):
+        self.latest_transactions = transactions
+        self.ids.gl_transactions.clear_widgets()
+        for t in transactions:
+            tile = ListTile(category_name=str(t[6]))
+            tile.tile_id = str(t[0])
+            tile.title = str(t[3])
+            tile.subtitle = str(t[5])
+            tile.amount = str(t[4])
+            tile.budget_snapshot = str(t[7])
+            if t[2]:
+                tile.expense = True
+            else:
+                tile.expense = False
+            tile.icon = category_icons.get(str(t[6]), "icons/default.png")
+            tile.icon_color = get_color_from_hex("f8f9fa")
+            tile.data = t
+
+            self.ids.gl_transactions.add_widget(tile)
             
 class AddNew(ModalView):
     expense = BooleanProperty(False)

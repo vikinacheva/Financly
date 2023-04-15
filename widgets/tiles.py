@@ -43,7 +43,7 @@ Builder.load_string('''
             font_size: app.fonts.size.h5
             color: app.colors.red if root.expense else app.colors.green
         Text:
-            id: extra
+            id: budget_snapshot
             font_name: app.fonts.body
             font_size: app.fonts.size.h6
             color: app.colors.primary_font
@@ -69,7 +69,7 @@ class ListTile(ButtonBehavior, BoxLayout):
     icon = StringProperty("")
     title = StringProperty("")
     subtitle = StringProperty("")
-    extra = StringProperty("")
+    budget_snapshot = StringProperty("")
     amount = NumericProperty(0.0)
     expense = BooleanProperty(True)
     data = ObjectProperty(allownone=True)
@@ -105,5 +105,5 @@ class ListTile(ButtonBehavior, BoxLayout):
         if amount.text.startswith("-+"):
             amount.text = "-"+amount.text[2:]
     
-    def on_extra(self, inst, extra):
-        self.ids.extra.text = f"{extra}"
+    def on_budget_snapshot(self, inst, budget_snapshot):
+        self.ids.budget_snapshot.text = f"{budget_snapshot}"
