@@ -76,17 +76,8 @@ class Home(Screen):
         conn.commit()
         conn.close()
         
-        tile = ListTile(category_name=category_name)
-        tile.tile_id = t["id"]
-        tile.title = t["title"]
-        tile.subtitle = t['date']
-        tile.amount = t["amount"]
-        tile.budget_snapshot = budget_snapshot
-        tile.budget_snapshot += " лв."
-        tile.icon = icon
-        tile.expense = t["expense"]
-        tile.icon_color = ic
-        tile.data = t
+        latest_transactions = app.root.get_screen('main').get_latest_transactions(current_user_id)
+        self.show_transactions(latest_transactions)     
         
         app = App.get_running_app()
         current_user_id = app.current_user_id
@@ -95,9 +86,9 @@ class Home(Screen):
         cursor.execute('UPDATE users SET budget = ? WHERE id = ?', (self.budget, current_user_id))
         conn.commit()
         conn.close()
-        
-        self.ids.gl_transactions.add_widget(tile)
+    
         self.ids.budget.text = f"{self.budget:.2f} лв."
+
     
     def show_transactions(self, transactions):
         self.latest_transactions = transactions
