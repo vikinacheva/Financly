@@ -12,7 +12,7 @@ class Setup(Screen):
     def next(self):
         if not self.ids.budget_input.text:
             return toast("Моля въведете начална сума!")
-        if not self.ids.budget_input.text.isdigit():
+        if not self.ids.budget_input.text.replace('.', '').isdigit():
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')
@@ -23,29 +23,19 @@ class Setup(Screen):
     def next1(self):
         if not self.ids.salary.text:
             return toast("Моля въведете месечен доход (заплата)!")
-        if not self.ids.salary.text.isdigit():
+        if not self.ids.salary.text.replace('.', '').isdigit():
             return toast("Сумата не може да съдържа букви!")
         else:
             self.ids.slide.load_next(mode='next')
             self.ids.progress1.value = 100
             self.ids.icon1.text_color = get_color_from_hex("#f7983c")
             self.ids.icon1.icon = "check-circle"
-        
-    def previous(self):
-        self.ids.slide.load_previous()
-        self.ids.progress.value = 0
-        self.ids.icon.text_color = rgba(34, 56, 97, 255)
-        self.ids.icon.icon = "numeric-1-circle"
-        
-    def previous1(self):
-        self.ids.slide.load_previous()
-        self.ids.progress1.value = 0
-        self.ids.icon1.text_color = rgba(34, 56, 97, 255)
-        self.ids.icon1.icon = "numeric-2-circle"
-        
+
     def ready(self):
         if not self.ids.savings.text:
             return toast("Моля въведете желания % за спестяване!")
+        if not self.ids.savings.text.replace('.', '').isdigit():
+            return toast("Процентът трябва да е число!")
         try:
             savings = float(self.ids.savings.text)
         except ValueError:
@@ -64,5 +54,10 @@ class Setup(Screen):
             user_obj.add_salary(float(self.ids.salary.text))
             user_obj.add_savings(float(self.ids.savings.text))
             db.add_user(user_obj)
+            val = db.select_by_email(email = App.get_running_app().root.get_screen('register').email.text)
+            current_user_id = val[0]
+            app = App.get_running_app()
+            app.current_user_id = current_user_id  
+            main_screen = self.manager.get_screen('main')
+            main_screen.on_login()
             self.manager.current = 'welcome'
-    
