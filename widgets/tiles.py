@@ -106,4 +106,4 @@ class ListTile(ButtonBehavior, BoxLayout):
             amount.text = "-"+amount.text[2:]
     
     def on_budget_snapshot(self, inst, budget_snapshot):
-        self.ids.budget_snapshot.text = f"{budget_snapshot}"
+        self.ids.budget_snapshot.text = f"{budget_snapshot} лв."

@@ -101,11 +101,7 @@ class BarChart(BoxLayout):
 
             point = Bar()
             point.bar_value = value
-            # if(len(self.point_colors) == len(self.points)):
-            #     point.bcolor = self.point_colors[i]
-            # else:
-            #     self
-            point.bcolor = self.point_colors # [i] if len(self.point_colors) == len(self.points) else self.point_colors[0]
+            point.bcolor = self.point_colors 
             point.text = str(p)
 
             box.add_widget(point)
@@ -177,9 +173,7 @@ if __name__ == '__main__':
             self.padding = [64, 64]
             bc = BarChart()
             bc.point_colors = [(get_color_from_hex("#f7983c"), rgba("#83F3FA"))]
-            # bc.point_colors = [rgba("#83BAED")] # For single bar graphs
             bc.points = [(20, 10), (15, 32), (45, 24), (87, 38), (34, 27), (98, 54), (56, 90)]
-            # bc.points = [23, 65, 10, 45, 29, 56, 39] # single bar graph
             bc.xlabels = ["Пон", "Вт", "Сря", "Четв", "Пет", "Съб", "Нед"]
 
             self.add_widget(bc)

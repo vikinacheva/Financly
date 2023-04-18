@@ -57,9 +57,11 @@
                             BoxLayout:
                                 id: wrapper_trend
                         GridLayout:
+                            id: incomes
                             cols: 1
                             Text: 
-                                text: "12, 450.02 лв."
+                                id: incomes_text
+                                text: f"{app.weekly_incomes} лв."
                                 color: app.colors.white
                                 font_name: app.fonts.heading
                                 font_size: app.fonts.size.h3
@@ -100,9 +102,11 @@
                             BoxLayout:
                                 id: wrapper_trend
                         GridLayout:
+                            id: expenses
                             cols: 1
                             Text: 
-                                text: "4,827.64 лв."
+                                id: expenses_text
+                                text: f"{app.weekly_expenses} лв."
                                 color: app.colors.white
                                 font_name: app.fonts.heading
                                 font_size: app.fonts.size.h3

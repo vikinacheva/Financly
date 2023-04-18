@@ -44,7 +44,9 @@ category_icons = {
 
 class Home(Screen):    
     budget = NumericProperty()
-    latest_transactions = ListProperty([])
+    latest_transactions = ListProperty()
+    weekly_incomes = NumericProperty()
+    weekly_expenses = NumericProperty()
         
     def add_new(self, expense=True):
         an = AddNew()
@@ -66,16 +68,22 @@ class Home(Screen):
         if expense:
             if float(amount) < self.budget:
                 self.budget -= float(amount)
+                self.weekly_expenses += float(amount)
+                app.weekly_expenses = self.weekly_expenses
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
             else:
                 self.budget -= float(amount)
+                self.weekly_expenses += float(amount)
+                app.weekly_expenses = self.weekly_expenses
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
                 toast("Надхвърлихте лимита си!")
                 self.ids.budget.color = get_color_from_hex("d00000")
         else:
             self.budget += float(amount)
+            self.weekly_incomes += float(amount)
+            app.weekly_incomes = self.weekly_incomes
             sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
-        
+
         budget_snapshot = f"{float(self.budget):.2f}"
         
         conn = sqlite3.connect('data/financly.db')
@@ -85,7 +93,7 @@ class Home(Screen):
         conn.close()
         
         latest_transactions = app.root.get_screen('main').get_latest_transactions(current_user_id)
-        self.show_transactions(latest_transactions)     
+        self.show_transactions(latest_transactions) 
         
         app = App.get_running_app()
         current_user_id = app.current_user_id
@@ -96,7 +104,8 @@ class Home(Screen):
         conn.close()
 
         self.ids.budget.text = f"{self.budget:.2f} лв."
-
+        app.root.get_screen('main').on_login()
+    
     def show_transactions(self, transactions):
         self.latest_transactions = transactions
         self.ids.gl_transactions.clear_widgets()

@@ -4,8 +4,8 @@ from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
-from kivy.properties import NumericProperty
 import sqlite3
+from datetime import datetime, timedelta
 
 
 Builder.load_file('views/main/main.kv')
@@ -19,10 +19,17 @@ class Main(Screen):
         current_user_id = app.current_user_id
         budget = self.get_budget(current_user_id)
         latest_transactions = self.get_latest_transactions(current_user_id)
+        weekly_incomes = sum([x[0] for x in self.get_weekly_incomes(current_user_id)])
+        weekly_expenses = sum([x[0] for x in self.get_weekly_expenses(current_user_id)])
         app.budget = budget
         app.latest_transactions = latest_transactions
+        app.weekly_incomes = weekly_incomes
+        app.weekly_expenses = weekly_expenses
         self.ids.home.budget = budget
         self.ids.home.show_transactions(latest_transactions) 
+        self.ids.home.weekly_incomes = weekly_incomes
+        self.ids.home.weekly_expenses = weekly_expenses
+        self.ids.analytics.show_weekly_transactions()
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -40,13 +47,47 @@ class Main(Screen):
         cursor = conn.cursor()
         cursor.execute(
             ('''
-            SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC LIMIT 10
+                SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC LIMIT 10
             '''),
             (id,)
         )
         transactions = cursor.fetchall()
         conn.close()
         return transactions
+    
+    def get_weekly_incomes(self, user_id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        today = datetime.today()
+        start_of_week = today - timedelta(days=today.weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+
+        cursor.execute('''SELECT amount FROM transactions
+                          WHERE user_id = ? AND 
+                          date >= ? AND 
+                          date <= ? AND 
+                          is_expense = 0''',
+                       (user_id, start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')))
+        incomes = cursor.fetchall()
+        conn.close()
+        return incomes
+    
+    def get_weekly_expenses(self, user_id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        today = datetime.today()
+        start_of_week = today - timedelta(days=today.weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+
+        cursor.execute('''SELECT amount FROM transactions
+                          WHERE user_id = ? AND 
+                          date >= ? AND 
+                          date <= ? AND 
+                          is_expense = 1''',
+                       (user_id, start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')))
+        expenses = cursor.fetchall()
+        conn.close()
+        return expenses
     
     def if_active (self, instance):
         if instance in self.ids.values():
