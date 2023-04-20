@@ -173,7 +173,6 @@ if __name__ == '__main__':
             self.padding = [64, 64]
             bc = BarChart()
             bc.point_colors = [(get_color_from_hex("#f7983c"), rgba("#83F3FA"))]
-            bc.points = [(20, 10), (15, 32), (45, 24), (87, 38), (34, 27), (98, 54), (56, 90)]
             bc.xlabels = ["Пон", "Вт", "Сря", "Четв", "Пет", "Съб", "Нед"]
 
             self.add_widget(bc)

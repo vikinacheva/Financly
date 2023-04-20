@@ -21,15 +21,21 @@ class Main(Screen):
         latest_transactions = self.get_latest_transactions(current_user_id)
         weekly_incomes = sum([x[0] for x in self.get_weekly_incomes(current_user_id)])
         weekly_expenses = sum([x[0] for x in self.get_weekly_expenses(current_user_id)])
+        daily_incomes = sum([x[0] for x in self.get_daily_incomes(current_user_id)])
+        daily_expenses = sum([x[0] for x in self.get_daily_expenses(current_user_id)])
         app.budget = budget
         app.latest_transactions = latest_transactions
         app.weekly_incomes = weekly_incomes
         app.weekly_expenses = weekly_expenses
+        app.daily_incomes = daily_incomes
+        app.daily_expenses = daily_expenses
         self.ids.home.budget = budget
         self.ids.home.show_transactions(latest_transactions) 
         self.ids.home.weekly_incomes = weekly_incomes
         self.ids.home.weekly_expenses = weekly_expenses
-        self.ids.analytics.show_weekly_transactions()
+        self.ids.home.daily_incomes = daily_incomes
+        self.ids.home.daily_expenses = daily_expenses
+        self.ids.analytics.show_transactions()
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -89,6 +95,40 @@ class Main(Screen):
         conn.close()
         return expenses
     
+    def get_daily_incomes(self, user_id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        today = datetime.today()
+
+        start_of_day = today.replace(hour=0, minute=0, second=0)
+        end_of_day = today.replace(hour=23, minute=59, second=59)
+
+        cursor.execute('''SELECT amount FROM transactions
+                          WHERE user_id = ? AND 
+                          date BETWEEN ? AND ? AND 
+                          is_expense = 0''',
+                       (user_id, start_of_day, end_of_day))
+        incomes = cursor.fetchall()
+        conn.close()
+        return incomes
+
+    def get_daily_expenses(self, user_id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        today = datetime.today()
+
+        start_of_day = today.replace(hour=0, minute=0, second=0)
+        end_of_day = today.replace(hour=23, minute=59, second=59)
+
+        cursor.execute('''SELECT amount FROM transactions
+                          WHERE user_id = ? AND 
+                          date BETWEEN ? AND ? AND 
+                          is_expense = 1''',
+                       (user_id, start_of_day, end_of_day))
+        expenses = cursor.fetchall()
+        conn.close()
+        return expenses
+
     def if_active (self, instance):
         if instance in self.ids.values():
             current_id = list(self.ids.keys())[list(self.ids.values()).index(instance)]
