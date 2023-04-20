@@ -92,7 +92,6 @@ class BarChart(BoxLayout):
         ymin = min(data)
         ymax = max(data)
 
-
         for i, p in enumerate(self.points):
             if type(self.points[0]) in [list, tuple]:
                 value = (p[0]/ymax, p[1]/ymax)
@@ -165,20 +164,3 @@ class AxisLabel(BoxLayout):
     text = StringProperty("")
     def __init__(self, **kw) -> None:
         super().__init__(**kw)
-
-if __name__ == '__main__':
-    class ChartTest(BoxLayout):
-        def __init__(self, **kw) -> None:
-            super().__init__(**kw)
-            self.padding = [64, 64]
-            bc = BarChart()
-            bc.point_colors = [(get_color_from_hex("#f7983c"), rgba("#83F3FA"))]
-            bc.xlabels = ["Пон", "Вт", "Сря", "Четв", "Пет", "Съб", "Нед"]
-
-            self.add_widget(bc)
-
-    class ChartApp(App):
-        def build(self):
-            return ChartTest()
-
-    ChartApp().run()

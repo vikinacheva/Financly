@@ -1,12 +1,8 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from kivy.metrics import dp, sp
-from kivy.properties import NumericProperty
-from kivy.utils import rgba, QueryDict, get_random_color
+from datetime import datetime
 from kivy.clock import Clock
-from datetime import datetime, timedelta
-from widgets.tiles import ListTile
 
 Builder.load_file('views/analytics/analytics.kv')
 
@@ -26,14 +22,37 @@ class Analytics(Screen):
         app = App.get_running_app()
         weekly_incomes = app.weekly_incomes
         weekly_expenses = app.weekly_expenses
-        daily_incomes = app.daily_incomes
-        daily_expenses = app.daily_expenses
-        self.ids.incomes_text.text = f"{weekly_incomes:.2f} лв."
-        self.ids.expenses_text.text = f"{weekly_expenses:.2f} лв."
+        total_incomes = 0
+        total_expenses = 0
+        for income in weekly_incomes:
+            total_incomes += income[0]
+        for expense in weekly_expenses:
+            total_expenses += expense[0]
+        self.ids.incomes_text.text = f"{total_incomes:.2f} лв."
+        self.ids.expenses_text.text = f"{total_expenses:.2f} лв."
         
+        income_dict = {day: 0 for day in range(7)}
+        expense_dict = {day: 0 for day in range(7)}
 
+        for income in weekly_incomes:
+            date = datetime.strptime(income[1], '%Y-%m-%d %H:%M:%S').date()
+            day = date.weekday()  
+            income_dict[day] += income[0]
 
-
-    
-
-       
+        for expense in weekly_expenses:
+            date = datetime.strptime(expense[1], '%Y-%m-%d %H:%M:%S').date()
+            day = date.weekday()  
+            expense_dict[day] += expense[0]
+        
+        points = []
+        for day in range(7):
+            if income_dict[day] == 0 and expense_dict[day] == 0:
+                points.append((0.1, 0.1)) 
+            elif income_dict[day] == 0:
+                points.append((0.1, expense_dict[day]))
+            elif expense_dict[day] == 0:
+                points.append((income_dict[day], 0.1)) 
+            else:
+                points.append((income_dict[day], expense_dict[day]))
+        chart = self.ids.chart 
+        chart.points = points

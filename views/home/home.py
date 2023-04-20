@@ -14,7 +14,7 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.metrics import dp
-from kivy.utils import get_color_from_hex
+from kivy.utils import get_color_from_hex, rgba
 from kivymd.toast.kivytoast import toast
 
 
@@ -45,10 +45,8 @@ category_icons = {
 class Home(Screen):    
     budget = NumericProperty()
     latest_transactions = ListProperty()
-    weekly_incomes = NumericProperty()
-    weekly_expenses = NumericProperty()
-    daily_incomes = NumericProperty()
-    daily_expenses = NumericProperty()
+    weekly_incomes = ListProperty()
+    weekly_expenses = ListProperty()
         
     def add_new(self, expense=True):
         an = AddNew()
@@ -70,27 +68,29 @@ class Home(Screen):
         if expense:
             if float(amount) < self.budget:
                 self.budget -= float(amount)
-                self.weekly_expenses += float(amount)
-                self.daily_expenses += float(amount)
+                self.weekly_expenses.append(float(amount))
                 app.weekly_expenses = self.weekly_expenses
-                app.daily_expenses = self.daily_expenses
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
             else:
                 self.budget -= float(amount)
-                self.weekly_expenses += float(amount)
-                self.daily_expenses += float(amount)
+                self.weekly_expenses.append(float(amount))
                 app.weekly_expenses = self.weekly_expenses
-                app.daily_expenses = self.daily_expenses
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
-                toast("Надхвърлихте лимита си!")
+                toast("Надхвърли лимита си!")
                 self.ids.budget.color = get_color_from_hex("d00000")
         else:
-            self.budget += float(amount)
-            self.weekly_incomes += float(amount)
-            self.daily_incomes += float(amount)
-            app.weekly_incomes = self.weekly_incomes
-            app.daily_incomes = self.daily_incomes
-            sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
+            if float(amount) > self.budget:
+                self.budget += float(amount)
+                self.weekly_incomes.append(float(amount))
+                app.weekly_incomes = self.weekly_incomes
+                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
+                toast("Отново на плюс!")
+                self.ids.budget.color = rgba(255, 255, 255, 255)
+            else:
+                self.budget += float(amount)
+                self.weekly_incomes.append(float(amount))
+                app.weekly_incomes = self.weekly_incomes
+                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
 
         budget_snapshot = f"{float(self.budget):.2f}"
         
