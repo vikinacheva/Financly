@@ -24,6 +24,8 @@ class Financly(MDApp):
         self.latest_transactions = None
         self.weekly_incomes = 0
         self.weekly_expenses = 0
+        self.monthly_incomes = None
+        self.monthly_expenses = None
         
     theme_cls = ThemeManager()
     

@@ -47,6 +47,8 @@ class Home(Screen):
     latest_transactions = ListProperty()
     weekly_incomes = ListProperty()
     weekly_expenses = ListProperty()
+    monthly_incomes = ListProperty()
+    monthly_expenses = ListProperty()
         
     def add_new(self, expense=True):
         an = AddNew()
@@ -70,11 +72,15 @@ class Home(Screen):
                 self.budget -= float(amount)
                 self.weekly_expenses.append(float(amount))
                 app.weekly_expenses = self.weekly_expenses
+                self.monthly_expenses.append(float(amount))
+                app.monthly_expenses = self.monthly_expenses
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
             else:
                 self.budget -= float(amount)
                 self.weekly_expenses.append(float(amount))
                 app.weekly_expenses = self.weekly_expenses
+                self.monthly_expenses.append(float(amount))
+                app.monthly_expenses = self.monthly_expenses
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
                 toast("Надхвърли лимита си!")
                 self.ids.budget.color = get_color_from_hex("d00000")
@@ -83,6 +89,8 @@ class Home(Screen):
                 self.budget += float(amount)
                 self.weekly_incomes.append(float(amount))
                 app.weekly_incomes = self.weekly_incomes
+                self.monthly_incomes.append(float(amount))
+                app.monthly_incomes = self.monthly_incomes
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
                 toast("Отново на плюс!")
                 self.ids.budget.color = rgba(255, 255, 255, 255)
@@ -90,6 +98,8 @@ class Home(Screen):
                 self.budget += float(amount)
                 self.weekly_incomes.append(float(amount))
                 app.weekly_incomes = self.weekly_incomes
+                self.monthly_incomes.append(float(amount))
+                app.monthly_incomes = self.monthly_incomes
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
 
         budget_snapshot = f"{float(self.budget):.2f}"

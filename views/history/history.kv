@@ -14,28 +14,24 @@
                 color: app.colors.tertiary
                 halign: 'center'
         BoxLayout:
-            size_hint_y: .25
-            id: wrapper_overview
-            orientation: 'vertical'
-            padding: [dp(12), dp(4)]
-            BoxLayout:
-                size_hint_y: None
-                height: dp(24)
-                SoftSpinner:
-                    id: sp_overview
-                    text: 'Изхарчено'
-                    values: ["Изхарчено", "Спестено"]
-                    size_hint_x: .4
-                    radius: [self.height/2]
-            BoxLayout:
-                orientation: 'vertical'
-                Text:   
-                    text: '85.49 лв.'
-                    font_name: app.fonts.heading
-                    font_size: app.fonts.size.h1
-                    color: app.colors.primary
-                    valign: 'bottom'
-                    halign: 'center'
+            size_hint_y: None
+            height: dp(38)
+            Text:   
+                id: monthly_expenses
+                text: f'app.monthly_expenses лв.'
+                font_name: app.fonts.heading
+                font_size: app.fonts.size.h4
+                color: app.colors.red
+                valign: 'bottom'
+                halign: 'center'
+            Text:   
+                id: monthly_savings
+                # text: f'app.monthly_savings лв.'
+                font_name: app.fonts.heading
+                font_size: app.fonts.size.h4
+                color: app.colors.green
+                valign: 'bottom'
+                halign: 'center'
         Widget:
             size_hint_y: .05
         BoxLayout:

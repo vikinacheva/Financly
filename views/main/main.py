@@ -21,15 +21,22 @@ class Main(Screen):
         latest_transactions = self.get_latest_transactions(current_user_id)
         weekly_incomes = self.get_weekly_incomes(current_user_id)
         weekly_expenses = self.get_weekly_expenses(current_user_id)
+        monthly_incomes = self.get_monthly_incomes(current_user_id)
+        monthly_expenses = self.get_monthly_expenses(current_user_id)
         app.budget = budget
         app.latest_transactions = latest_transactions
         app.weekly_incomes = weekly_incomes
         app.weekly_expenses = weekly_expenses
+        app.monthly_incomes = monthly_incomes
+        app.monthly_expenses = monthly_expenses
         self.ids.home.budget = budget
         self.ids.home.show_transactions(latest_transactions) 
         self.ids.home.weekly_incomes = weekly_incomes
         self.ids.home.weekly_expenses = weekly_expenses
+        self.ids.home.monthly_incomes = monthly_incomes
+        self.ids.home.monthly_expenses = monthly_expenses
         self.ids.analytics.show_transactions()
+        self.ids.history.show_transactions(monthly_incomes, monthly_expenses)
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -88,6 +95,42 @@ class Main(Screen):
         expenses = cursor.fetchall()
         conn.close()
         return expenses
+    
+    def get_monthly_expenses(self, user_id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        today = datetime.today()
+        start_of_month = datetime(today.year, today.month, 1)
+        end_of_month = datetime(today.year, today.month, 1) + timedelta(days=32)
+        end_of_month = datetime(end_of_month.year, end_of_month.month, 1) - timedelta(days=1)
+
+        cursor.execute('''SELECT * FROM transactions
+                          WHERE user_id = ? AND 
+                          date >= ? AND 
+                          date <= ? AND 
+                          is_expense = 1''',
+                       (user_id, start_of_month.strftime('%Y-%m-%d'), end_of_month.strftime('%Y-%m-%d')))
+        expenses = cursor.fetchall()
+        conn.close()
+        return expenses
+
+    def get_monthly_incomes(self, user_id):
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        today = datetime.today()
+        start_of_month = datetime(today.year, today.month, 1)
+        end_of_month = datetime(today.year, today.month, 1) + timedelta(days=32)
+        end_of_month = datetime(end_of_month.year, end_of_month.month, 1) - timedelta(days=1)
+
+        cursor.execute('''SELECT * FROM transactions
+                          WHERE user_id = ? AND 
+                          date >= ? AND 
+                          date <= ? AND 
+                          is_expense = 0''',
+                       (user_id, start_of_month.strftime('%Y-%m-%d'), end_of_month.strftime('%Y-%m-%d')))
+        incomes = cursor.fetchall()
+        conn.close()
+        return incomes
 
     def if_active (self, instance):
         if instance in self.ids.values():
