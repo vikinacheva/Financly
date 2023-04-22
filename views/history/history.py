@@ -26,9 +26,11 @@ category_icons = {
 class History(Screen):
     monthly_incomes = ListProperty()
     monthly_expenses = ListProperty()
+    monthly_savings = NumericProperty()
     
     def show_transactions(self, incomes, expenses):
         app = App.get_running_app()
+        self.monthly_savings = app.monthly_savings
         self.monthly_incomes = incomes
         self.monthly_expenses = expenses
 
@@ -63,4 +65,4 @@ class History(Screen):
             self.ids.gl_history.add_widget(tile)
 
         self.ids.monthly_expenses.text = f"-{total_expenses:.2f} лв."
-        self.ids.monthly_savings.text = f"{total_incomes - total_expenses:.2f} лв."
+        self.ids.monthly_savings.text = f"{total_incomes - total_expenses:.2f} / {self.monthly_savings} лв."

@@ -23,12 +23,14 @@ class Main(Screen):
         weekly_expenses = self.get_weekly_expenses(current_user_id)
         monthly_incomes = self.get_monthly_incomes(current_user_id)
         monthly_expenses = self.get_monthly_expenses(current_user_id)
+        monthly_savings = self.get_monthly_savings(current_user_id)
         app.budget = budget
         app.latest_transactions = latest_transactions
         app.weekly_incomes = weekly_incomes
         app.weekly_expenses = weekly_expenses
         app.monthly_incomes = monthly_incomes
         app.monthly_expenses = monthly_expenses
+        app.monthly_savings = monthly_savings
         self.ids.home.budget = budget
         self.ids.home.show_transactions(latest_transactions) 
         self.ids.home.weekly_incomes = weekly_incomes
@@ -37,6 +39,7 @@ class Main(Screen):
         self.ids.home.monthly_expenses = monthly_expenses
         self.ids.analytics.show_transactions()
         self.ids.history.show_transactions(monthly_incomes, monthly_expenses)
+        self.ids.history.monthly_savings = monthly_savings
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -131,6 +134,20 @@ class Main(Screen):
         incomes = cursor.fetchall()
         conn.close()
         return incomes
+    
+    def get_monthly_savings(self, id):
+        self.conn = sqlite3.connect('data/financly.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute('SELECT salary, savings FROM users WHERE users.id = id', {'id': id})
+            result = self.c.fetchone()
+            if result is not None:
+                salary = result[0]
+                savings = result[1]
+                monthly_savings = salary * savings / 100
+                return monthly_savings
+            else:
+                return None
 
     def if_active (self, instance):
         if instance in self.ids.values():

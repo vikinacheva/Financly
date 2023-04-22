@@ -46,17 +46,20 @@ class Setup(Screen):
             return
         else:
             db = Database()
+            app = App.get_running_app()
             user_obj = User()
-            user_obj.add_username(App.get_running_app().root.get_screen('register').username.text)
-            user_obj.add_email(App.get_running_app().root.get_screen('register').email.text)
-            user_obj.add_password(App.get_running_app().root.get_screen('register').password.text)
+            
+            user_obj.add_username(app.root.get_screen('register').username.text)
+            user_obj.add_email(app.root.get_screen('register').email.text)
+            user_obj.add_password(app.root.get_screen('register').password.text)
             user_obj.add_budget(float(self.ids.budget_input.text))
             user_obj.add_salary(float(self.ids.salary.text))
             user_obj.add_savings(float(self.ids.savings.text))
+            
             db.add_user(user_obj)
-            val = db.select_by_email(email = App.get_running_app().root.get_screen('register').email.text)
+            val = db.select_by_email(email = app.root.get_screen('register').email.text)
             current_user_id = val[0]
-            app = App.get_running_app()
+                        
             app.current_user_id = current_user_id  
             main_screen = self.manager.get_screen('main')
             main_screen.on_login()
