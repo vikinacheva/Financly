@@ -24,6 +24,8 @@ class Main(Screen):
         monthly_incomes = self.get_monthly_incomes(current_user_id)
         monthly_expenses = self.get_monthly_expenses(current_user_id)
         monthly_savings = self.get_monthly_savings(current_user_id)
+        print(str(monthly_savings))
+        username = self.get_username(current_user_id)
         app.budget = budget
         app.latest_transactions = latest_transactions
         app.weekly_incomes = weekly_incomes
@@ -31,6 +33,7 @@ class Main(Screen):
         app.monthly_incomes = monthly_incomes
         app.monthly_expenses = monthly_expenses
         app.monthly_savings = monthly_savings
+        app.username = username
         self.ids.home.budget = budget
         self.ids.home.show_transactions(latest_transactions) 
         self.ids.home.weekly_incomes = weekly_incomes
@@ -40,6 +43,7 @@ class Main(Screen):
         self.ids.analytics.show_transactions()
         self.ids.history.show_transactions(monthly_incomes, monthly_expenses)
         self.ids.history.monthly_savings = monthly_savings
+        self.ids.account.profile()
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')
@@ -139,13 +143,24 @@ class Main(Screen):
         self.conn = sqlite3.connect('data/financly.db')
         self.c = self.conn.cursor()
         with self.conn:
-            self.c.execute('SELECT salary, savings FROM users WHERE users.id = id', {'id': id})
+            self.c.execute('SELECT salary, savings FROM users WHERE id = ?', (id,))
             result = self.c.fetchone()
             if result is not None:
-                salary = result[0]
-                savings = result[1]
+                salary, savings = result
                 monthly_savings = salary * savings / 100
                 return monthly_savings
+            else:
+                return None
+
+    
+    def get_username(self, id):
+        self.conn = sqlite3.connect('data/financly.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute('SELECT username FROM users WHERE users.id = :id', {'id': id})
+            result = self.c.fetchone()
+            if result is not None:
+                return result[0]
             else:
                 return None
 

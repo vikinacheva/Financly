@@ -22,12 +22,19 @@ class Analytics(Screen):
         app = App.get_running_app()
         weekly_incomes = app.weekly_incomes
         weekly_expenses = app.weekly_expenses
+        
         total_incomes = 0
         total_expenses = 0
         for income in weekly_incomes:
             total_incomes += income[0]
         for expense in weekly_expenses:
             total_expenses += expense[0]
+        
+        if total_incomes == 0 and total_expenses == 0:
+            chart = self.ids.chart
+            chart.points = []
+            return
+    
         self.ids.incomes_text.text = f"{total_incomes:.2f} лв."
         self.ids.expenses_text.text = f"{total_expenses:.2f} лв."
         
@@ -47,12 +54,12 @@ class Analytics(Screen):
         points = []
         for day in range(7):
             if income_dict[day] == 0 and expense_dict[day] == 0:
-                points.append((0.1, 0.1)) 
+                points.append((0.0001, 0.0001)) 
             elif income_dict[day] == 0:
-                points.append((0.1, expense_dict[day]))
+                points.append((0.0001, expense_dict[day]))
             elif expense_dict[day] == 0:
-                points.append((income_dict[day], 0.1)) 
+                points.append((income_dict[day], 0.0001)) 
             else:
                 points.append((income_dict[day], expense_dict[day]))
-        chart = self.ids.chart 
+        chart = self.ids.chart  
         chart.points = points
