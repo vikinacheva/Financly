@@ -49,6 +49,13 @@ class Home(Screen):
     weekly_expenses = ListProperty()
     monthly_incomes = ListProperty()
     monthly_expenses = ListProperty()
+    
+    def delete_tile(self, inst):
+        ta = TileAction()
+        ta.tile_id = inst.tile_id
+        ta.budget_label = self.ids.budget
+        ta.callback = self.show_transactions
+        ta.open()
         
     def add_new(self, expense=True):
         an = AddNew()
@@ -122,6 +129,7 @@ class Home(Screen):
         conn.close()
 
         self.ids.budget.text = f"{self.budget:.2f} лв."
+        
         app.root.get_screen('main').on_login()
     
     def show_transactions(self, transactions):
@@ -141,9 +149,44 @@ class Home(Screen):
             tile.icon = category_icons.get(str(t[6]), "icons/default.png")
             tile.icon_color = get_color_from_hex("f8f9fa")
             tile.data = t
+            tile.bind(on_release=self.delete_tile)
 
             self.ids.gl_transactions.add_widget(tile)
-            
+
+class TileAction(ModalView):
+    tile_id = NumericProperty()
+    callback = ObjectProperty(print)
+    budget_label = ObjectProperty()
+    
+    def __init__(self, **kw) -> None:
+        super().__init__(**kw)
+        
+    def delete_transaction(self):
+        app = App.get_running_app()
+        conn = sqlite3.connect('data/financly.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT amount, is_expense FROM transactions WHERE id=?", (self.tile_id,))
+        result = cursor.fetchone()
+        amount = result[0]
+        is_expense = result[1]
+        if is_expense == 1:
+            cursor.execute("UPDATE users SET budget = budget + ? WHERE id = ?", (amount, app.current_user_id))
+        else:
+            cursor.execute("UPDATE users SET budget = budget - ? WHERE id = ?", (amount, app.current_user_id))
+        cursor.execute("DELETE FROM transactions WHERE id=?", (self.tile_id,))
+        conn.commit()
+        cursor.execute("SELECT budget FROM users WHERE id=?", (app.current_user_id,))
+        budget = cursor.fetchone()[0]
+        conn.close()
+        
+        current_user_id = app.current_user_id
+        latest_transactions = app.root.get_screen('main').get_latest_transactions(current_user_id)
+        self.callback(latest_transactions)
+        
+        self.budget_label.text = f"{budget} лв."
+        
+        app.root.get_screen('main').on_login()
+                   
 class AddNew(ModalView):
     expense = BooleanProperty(False)
     callback = ObjectProperty(print)

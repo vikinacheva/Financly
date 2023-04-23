@@ -9,20 +9,6 @@
 				padding: dp(14)
 				vertical: True
 				bcolor: [app.colors.tertiary, app.colors.primary]
-				BoxLayout:
-    				orientation: "horizontal"
-    				spacing: 500
-    				padding: 10
-    				# Image:
-    				#     source: "assets/icons/logo.png"
-    				#     size_hint: None, None
-    				#     size: 75, 75
-					# 	pos_hint: {"center_y": .85}
-					Image:
-    					source: app.profile_pic
-    					size_hint: None, None
-    					size: 75, 75
-						pos_hint: {"center_y": .85}
 				Text: 
 					text: "Текущ баланс"
 					color: app.colors.white
@@ -97,6 +83,30 @@
 							height: self.minimum_height
 							spacing: dp(20)
 
+<TileAction>:
+	background: ''
+	background_color: [0,0,0, .2]
+	AnchorLayout:
+		anchor_y: 'bottom'
+		BackBox:
+			orientation: 'vertical'
+			padding: dp(12)
+			bcolor: app.colors.white
+			size_hint_y: None
+			height: dp(60)
+			GridLayout:
+				cols: 1
+				FlatButton:
+					text: 'Изтрий'
+					color: app.colors.red
+					font_name: app.fonts.heading
+					halign: 'left'
+					size_hint_y: None
+					height: dp(20)
+					on_release:
+						root.delete_transaction()
+						root.dismiss()
+					
 <AddNew>:
 	expense: False
     category_button: category_button
