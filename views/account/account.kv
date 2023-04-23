@@ -10,17 +10,26 @@
     	# 	size: 75, 75
 		# 	pos_hint: {"center_y": .85}
         Image:
-            source: "assets/icons/user.png"
+            id: profile_picture
             size_hint: None, None
             size: 200, 200
             pos_hint: {"center_x": .5}
         Label:
             id: username
+            text: "Здравей, "
             size_hint: None, None
             size: self.texture_size
             pos_hint: {"center_x": .5}
-            color: app.colors.black
+            color: app.colors.primary
         MDFloatLayout:
+            MDRaisedButton:
+                text: "Сменете профилната снимка"
+                pos_hint: {"center_x": .5, "center_y": .83}
+                text_color: app.colors.white
+                line_color: app.colors.primary
+                md_bg_color: app.colors.primary
+                on_release:
+                    root.change_profile_picture()
             MDRaisedButton:
                 text: "Излез"
                 pos_hint: {"center_x": .5, "center_y": .7}

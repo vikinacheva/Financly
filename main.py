@@ -22,12 +22,13 @@ class Financly(MDApp):
         self.current_user_id = None
         self.budget = None
         self.latest_transactions = None
-        self.weekly_incomes = 0
-        self.weekly_expenses = 0
+        self.weekly_incomes = None
+        self.weekly_expenses = None
         self.monthly_incomes = None
         self.monthly_expenses = None
         self.monthly_savings = None
         self.username = None
+        self.profile_pic = None
         
     theme_cls = ThemeManager()
     
@@ -72,9 +73,9 @@ class Financly(MDApp):
         screen_manager = ScreenManager()
         screen_manager.add_widget(login.Login(name = "login"))
         screen_manager.add_widget(main.Main(name = "main"))
+        screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(setup.Setup(name = "setup"))
-        screen_manager.add_widget(start.Start(name = "start"))
         screen_manager.add_widget(welcome.Welcome(name = "welcome"))
         
         return screen_manager   

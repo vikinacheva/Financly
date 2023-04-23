@@ -88,6 +88,7 @@ class Home(Screen):
             if float(amount) > self.budget:
                 self.budget += float(amount)
                 self.weekly_incomes.append(float(amount))
+                print("weekly incomes3" + str(self.weekly_incomes))                
                 app.weekly_incomes = self.weekly_incomes
                 self.monthly_incomes.append(float(amount))
                 app.monthly_incomes = self.monthly_incomes

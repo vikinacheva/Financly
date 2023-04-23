@@ -22,6 +22,7 @@ class Analytics(Screen):
         app = App.get_running_app()
         weekly_incomes = app.weekly_incomes
         weekly_expenses = app.weekly_expenses
+        print("weekly incomes4" + str(app.weekly_incomes))
         
         total_incomes = 0
         total_expenses = 0
@@ -34,7 +35,7 @@ class Analytics(Screen):
             chart = self.ids.chart
             chart.points = []
             return
-    
+
         self.ids.incomes_text.text = f"{total_incomes:.2f} лв."
         self.ids.expenses_text.text = f"{total_expenses:.2f} лв."
         

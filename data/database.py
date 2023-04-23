@@ -1,12 +1,15 @@
 import sqlite3
 import datetime
 import threading
+from PIL import Image
+import io
 
 class User():
-    def __init__(self, username=None, email=None, password=None, budget=None, salary=None, savings=None, transactions=None):
+    def __init__(self, username=None, email=None, password=None, profile_picture = None, budget=None, salary=None, savings=None, transactions=None):
         self.username = username
         self.email = email
         self.password = password
+        self.profile_picture = profile_picture
         self.budget = budget
         self.salary = salary
         self.savings = savings
@@ -20,6 +23,9 @@ class User():
     
     def add_password(self, password):
         self.password = password
+    
+    def add_profile_picture(self, profile_picture):
+        self.profile_picture = profile_picture
         
     def add_budget(self, budget):
         self.budget = budget
@@ -31,7 +37,7 @@ class User():
         self.savings = savings
         
     def add_transaction(self, user_id, is_expense, title, amount, category, budget_snapshot):
-        date = datetime.datetime.now().strftime("%Y-%m-%d")
+        date = datetime.datetime.now().strftime('%Y-%m-%d')
         db = Database()
         db.add_transaction(user_id, is_expense, title, amount, date, category, budget_snapshot)
         self.transactions.append((is_expense, title, amount, date, category, budget_snapshot))
@@ -42,11 +48,12 @@ class User():
         user_data = db.select_by_id(id)
         if user_data:
             username, email, password = user_data[:3]
+            profile_picture = db.get_profile_picture(id)
             budget = db.get_budget(id)
             salary = db.get_salary(id)
             savings = db.get_savings(id)
             transactions = db.get_transactions(id)
-            user = cls(username, email, password, budget, salary, savings, transactions)
+            user = cls(username, email, password, profile_picture, budget, salary, savings, transactions)
             return user
         else:
             return None
@@ -62,7 +69,7 @@ class Database:
                 username TEXT,
                 email TEXT UNIQUE,
                 password TEXT,
-                profile_picture BLOB,
+                profile_picture TEXT,
                 budget REAL,
                 salary REAL,
                 savings REAL
@@ -84,9 +91,11 @@ class Database:
         self.conn.commit()
 
     def add_user(self, user_obj):
+        if user_obj.profile_picture is None:
+            user_obj.profile_picture = "assets/icons/user.png"
         with self.conn:
-            self.c.execute('INSERT INTO users(username, email, password, budget, salary, savings) VALUES(:username, :email, :password, :budget, :salary, :savings)',
-                        {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password, 'budget': user_obj.budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
+            self.c.execute('INSERT INTO users(username, email, password, profile_picture, budget, salary, savings) VALUES(:username, :email, :password, :profile_picture, :budget, :salary, :savings)',
+                            {'username': user_obj.username, 'email': user_obj.email, 'password': user_obj.password, 'profile_picture': user_obj.profile_picture, 'budget': user_obj.budget, 'salary': user_obj.salary, 'savings': user_obj.savings})
         self.conn.commit()
 
     def add_transaction(self, is_expense, title, amount, date, category, budget_snapshot):
@@ -101,6 +110,17 @@ class Database:
             return result[0]
         else:
             return None
+    
+    def get_profile_picture(self, id):
+        self.conn = sqlite3.connect('data/financly.db')
+        self.c = self.conn.cursor()
+        with self.conn:
+            self.c.execute('SELECT profile_picture FROM users WHERE users.id = :id', {'id': id})
+            result = self.c.fetchone()
+            if result is not None:
+                return result[0]
+            else:
+                return None
             
     def get_salary(self, id):
         with self.conn:
