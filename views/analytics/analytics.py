@@ -22,7 +22,6 @@ class Analytics(Screen):
         app = App.get_running_app()
         weekly_incomes = app.weekly_incomes
         weekly_expenses = app.weekly_expenses
-        print("weekly incomes4" + str(app.weekly_incomes))
         
         total_incomes = 0
         total_expenses = 0

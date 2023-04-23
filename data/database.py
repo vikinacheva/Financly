@@ -37,7 +37,7 @@ class User():
         self.savings = savings
         
     def add_transaction(self, user_id, is_expense, title, amount, category, budget_snapshot):
-        date = datetime.datetime.now().strftime('%Y-%m-%d')
+        date = datetime.datetime.now().strftime("%Y-%m-%d")
         db = Database()
         db.add_transaction(user_id, is_expense, title, amount, date, category, budget_snapshot)
         self.transactions.append((is_expense, title, amount, date, category, budget_snapshot))

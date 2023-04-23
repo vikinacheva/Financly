@@ -20,7 +20,6 @@ class Main(Screen):
         budget = self.get_budget(current_user_id)
         latest_transactions = self.get_latest_transactions(current_user_id)
         weekly_incomes = self.get_weekly_incomes(current_user_id)
-        print("weekly incomes" + str(weekly_incomes))
         weekly_expenses = self.get_weekly_expenses(current_user_id)
         monthly_incomes = self.get_monthly_incomes(current_user_id)
         monthly_expenses = self.get_monthly_expenses(current_user_id)
@@ -30,7 +29,6 @@ class Main(Screen):
         app.budget = budget
         app.latest_transactions = latest_transactions
         app.weekly_incomes = weekly_incomes
-        print("weekly incomes2" + str(app.weekly_incomes))
         app.weekly_expenses = weekly_expenses
         app.monthly_incomes = monthly_incomes
         app.monthly_expenses = monthly_expenses
@@ -76,41 +74,32 @@ class Main(Screen):
     def get_weekly_incomes(self, user_id):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        today = datetime.today()
-        start_of_week = today - timedelta(days=today.weekday())
+        now = datetime.now()
+        start_of_week = now - timedelta(days=now.weekday())
         start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
-        end_of_week = start_of_week + timedelta(days=6)
-        end_of_week = end_of_week.replace(hour=23, minute=59, second=59, microsecond=999999)
-
+        end_of_week = start_of_week + timedelta(days=7)
         cursor.execute('''SELECT amount, date FROM transactions
                           WHERE user_id = ? AND 
-                          date >= ? AND 
-                          date <= ? AND 
-                          is_expense = 0''',
-                       (user_id, start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')))
+                          is_expense = 0 AND 
+                          date >= ? AND date < ?''',
+                       (user_id, start_of_week, end_of_week))
         incomes = cursor.fetchall()
-        print("start: "+str(start_of_week))
-        print("today: "+str(today))
-        print("end: "+str(end_of_week))
-        print("incomes" + str(incomes))
         conn.close()
         return incomes
     
     def get_weekly_expenses(self, user_id):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        today = datetime.today()
-        start_of_week = today - timedelta(days=today.weekday())
-        end_of_week = start_of_week + timedelta(days=6)
-
+        now = datetime.now()
+        start_of_week = now - timedelta(days=now.weekday())
+        start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_of_week = start_of_week + timedelta(days=7)
         cursor.execute('''SELECT amount, date FROM transactions
                           WHERE user_id = ? AND 
-                          date >= ? AND 
-                          date <= ? AND 
-                          is_expense = 1''',
-                       (user_id, start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')))
+                          is_expense = 1 AND 
+                          date >= ? AND date < ?''',
+                       (user_id, start_of_week, end_of_week))
         expenses = cursor.fetchall()
-        
         conn.close()
         return expenses
     
