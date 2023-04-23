@@ -31,15 +31,12 @@ class Account(Screen):
         app = App.get_running_app()
         self.username = app.username
         self.profile_pic = app.profile_pic
-        self.ids.username.text = f"Здравейте, {self.username}"
+        self.ids.username.text = f"{self.username}"
         self.ids.profile_picture.source = self.profile_pic
         
     def logout(self):
         app = App.get_running_app()
-        app.root.transition.direction = 'right'
-        app.root.current = "login"
-        app.root.get_screen('login').ids.email.text = ""
-        app.root.get_screen('login').ids.password.text = ""
+        app.root.get_screen('main').on_logout()
 
     def change_profile_picture(self):
         popup = Popup(title="Изберете профилна снимка", size_hint=(0.8, 0.8))
@@ -65,6 +62,6 @@ class Account(Screen):
         conn.commit()
         conn.close()
 
-        popup = Popup(title="Профилната снимка е сменена", content=Label(text="Промените са запазени успешно!"), size_hint=(0.8, 0.8))
+        popup = Popup(title="Профилната снимка е сменена", content=Label(text="Профилната снимка е сменена!"), size_hint=(0.8, 0.8))
         popup.open()
-        Clock.schedule_once(lambda dt: popup.dismiss(), 1)
+        Clock.schedule_once(lambda dt: popup.dismiss(), 1.5)

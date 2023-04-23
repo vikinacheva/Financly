@@ -46,6 +46,19 @@ class Main(Screen):
         self.ids.history.monthly_savings = monthly_savings
         self.ids.account.profile()
         self.ids.account.profile_pic = profile_pic
+        
+        screen_manager = self.ids.screen_manager
+        screen_manager.transition.direction = 'left'
+        screen_manager.current = 'screen_home'
+    
+    def on_logout(self):
+        screen_manager = self.ids.screen_manager
+        screen_manager.transition.direction = 'left'
+        app = App.get_running_app()
+        app.root.current = 'login'
+        app.root.transition.direction = 'left'
+        app.root.get_screen('login').ids.email.text = ''
+        app.root.get_screen('login').ids.password.text = ''
 
     def get_budget(self, id):
         self.conn = sqlite3.connect('data/financly.db')

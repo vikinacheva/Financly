@@ -30,6 +30,18 @@ class Setup(Screen):
             self.ids.progress1.value = 100
             self.ids.icon1.text_color = get_color_from_hex("#f7983c")
             self.ids.icon1.icon = "check-circle"
+    
+    def previous(self):
+        self.ids.slide.load_previous()
+        self.ids.progress.value = 0
+        self.ids.icon.text_color = rgba(34, 56, 97, 255)
+        self.ids.icon.icon = "numeric-1-circle"
+
+    def previous1(self):
+        self.ids.slide.load_previous()
+        self.ids.progress1.value = 0
+        self.ids.icon1.text_color = rgba(34, 56, 97, 255)
+        self.ids.icon1.icon = "numeric-2-circle"
 
     def ready(self):
         if not self.ids.savings.text:

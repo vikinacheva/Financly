@@ -20,7 +20,10 @@ class Login(Screen):
         else:
             self.ids.password.password = True
             self.ids.password_text.text = 'Покажи паролата'
-            
+    
+    def message(self):
+        return toast("Не можем да Ви помогнем с това!")
+        
     def validate(self):
         self.data = Database()
         email = self.ids.email.text
@@ -48,5 +51,3 @@ class Login(Screen):
                 main_screen.on_login()
                 self.manager.transition.director = 'left'
                 self.manager.current = 'main'
-                
-        

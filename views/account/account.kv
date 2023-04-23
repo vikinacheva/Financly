@@ -6,12 +6,13 @@
         padding: "20dp"
         Image:
             id: profile_picture
+            source: "assets/icons/user.png"
             size_hint: None, None
             size: 200, 200
             pos_hint: {"center_x": .5}
         Label:
             id: username
-            text: "Здравей, "
+            text: ""
             size_hint: None, None
             size: self.texture_size
             pos_hint: {"center_x": .5}
@@ -26,7 +27,7 @@
                 on_release:
                     root.change_profile_picture()
             MDRaisedButton:
-                text: "Излез"
+                text: "Излезте"
                 pos_hint: {"center_x": .5, "center_y": .7}
                 text_color: app.colors.white
                 line_color: app.colors.primary

@@ -71,9 +71,9 @@ class Financly(MDApp):
     def build(self):
         self.db = Database()
         screen_manager = ScreenManager()
-        screen_manager.add_widget(login.Login(name = "login"))
         screen_manager.add_widget(main.Main(name = "main"))
         screen_manager.add_widget(start.Start(name = "start"))
+        screen_manager.add_widget(login.Login(name = "login"))
         screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(setup.Setup(name = "setup"))
         screen_manager.add_widget(welcome.Welcome(name = "welcome"))

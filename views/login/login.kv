@@ -13,13 +13,13 @@
                 root.manager.transition.direction = "right"
                 root.manager.current = "start"
         MDLabel:
-            text: "ДОБРЕ ДОШЪЛ!"
+            text: "ДОБРЕ ДОШЛИ!"
             pos_hint: {"center_x": .6, "center_y": .85}
             font_name: app.fonts.space
             font_size: app.fonts.size.h2
             color: app.colors.primary
         MDLabel:
-            text: "Влез, за да продължиш"
+            text: "Влезте, за да продължите напред"
             pos_hint: {"center_x": .6, "center_y": .79}
             font_name: app.fonts.body
             font_size: app.fonts.size.h5
@@ -79,7 +79,7 @@
             font_name: app.fonts.body
             color: app.colors.tertiary_font            
         Button:
-            text: "Влез"
+            text: "Влезте"
             size_hint: .66, .065
             pos_hint: {"center_x": .5, "center_y": .34}
             background_color: 0, 0, 0, 0
@@ -99,6 +99,8 @@
             color: app.colors.tertiary_font
             font_size: app.fonts.size.h6
             font_name: app.fonts.body
+            on_release:
+                root.message()
         MDLabel:
             text: "или"
             halign: "center"
@@ -115,16 +117,16 @@
             pos_hint: {"center_x": .7, "center_y": .218}
             md_bg_color: app.colors.dash
         MDLabel:
-            text: "Нямаш акаунт?"
+            text: "Нямате акаунт?"
             halign: "center"
             pos_hint: {"center_x": .38, "center_y": .16}
             font_name: app.fonts.body
             font_size: app.fonts.size.h6
             color: app.colors.tertiary_font
         MDTextButton:
-            text: "Регистрирай се"
+            text: "Регистрирайте се"
             halign: "center"
-            pos_hint: {"center_x": .605, "center_y": .16}
+            pos_hint: {"center_x": .62, "center_y": .16}
             font_name: app.fonts.body
             font_size: app.fonts.size.h6
             color: app.colors.secondary_font

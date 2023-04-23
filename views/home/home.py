@@ -99,7 +99,6 @@ class Home(Screen):
                 self.monthly_incomes.append(float(amount))
                 app.monthly_incomes = self.monthly_incomes
                 sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
-                toast("Отново на плюс!")
                 self.ids.budget.color = rgba(255, 255, 255, 255)
             else:
                 self.budget += float(amount)
@@ -278,11 +277,11 @@ class AddNew(ModalView):
 
     def confirm(self):
         if self.ids.title.text == '':
-            return toast("Моля въведи заглавие на транзакцията!")
+            return toast("Моля въведете заглавие на транзакцията!")
         elif self.ids.category_button.text == 'Избери категория':
-            return toast("Моля избери категория!")
+            return toast("Моля изберете категория!")
         elif self.ids.new_amount.text == "0.00":
-            return toast("Моля въведи сума на транзакцията!")
+            return toast("Моля въведете сума на транзакцията!")
         else:
             self.dismiss()
             icons = os.listdir("assets/icons")
