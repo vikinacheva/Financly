@@ -73,6 +73,6 @@ class Setup(Screen):
             current_user_id = val[0]
                         
             app.current_user_id = current_user_id  
-            main_screen = self.manager.get_screen('main')
+            main_screen = self.manager.get_screen('all')
             main_screen.on_login()
             self.manager.current = 'welcome'

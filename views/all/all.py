@@ -8,12 +8,12 @@ import sqlite3
 from datetime import datetime, timedelta
 
 
-Builder.load_file('views/main/main.kv')
+Builder.load_file('views/all/all.kv')
 
 class NavBar(CommonElevationBehavior, MDFloatLayout):
     pass
     
-class Main(Screen): 
+class All(Screen): 
     def on_login(self):
         app = App.get_running_app()
         current_user_id = app.current_user_id

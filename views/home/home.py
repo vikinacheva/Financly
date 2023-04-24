@@ -116,7 +116,7 @@ class Home(Screen):
         conn.commit()
         conn.close()
         
-        latest_transactions = app.root.get_screen('main').get_latest_transactions(current_user_id)
+        latest_transactions = app.root.get_screen('all').get_latest_transactions(current_user_id)
         self.show_transactions(latest_transactions) 
         
         app = App.get_running_app()
@@ -129,7 +129,7 @@ class Home(Screen):
 
         self.ids.budget.text = f"{self.budget:.2f} лв."
         
-        app.root.get_screen('main').on_login()
+        app.root.get_screen('all').on_login()
     
     def show_transactions(self, transactions):
         self.latest_transactions = transactions
@@ -179,12 +179,17 @@ class TileAction(ModalView):
         conn.close()
         
         current_user_id = app.current_user_id
-        latest_transactions = app.root.get_screen('main').get_latest_transactions(current_user_id)
+        latest_transactions = app.root.get_screen('all').get_latest_transactions(current_user_id)
         self.callback(latest_transactions)
         
-        self.budget_label.text = f"{budget} лв."
+        if budget < 0:
+            self.budget_label.text = f"{budget} лв."
+            self.budget_label.color = get_color_from_hex("d00000")
+        else:
+            self.budget_label.text = f"{budget} лв."
+            self.budget_label.color = rgba(255, 255, 255, 255)
         
-        app.root.get_screen('main').on_login()
+        app.root.get_screen('all').on_login()
                    
 class AddNew(ModalView):
     expense = BooleanProperty(False)

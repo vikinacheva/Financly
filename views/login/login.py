@@ -47,7 +47,7 @@ class Login(Screen):
             else:
                 app = App.get_running_app()
                 app.current_user_id = current_user_id  
-                main_screen = self.manager.get_screen('main')
+                main_screen = self.manager.get_screen('all')
                 main_screen.on_login()
                 self.manager.transition.director = 'left'
-                self.manager.current = 'main'
+                self.manager.current = 'all'

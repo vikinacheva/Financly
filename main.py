@@ -12,7 +12,7 @@ from views.login import login
 from views.register import register
 from views.welcome import welcome
 from views.setup import setup
-from views.main import main
+from views.all import all
 
 Window.size = (360, 640)   
     
@@ -76,7 +76,7 @@ class Financly(MDApp):
         screen_manager.add_widget(register.Register(name = "register"))
         screen_manager.add_widget(setup.Setup(name = "setup"))
         screen_manager.add_widget(welcome.Welcome(name = "welcome"))
-        screen_manager.add_widget(main.Main(name = "main"))
+        screen_manager.add_widget(all.All(name = "all"))
         
         return screen_manager   
             

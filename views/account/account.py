@@ -36,7 +36,7 @@ class Account(Screen):
         
     def logout(self):
         app = App.get_running_app()
-        app.root.get_screen('main').on_logout()
+        app.root.get_screen('all').on_logout()
 
     def change_profile_picture(self):
         popup = Popup(title="Изберете профилна снимка", size_hint=(0.8, 0.8))
