@@ -75,39 +75,25 @@ class Home(Screen):
         title = t['title']
         
         if expense:
-            if float(amount) < self.budget:
-                self.budget -= float(amount)
-                self.weekly_expenses.append(float(amount))
-                app.weekly_expenses = self.weekly_expenses
-                self.monthly_expenses.append(float(amount))
-                app.monthly_expenses = self.monthly_expenses
-                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
-            else:
-                self.budget -= float(amount)
-                self.weekly_expenses.append(float(amount))
-                app.weekly_expenses = self.weekly_expenses
-                self.monthly_expenses.append(float(amount))
-                app.monthly_expenses = self.monthly_expenses
-                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
-                toast("Надхвърли лимита си!")
-                self.ids.budget.color = get_color_from_hex("d00000")
+            self.budget -= float(amount)
+            self.weekly_expenses.append(float(amount))
+            app.weekly_expenses = self.weekly_expenses
+            self.monthly_expenses.append(float(amount))
+            app.monthly_expenses = self.monthly_expenses
+            sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, true, ?, ?, ?, ?, ?)"
         else:
-            if float(amount) > self.budget:
-                self.budget += float(amount)
-                self.weekly_incomes.append(float(amount))
-                app.weekly_incomes = self.weekly_incomes
-                self.monthly_incomes.append(float(amount))
-                app.monthly_incomes = self.monthly_incomes
-                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
-                self.ids.budget.color = rgba(255, 255, 255, 255)
-            else:
-                self.budget += float(amount)
-                self.weekly_incomes.append(float(amount))
-                app.weekly_incomes = self.weekly_incomes
-                self.monthly_incomes.append(float(amount))
-                app.monthly_incomes = self.monthly_incomes
-                sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
+            self.budget += float(amount)
+            self.weekly_incomes.append(float(amount))
+            app.weekly_incomes = self.weekly_incomes
+            self.monthly_incomes.append(float(amount))
+            app.monthly_incomes = self.monthly_incomes
+            sql = "INSERT INTO transactions (user_id, is_expense, title, amount, date, category, budget_snapshot) VALUES (?, false, ?, ?, ?, ?, ?)"
 
+        if self.budget < 0:
+            self.ids.budget.color = get_color_from_hex("d00000")
+        else:
+            self.ids.budget.color = rgba(255, 255, 255, 255)
+        
         budget_snapshot = f"{float(self.budget):.2f}"
         
         conn = sqlite3.connect('data/financly.db')
