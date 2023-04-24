@@ -12,15 +12,15 @@ from kivy.properties import StringProperty
 Builder.load_file('views/account/account.kv')
 
 profile_pics = [
-    'assets/profile_pictures/profile1.jpg',
-    'assets/profile_pictures/profile2.jpg',
-    'assets/profile_pictures/profile3.jpg',
-    'assets/profile_pictures/profile4.jpg',
-    'assets/profile_pictures/profile5.jpg',
-    'assets/profile_pictures/profile6.jpg',
-    'assets/profile_pictures/profile7.jpg',
-    'assets/profile_pictures/profile8.jpg',
-    'assets/profile_pictures/profile9.jpg',
+    'assets/imgs/profile1.jpg',
+    'assets/imgs/profile2.jpg',
+    'assets/imgs/profile3.jpg',
+    'assets/imgs/profile4.jpg',
+    'assets/imgs/profile5.jpg',
+    'assets/imgs/profile6.jpg',
+    'assets/imgs/profile7.jpg',
+    'assets/imgs/profile8.jpg',
+    'assets/imgs/profile9.jpg',
 ]
 
 class Account(Screen):
