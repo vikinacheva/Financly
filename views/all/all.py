@@ -50,6 +50,8 @@ class All(Screen):
         screen_manager = self.ids.screen_manager
         screen_manager.transition.direction = 'left'
         screen_manager.current = 'screen_home'
+        
+        self.if_active(self.ids.nav_icon1)
     
     def on_logout(self):
         screen_manager = self.ids.screen_manager
