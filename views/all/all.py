@@ -6,6 +6,7 @@ from kivy.utils import get_color_from_hex
 from kivy.lang import Builder
 import sqlite3
 from datetime import datetime, timedelta
+import calendar
 
 
 Builder.load_file('views/all/all.kv')
@@ -121,17 +122,20 @@ class All(Screen):
     def get_monthly_incomes(self, user_id):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        today = datetime.today()
-        start_of_month = datetime(today.year, today.month, 1)
-        end_of_month = datetime(today.year, today.month, 1) + timedelta(days=32)
-        end_of_month = datetime(end_of_month.year, end_of_month.month, 1) - timedelta(days=1)
+
+        now = datetime.now()
+
+        last_day_of_month = calendar.monthrange(now.year, now.month)[1]
+
+        start_of_month = datetime(now.year, now.month, 1)
+        end_of_month = datetime(now.year, now.month, last_day_of_month, 23, 59, 59)
 
         cursor.execute('''SELECT * FROM transactions
                           WHERE user_id = ? AND 
                           date >= ? AND 
                           date <= ? AND 
                           is_expense = 0''',
-                       (user_id, start_of_month.strftime('%Y-%m-%d'), end_of_month.strftime('%Y-%m-%d')))
+                       (user_id, start_of_month, end_of_month))
         incomes = cursor.fetchall()
         conn.close()
         return incomes
@@ -139,17 +143,20 @@ class All(Screen):
     def get_monthly_expenses(self, user_id):
         conn = sqlite3.connect('data/financly.db')
         cursor = conn.cursor()
-        today = datetime.today()
-        start_of_month = datetime(today.year, today.month, 1)
-        end_of_month = datetime(today.year, today.month, 1) + timedelta(days=32)
-        end_of_month = datetime(end_of_month.year, end_of_month.month, 1) - timedelta(days=1)
+
+        now = datetime.now()
+
+        last_day_of_month = calendar.monthrange(now.year, now.month)[1]
+
+        start_of_month = datetime(now.year, now.month, 1)
+        end_of_month = datetime(now.year, now.month, last_day_of_month, 23, 59, 59)
 
         cursor.execute('''SELECT * FROM transactions
                           WHERE user_id = ? AND 
                           date >= ? AND 
                           date <= ? AND 
                           is_expense = 1''',
-                       (user_id, start_of_month.strftime('%Y-%m-%d'), end_of_month.strftime('%Y-%m-%d')))
+                       (user_id, start_of_month, end_of_month))
         expenses = cursor.fetchall()
         conn.close()
         return expenses
