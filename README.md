@@ -1,8 +1,8 @@
 Financly is a personal finance management mobile app, created for the purpose of helping people with keeping track of their spendings and achieving a custom set saving goal.
 
+![IMG_6772](https://github.com/user-attachments/assets/6c26b8eb-1c03-4031-b376-297b1b87f371)
 ![IMG_6774](https://github.com/user-attachments/assets/aa25992e-d42c-4094-8c9c-77a4232a0e29)
 ![IMG_6773](https://github.com/user-attachments/assets/ee637bce-e649-46b0-a1c4-dba5a120bfdd)
-![IMG_6772](https://github.com/user-attachments/assets/6c26b8eb-1c03-4031-b376-297b1b87f371)
 ![IMG_6777](https://github.com/user-attachments/assets/6015c679-256c-4074-af19-77baf681b2f9)
 ![IMG_6776](https://github.com/user-attachments/assets/548ccca4-84bc-4eea-88b9-82a86191d4fb)
 ![IMG_6775](https://github.com/user-attachments/assets/058bfe3d-a157-465b-92d8-af1ce4c032de)
