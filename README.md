@@ -1,0 +1,20 @@
+Financly is a personal finance management mobile app, created for the purpose of helping people with keeping track of their spendings and achieving a custom set saving goal.
+
+![IMG_6781](https://github.com/user-attachments/assets/99f8ec3d-3767-4cd5-82a5-e946dc080337)!
+[![IMG_6788](https://github.com/user-attachments/assets/244b0cc5-ecb8-4770-b388-5e4848f0f45b)
+![IMG_6787](https://github.com/user-attachments/assets/b624c0a3-0316-4661-9d96-b64db68f8599)
+![IMG_6786](https://github.com/user-attachments/assets/0a641e8e-30e3-4777-afb6-52e8a0045900)
+![IMG_6785](https://github.com/user-attachments/assets/2b83d1bb-778a-46d7-922b-d4dfc9c1ff5a)
+![IMG_6784](https://github.com/user-attachments/assets/095ac17d-5df5-420c-8358-ee371afc8008)
+![IMG_6783](https://github.com/user-attachments/assets/3e99d371-fcf6-4fad-b516-d1b7c23b7d96)
+![IMG_6782](https://github.com/user-attachments/assets/4f785b21-44cd-437c-bc3f-ec4f64e6dcc3)
+Uploading IMG_6781.jpeg…]()
+![IMG_6780](https://github.com/user-attachments/assets/f3f44e3d-e192-4f68-a9ed-fed4307ebe51)
+![IMG_6779](https://github.com/user-attachments/assets/ebcb3e9c-0927-40ec-9486-0cf2bb963c43)
+![IMG_6778](https://github.com/user-attachments/assets/0ea9f405-dcdc-403c-8c42-c21fcc612562)
+![IMG_6777](https://github.com/user-attachments/assets/b340358d-4048-4b9d-88ae-d7783c728788)
+![IMG_6776](https://github.com/user-attachments/assets/41b1a5a5-bf98-4dee-ad69-4be90c950d75)
+![IMG_6775](https://github.com/user-attachments/assets/68665159-646a-41c2-8f75-e979159b95ec)
+![IMG_6774](https://github.com/user-attachments/assets/b51bf044-b628-4a1d-ba58-6c7d6306dabf)
+![IMG_6773](https://github.com/user-attachments/assets/9967911f-d6df-4d33-965a-31a3c1ad39e8)
+![IMG_6772](https://github.com/user-attachments/assets/5d3d2fb4-f2e8-4fa9-9184-aef6377b5f49)
